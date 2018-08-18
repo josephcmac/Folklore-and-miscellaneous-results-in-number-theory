@@ -6,4 +6,4 @@ Definition (folklore): A result which is well-known in a particular field, but i
 
 Definition (miscellaneous): A result which is hard to classify into a given area of a field.
 
-Collaborations are welcome.
+Collaborations are welcome (please, always include the name of the author in each thy file).
