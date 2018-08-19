@@ -5,7 +5,3 @@ This is a repository for formal verification of proofs of number-theoretic resul
 Definition (folklore): A result which is well-known in a particular field, but it is hard to find a proof in the literature.
 
 Definition (miscellaneous): A result which is hard to classify into a given area of a field.
-
-The goal of this repository is to submit the thy files to the Archives of Formal Proofs as a collaborative project: https://www.isa-afp.org/
-
-Collaborations are welcome (please, always include the name of the author in each thy file).
