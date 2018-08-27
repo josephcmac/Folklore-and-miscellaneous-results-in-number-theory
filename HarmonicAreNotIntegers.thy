@@ -8,7 +8,7 @@ H(n) = 1 + 1/2 + 1/3 + 1/4 + ... + 1/n.
 
 Suppose that n \<ge> 2.  we will prove that H(n) is not an integer (this result is due to Taeisinger).
 
-We use some results from the file TrapezoidalNumbers.thy in the same repertory.
+We use some results from the file PowOfTwo.thy in the same repository.
 
 
 (This code  was verified in Isabelle2018-RC4/HOL)
@@ -17,7 +17,7 @@ We use some results from the file TrapezoidalNumbers.thy in the same repertory.
 
 theory HarmonicAreNotIntegers
 
-imports Complex_Main TrapezoidalNumbers
+imports Complex_Main PowOfTwo
 
 begin
 
@@ -412,13 +412,6 @@ proof-
 section {* Application to Harmonic Numbers *}
 
 subsection {* Trivial Auxiliary Results *}
-
-
-lemma ParityDescomposition:
-  fixes n::nat
-  assumes \<open>n \<ge> 1\<close>
-  shows \<open>\<exists> k t :: nat. n = (2::nat)^k*t \<and> odd t\<close>
-  by (metis TrapezoidalNumbersSuf_1C assms   less_one linorder_not_le     )
 
 
 
