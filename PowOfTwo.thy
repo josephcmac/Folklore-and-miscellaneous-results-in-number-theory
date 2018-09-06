@@ -2,7 +2,9 @@
 Title: Powers of 2
 Author: Jose Manuel Rodriguez Caballero
 
-Miscellany about powers of 2.
+Miscellany about powers of 2. Our main result will be the following theorem:
+
+\<exists>! f :: nat \<Rightarrow> nat. \<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) )
 
 (This code  was verified in Isabelle2018-RC4/HOL)
 
@@ -206,5 +208,225 @@ proof-
   then show ?thesis 
     by (simp add: \<open>n = 2 ^ u * v\<close>)
 qed
+
+(* ---  *)
+
+lemma preExistenceUniquenessEvenPart:
+\<open>\<forall> n::nat. \<exists> u v :: nat. ( n \<ge> 1 \<longrightarrow> n = 2^u*v \<and> odd v )\<close>
+  by (simp add: ParityDescomposition) 
+
+lemma preExistenceEvenPart:
+\<open>\<exists> f g :: nat \<Rightarrow> nat. \<forall> n::nat. ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
+  using preExistenceUniquenessEvenPart by metis
+
+lemma ExistenceEvenPart:
+\<open>\<exists> f :: nat \<Rightarrow> nat. \<exists> g :: nat \<Rightarrow> nat. \<forall> n::nat. (f 0 = 0) \<and> (g 0 = 1) \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
+proof-
+  obtain f g :: \<open>nat \<Rightarrow> nat\<close> where 
+\<open> \<forall> n::nat. ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
+    using preExistenceEvenPart by blast
+
+  obtain ff :: \<open>nat \<Rightarrow> nat\<close> where 
+\<open>ff \<equiv> \<lambda> n. (if n = 0 then 0 else f n)\<close>
+    by simp
+
+  obtain gg :: \<open>nat \<Rightarrow> nat\<close> where 
+\<open>gg \<equiv> \<lambda> n. (if n = 0 then 1 else g n)\<close>
+    by simp
+
+  from \<open> \<forall> n::nat. ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
+\<open>ff \<equiv> \<lambda> n. (if n = 0 then 0 else f n)\<close> \<open>gg \<equiv> \<lambda> n. (if n = 0 then 1 else g n)\<close>
+  show ?thesis 
+    by (smt \<open>\<And>thesis. (\<And>ff. ff \<equiv> \<lambda>n. if n = 0 then 0 else f n \<Longrightarrow> thesis) \<Longrightarrow> thesis\<close> \<open>\<And>thesis. (\<And>gg. gg \<equiv> \<lambda>n. if n = 0 then 1 else g n \<Longrightarrow> thesis) \<Longrightarrow> thesis\<close> not_one_le_zero)
+qed
+
+
+lemma preUniqEvenPartS0:
+  fixes f ff  g gg  :: \<open>nat \<Rightarrow> nat\<close> and n :: nat
+  assumes \<open>n = 0\<close> and  \<open>f 0 = 0\<close> and \<open>g 0 = 1\<close> and \<open> n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) \<close>
+    and \<open>ff 0 = 0\<close> and \<open>gg 0 = 1\<close> and \<open> n \<ge> 1 \<longrightarrow> n = 2^(ff n)*(gg n) \<and> odd (gg n)\<close>
+  shows \<open>f n = ff n \<and> g n = gg n\<close>
+  by (simp add: assms(1) assms(2) assms(3) assms(5) assms(6))
+
+
+lemma preUniqnessOddEven_OddPartOneSide :
+ fixes uu v vv :: nat
+ assumes  \<open>odd v\<close> and \<open>odd vv\<close> and \<open>v = 2^uu*vv\<close>
+ shows \<open>v = vv\<close>
+  using assms(1) assms(3) by auto
+
+lemma preUniqnessOddEven_OddPart :
+ fixes u uu v vv :: nat
+ assumes \<open>u \<le> uu\<close> and \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
+ shows \<open>v = vv\<close>
+proof-
+  from  \<open>u \<le> uu\<close> obtain k :: nat where \<open>u + k = uu\<close> 
+    using le_Suc_ex by blast
+  from \<open>2^u*v = 2^uu*vv\<close> \<open>u + k = uu\<close> 
+    have \<open>v = 2^k*vv\<close> 
+      by (smt Groups.mult_ac(1) nonzero_mult_div_cancel_left power_add power_eq_0_iff rel_simps(76))
+    then show ?thesis using \<open>odd v\<close> \<open>odd vv\<close> 
+      using preUniqnessOddEven_OddPartOneSide by blast
+qed
+
+lemma UniqnessOddEven_OddPart :
+ fixes u uu v vv :: nat
+ assumes \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
+ shows \<open>v = vv\<close>
+  by (metis assms(1) assms(2) assms(3) nat_le_linear preUniqnessOddEven_OddPart)
+
+
+lemma UniqnessOddEven_EvenPart :
+ fixes u uu v vv :: nat
+ assumes \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
+ shows \<open>u = uu\<close>
+  by (metis One_nat_def UniqnessOddEven_OddPart assms(1) assms(2) assms(3) even_zero lessI mult_cancel_right numeral_2_eq_2 power_inject_exp)
+
+lemma UniqnessOddEven :
+ fixes u uu v vv :: nat
+ assumes \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
+ shows \<open>u = uu \<and> v = vv\<close>
+  using UniqnessOddEven_EvenPart UniqnessOddEven_OddPart assms(1) assms(2) assms(3) by blast
+
+lemma preUniqEvenPartS1:
+  fixes f ff  g gg  :: \<open>nat \<Rightarrow> nat\<close> and n :: nat
+  assumes \<open>n \<ge> 1\<close> and  \<open>f 0 = 0\<close> and \<open>g 0 = 1\<close> and \<open> n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) \<close>
+    and \<open>ff 0 = 0\<close> and \<open>gg 0 = 1\<close> and \<open> n \<ge> 1 \<longrightarrow> n = 2^(ff n)*(gg n) \<and> odd (gg n)\<close>
+  shows \<open>f n = ff n \<and> g n = gg n\<close>
+  by (metis UniqnessOddEven assms(1) assms(4) assms(7))
+
+
+lemma preUniqEvenPartS:
+  fixes f ff  g gg  :: \<open>nat \<Rightarrow> nat\<close> and n :: nat
+  assumes \<open>f 0 = 0\<close> and \<open>g 0 = 1\<close> and \<open> n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) \<close>
+    and \<open>ff 0 = 0\<close> and \<open>gg 0 = 1\<close> and \<open> n \<ge> 1 \<longrightarrow> n = 2^(ff n)*(gg n) \<and> odd (gg n)\<close>
+  shows \<open>f n = ff n \<and> g n = gg n\<close>
+  by (metis assms(1) assms(2) assms(3) assms(4) assms(5) assms(6) dvd_imp_le neq0_conv one_dvd preUniqEvenPartS1)
+
+lemma preUniqEvenPartSQE:
+  fixes f ff  g gg  :: \<open>nat \<Rightarrow> nat\<close>
+  shows \<open>(\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) 
+\<and> (ff 0 = 0 \<and> gg 0 = 1 \<and> (n \<ge> 1 \<longrightarrow> n = 2^(ff n)*(gg n) \<and> odd (gg n) )) ) \<Longrightarrow> (f  = ff ) \<and> (g  = gg ) \<close>
+  using preUniqEvenPartS by blast
+
+lemma preUniqEvenPartSQEG:
+  fixes f ff  :: \<open>nat \<Rightarrow> nat\<close>
+  shows \<open>\<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) 
+\<and> (ff 0 = 0 \<and> g 0 = 1 \<and> (n \<ge> 1 \<longrightarrow> n = 2^(ff n)*(g n) \<and> odd (g n) )) ) \<Longrightarrow> (f = ff ) \<close>
+  using preUniqEvenPartSQE by blast
+
+lemma preUniqEvenPartSQEGD:
+  fixes f ff  :: \<open>nat \<Rightarrow> nat\<close>
+  assumes \<open>\<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) )
+\<and> (\<forall> n. (ff 0 = 0 \<and> g 0 = 1 \<and> (n \<ge> 1 \<longrightarrow> n = 2^(ff n)*(g n) \<and> odd (g n) )) )\<close>
+  shows \<open>f = ff\<close>
+  by (metis assms preUniqEvenPartSQE)
+
+lemma preUniqEvenPartSQEGX:
+   \<open>\<exists> f :: nat \<Rightarrow> nat. \<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) ) \<close>
+  by (smt ExistenceEvenPart preUniqEvenPartSQE)
+
+lemma UniqEvenPartXrferew4:
+ \<open>\<exists>f. \<exists>!g. f 0 = 0 \<and>
+             g 0 = Suc 0 \<and>
+             (\<forall>n\<ge>Suc 0. n = 2 ^ f n * g n \<and> odd (g n))\<close>
+  using preUniqEvenPartSQEGX by auto
+
+lemma preUniqEvenPartXr43ur93n: 
+  fixes f y g ga :: \<open>nat \<Rightarrow> nat\<close> and n :: nat
+  assumes
+\<open> \<forall>y y'.
+          y 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y n \<and> odd (y n)) \<and>
+          y' 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y' n \<and> odd (y' n)) \<longrightarrow>
+          y = y'\<close> 
+and
+      \<open> \<forall>ya y'.
+          ya 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ y n * ya n \<and> odd (ya n)) \<and>
+          y' 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ y n * y' n \<and> odd (y' n)) \<longrightarrow>
+          ya = y'\<close>and
+      \<open>f 0 = 0\<close> and
+      \<open>y 0 = 0\<close> and
+      \<open>g 0 = Suc 0\<close> and
+      \<open> \<forall>n\<ge>Suc 0. n = 2 ^ f n * g n \<and> odd (g n)\<close> and
+      \<open> ga 0 = Suc 0\<close> and
+      \<open> \<forall>n\<ge>Suc 0. n = 2 ^ y n * ga n \<and> odd (ga n)\<close> 
+    shows \<open> f n = y n\<close>
+proof(cases \<open>n = 0\<close>)
+case True
+  then show ?thesis 
+    by (simp add: assms(3) assms(4))
+next
+  case False
+  then have \<open>n \<ge> Suc 0\<close> 
+    using not_less_eq_eq by blast
+  then show ?thesis 
+    using One_nat_def assms(3) assms(4) assms(5) assms(6) assms(7) assms(8) preUniqEvenPartS by presburger
+qed
+
+lemma preUniqEvenPartXr43ur93: 
+  fixes f y g ga :: \<open>nat \<Rightarrow> nat\<close>
+  assumes
+\<open> \<forall>y y'.
+          y 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y n \<and> odd (y n)) \<and>
+          y' 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y' n \<and> odd (y' n)) \<longrightarrow>
+          y = y'\<close> 
+and
+      \<open> \<forall>ya y'.
+          ya 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ y n * ya n \<and> odd (ya n)) \<and>
+          y' 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ y n * y' n \<and> odd (y' n)) \<longrightarrow>
+          ya = y'\<close>and
+      \<open>f 0 = 0\<close> and
+      \<open>y 0 = 0\<close> and
+      \<open>g 0 = Suc 0\<close> and
+      \<open> \<forall>n\<ge>Suc 0. n = 2 ^ f n * g n \<and> odd (g n)\<close> and
+      \<open> ga 0 = Suc 0\<close> and
+      \<open> \<forall>n\<ge>Suc 0. n = 2 ^ y n * ga n \<and> odd (ga n)\<close> 
+    shows \<open> f = y\<close>
+proof (rule classical)
+  assume \<open>\<not>(f = y)\<close>
+  then obtain n where \<open>f n \<noteq> y n \<close> 
+    by (meson ext)
+  from preUniqEvenPartXr43ur93n have \<open>f n = y n\<close> 
+    using One_nat_def assms(3) assms(4) assms(5) assms(6) assms(7) assms(8) preUniqEvenPartS by presburger
+  from  \<open>f n \<noteq> y n \<close>  \<open>f n = y n\<close>  have False 
+    by blast
+  then show ?thesis by blast
+qed
+
+lemma UniqEvenPartXr43ur93: \<open>\<And>f y g ga.
+       \<forall>y y'.
+          y 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y n \<and> odd (y n)) \<and>
+          y' 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y' n \<and> odd (y' n)) \<longrightarrow>
+          y = y' \<Longrightarrow>
+       \<forall>ya y'.
+          ya 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ y n * ya n \<and> odd (ya n)) \<and>
+          y' 0 = Suc 0 \<and>
+          (\<forall>n\<ge>Suc 0. n = 2 ^ y n * y' n \<and> odd (y' n)) \<longrightarrow>
+          ya = y' \<Longrightarrow>
+       f 0 = 0 \<Longrightarrow>
+       y 0 = 0 \<Longrightarrow>
+       g 0 = Suc 0 \<Longrightarrow>
+       \<forall>n\<ge>Suc 0. n = 2 ^ f n * g n \<and> odd (g n) \<Longrightarrow>
+       ga 0 = Suc 0 \<Longrightarrow>
+       \<forall>n\<ge>Suc 0. n = 2 ^ y n * ga n \<and> odd (ga n) \<Longrightarrow> f = y\<close>
+  using preUniqEvenPartXr43ur93 by auto
+
+theorem UniqEvenPart:
+   \<open>\<exists>! f :: nat \<Rightarrow> nat. \<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) ) \<close>
+  apply (auto)
+  using UniqEvenPartXrferew4 apply blast
+  using UniqEvenPartXr43ur93 apply auto
+  done
 
 end
