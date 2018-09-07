@@ -429,4 +429,280 @@ theorem UniqEvenPart:
   using UniqEvenPartXr43ur93 apply auto
   done
 
+(* --- *)
+
+definition OddPart :: \<open>nat \<Rightarrow> nat\<close> where
+\<open>OddPart \<equiv> \<lambda> n. (if n = 0 then 1 else  Max {d |d :: nat.  d dvd n \<and> odd d} )\<close>
+
+definition Exp2 :: \<open>nat \<Rightarrow> nat\<close> where
+\<open>Exp2 \<equiv> \<lambda> n. (if n = 0 then 0 else Max {k |k :: nat.  (2^k) dvd n})\<close>
+
+lemma preExp2OddPartChar1:
+  fixes n :: nat
+  assumes \<open>n \<ge> 1\<close>
+  shows \<open> odd (OddPart n) \<close>
+proof-
+  from \<open>n \<ge> 1\<close> have \<open>\<not> (n = 0)\<close> by simp
+  then obtain S :: \<open>nat set\<close> where \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close> 
+    by blast
+  from  \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close>  \<open>n \<ge> 1\<close> have \<open>S \<noteq> {}\<close> by auto
+  from  \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close>  \<open>n \<ge> 1\<close> have \<open>finite S\<close> by auto
+  from \<open>S \<noteq> {}\<close> \<open>finite S\<close> obtain d :: nat where \<open>d = Max S\<close>  
+    by blast
+  from \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close> \<open>d = Max S\<close>  have \<open>d = OddPart n\<close> 
+    using OddPart_def 
+    using \<open>n \<noteq> 0\<close> by presburger
+  from \<open>S \<noteq> {}\<close> \<open>finite S\<close> \<open>d = Max S\<close> have \<open> d dvd n \<and> odd d \<close>
+    using Max_in \<open>S = {d |d. d dvd n \<and> odd d}\<close> by auto
+  then have \<open>odd d\<close> by blast 
+  from \<open>odd d\<close>  \<open>d = OddPart n\<close> show ?thesis 
+    by blast
+qed
+
+lemma Exp2L1QQ:
+\<open>(n :: nat) \<ge> 1 \<Longrightarrow> {e |e :: nat.  2^e dvd n} \<noteq> {}\<close>
+  by (metis One_nat_def ParityDescomposition dvd_triv_left empty_Collect_eq)
+
+lemma Exp2L1QQQ:
+\<open>(n :: nat) \<ge> 1 \<Longrightarrow> finite {e |e :: nat.  2^e dvd n}\<close>
+proof(rule classical)
+  assume \<open>n \<ge> 1\<close>
+  assume \<open>\<not> (finite {e |e :: nat.  2^e dvd n})\<close>
+  then have \<open>infinite {e |e :: nat.  2^e dvd n}\<close> 
+    by blast
+  obtain e :: nat where \<open>e \<in> {e |e :: nat.  2^e dvd n}\<close> and \<open>e > n\<close>
+    by (metis \<open>infinite {e |e. 2 ^ e dvd n}\<close> finite_nat_set_iff_bounded_le not_le)
+  from \<open>e \<in> {e |e :: nat.  2^e dvd n}\<close> have \<open>2^e dvd n\<close> 
+    by simp
+  from \<open>e > n\<close> have \<open>2^e > n \<close> 
+    using less_trans of_nat_less_two_power by auto
+  from \<open>n \<ge> 1\<close> \<open>2^e dvd n\<close> \<open>2^e > n \<close>  have False 
+    by auto
+  then show ?thesis 
+    by simp
+qed
+
+
+lemma Exp2L1:
+  fixes n :: nat
+  assumes \<open>n \<ge> 1\<close>
+  shows \<open> 2^(Exp2 n) dvd n \<close>
+proof-
+   from \<open>n \<ge> 1\<close> have \<open>\<not> (n = 0)\<close> by simp
+  then obtain S :: \<open>nat set\<close> where \<open>S = {e |e :: nat.  2^e dvd n}\<close> 
+    by blast
+  from  \<open>S = {e |e :: nat.  2^e dvd n}\<close> \<open>n \<ge> 1\<close> have \<open>S \<noteq> {}\<close> 
+    by (metis empty_Collect_eq one_dvd power_0)
+  from  \<open>S = {e |e :: nat.  2^e dvd n}\<close> \<open>n \<ge> 1\<close> have \<open>finite S\<close>
+    using Exp2L1QQQ by auto
+  from \<open>S \<noteq> {}\<close> \<open>finite S\<close> obtain e :: nat where \<open>e = Max S\<close>  
+    by blast
+  have \<open>2^e dvd n\<close> 
+    using Max_in \<open>S = {e |e. 2 ^ e dvd n}\<close> \<open>S \<noteq> {}\<close> \<open>e = Max S\<close> \<open>finite S\<close> by auto
+  then show ?thesis 
+    by (metis  Exp2_def \<open>S = {e |e. 2 ^ e dvd n}\<close> \<open>e = Max S\<close> \<open>n \<noteq> 0\<close>)
+qed
+
+lemma Exp2L2:
+  fixes n e :: nat
+  assumes \<open>n \<ge> 1\<close> \<open> 2^e dvd n\<close>
+  shows \<open> e \<le> Exp2 n \<close>
+proof-
+   from \<open>n \<ge> 1\<close> have \<open>\<not> (n = 0)\<close> by simp
+  then obtain S :: \<open>nat set\<close> where \<open>S = {e |e :: nat.  2^e dvd n}\<close> 
+    by blast
+  from  \<open>S = {e |e :: nat.  2^e dvd n}\<close> \<open>n \<ge> 1\<close> have \<open>S \<noteq> {}\<close> 
+    by (metis empty_Collect_eq one_dvd power_0)
+  from  \<open>S = {e |e :: nat.  2^e dvd n}\<close> \<open>n \<ge> 1\<close> have \<open>finite S\<close>
+    using Exp2L1QQQ by auto
+  from \<open>S \<noteq> {}\<close> \<open>finite S\<close> obtain ee :: nat where \<open>ee = Max S\<close>  
+    by blast
+  have \<open>ee = Exp2 n\<close> 
+    using Exp2_def \<open>S = {e |e. 2 ^ e dvd n}\<close> \<open>ee = Max S\<close> \<open>n \<noteq> 0\<close> by presburger
+  have \<open>e \<in> S\<close> 
+    using \<open>S = {e |e. 2 ^ e dvd n}\<close> assms(2) by blast 
+  have \<open>e \<le> ee\<close> 
+    by (simp add: \<open>e \<in> S\<close> \<open>ee = Max S\<close> \<open>finite S\<close>)
+  then have \<open>e \<le> Exp2 n\<close> using \<open>ee = Exp2 n\<close> 
+    by blast
+  then show ?thesis by blast
+qed
+
+lemma preExp2OddPartChar2XA:
+  fixes n k :: nat
+  assumes \<open>n \<ge> 1\<close> and \<open>n = 2^(Exp2 n)*k\<close>
+  shows \<open> odd k  \<close>
+proof (rule classical)
+  assume \<open>\<not> (odd k)\<close>
+  then have \<open>even k\<close> by blast
+  then obtain t :: nat where \<open>k = 2*t\<close> by blast
+  then have \<open>n = 2^((Exp2 n)+1)*t\<close> 
+    using assms(2) by auto
+  then have \<open>2^((Exp2 n)+1) dvd n\<close> 
+    by (metis dvd_triv_left)
+  then have \<open>(Exp2 n)+1 \<le> Exp2 n\<close> 
+    using Exp2L2 assms(1) by blast
+  then have False 
+    by simp
+  then show ?thesis 
+    by simp
+qed
+
+lemma preExp2OddPartChar2X1:
+  fixes n :: nat
+  assumes \<open>n \<ge> 1\<close>
+  shows \<open>\<exists> k :: nat.  n = 2^(Exp2 n)*k \<and> odd k \<close>
+  by (meson Exp2L1 assms dvdE preExp2OddPartChar2XA) 
+
+
+lemma OddPartL1:
+  fixes n :: nat
+  assumes \<open>n \<ge> 1\<close>
+  shows \<open> (OddPart n) dvd n \<close>
+proof-
+  from \<open>n \<ge> 1\<close> have \<open>\<not> (n = 0)\<close> by simp
+  then obtain S :: \<open>nat set\<close> where \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close> 
+    by blast
+  from  \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close>  \<open>n \<ge> 1\<close> have \<open>S \<noteq> {}\<close> by auto
+  from  \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close>  \<open>n \<ge> 1\<close> have \<open>finite S\<close> by auto
+  from \<open>S \<noteq> {}\<close> \<open>finite S\<close> obtain d :: nat where \<open>d = Max S\<close>  
+    by blast
+  from \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close> \<open>d = Max S\<close>  have \<open>d = OddPart n\<close> 
+    using OddPart_def 
+    using \<open>n \<noteq> 0\<close> by presburger
+  from \<open>S \<noteq> {}\<close> \<open>finite S\<close> \<open>d = Max S\<close> have \<open> d dvd n \<and> odd d \<close>
+    using Max_in \<open>S = {d |d. d dvd n \<and> odd d}\<close> by auto
+    then have \<open>d dvd n\<close> by blast
+    then show ?thesis using \<open>d = Max S\<close> 
+      using \<open>d = OddPart n\<close> by auto
+  qed
+
+lemma OddPartL1X1:
+  fixes n k :: nat
+  assumes \<open>n \<ge> 1\<close> and \<open>odd k\<close> and \<open>k dvd n\<close>
+  shows \<open>k \<le> (OddPart n)\<close>
+proof-
+  from \<open>n \<ge> 1\<close> have \<open>\<not> (n = 0)\<close> by simp
+  then obtain S :: \<open>nat set\<close> where \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close> 
+    by blast
+  from  \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close>  \<open>n \<ge> 1\<close> have \<open>S \<noteq> {}\<close> by auto
+  from  \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close>  \<open>n \<ge> 1\<close> have \<open>finite S\<close> by auto
+  from \<open>S \<noteq> {}\<close> \<open>finite S\<close> obtain d :: nat where \<open>d = Max S\<close>  
+    by blast
+  from \<open>S = {d |d :: nat.  d dvd n \<and> odd d}\<close> \<open>d = Max S\<close>  have \<open>d = OddPart n\<close> 
+    using OddPart_def 
+    using \<open>n \<noteq> 0\<close> by presburger
+  from \<open>S \<noteq> {}\<close> \<open>finite S\<close> \<open>d = Max S\<close> have \<open> d dvd n \<and> odd d \<close>
+    using Max_in \<open>S = {d |d. d dvd n \<and> odd d}\<close> by auto
+  then have \<open>odd d\<close> by blast 
+    have \<open>k \<le> d\<close> 
+      using Max_ge \<open>S = {d |d. d dvd n \<and> odd d}\<close> \<open>d = Max S\<close> \<open>finite S\<close> assms(2) assms(3) by blast
+    then show ?thesis 
+      by (simp add: \<open>d = OddPart n\<close>)
+  qed
+
+lemma OddPartL2S:
+  fixes n d k :: nat
+  assumes \<open>n \<ge> 1\<close> and \<open>n = d * (OddPart n)\<close> and \<open>k dvd d\<close> and \<open>odd k\<close>
+  shows \<open>k = 1\<close>
+proof(rule classical)
+  assume \<open>\<not>(k = 1)\<close>
+  then have \<open>k = 0 \<or> k \<ge> 2\<close> 
+    by linarith
+have \<open>k \<noteq> 0\<close> 
+  using assms(4) by presburger
+  then have \<open>k \<ge> 2\<close> 
+    using \<open>k = 0 \<or> 2 \<le> k\<close> by blast
+  obtain w :: nat where \<open>w = k * (OddPart n)\<close> 
+    by blast
+  have \<open>w dvd n\<close> 
+    by (metis \<open>w = k * OddPart n\<close> assms(2) assms(3) dvd_times_right_cancel_iff gcd_nat.order_iff_strict mult_cancel_right)
+  have \<open>odd w\<close> 
+    using \<open>w = k * OddPart n\<close> assms(1) assms(4) even_mult_iff preExp2OddPartChar1 by blast
+  have \<open>w > OddPart n\<close> 
+    by (metis OddPart_def \<open>k \<noteq> 0\<close> \<open>k \<noteq> 1\<close> \<open>w = k * OddPart n\<close> \<open>w dvd n\<close> dvd_div_mult_self less_one  mult_cancel_right mult_is_0 mult_le_mono1 nat_mult_1 nat_neq_iff not_le semiring_normalization_rules(11))
+  have \<open>w \<le> OddPart n\<close> 
+    using OddPartL1X1 \<open>odd w\<close> \<open>w dvd n\<close> assms(1) by blast
+  from  \<open>w > OddPart n\<close> \<open>w \<le> OddPart n\<close>  have False by simp
+  then show ?thesis by blast
+qed
+
+
+lemma OddPartL2:
+  fixes n d :: nat
+  assumes \<open>n \<ge> 1\<close> and \<open>n = d * (OddPart n)\<close>
+  shows \<open>\<forall> k :: nat. k dvd d \<and> odd k \<longrightarrow> k = 1\<close>
+  using OddPartL2S assms(1) assms(2) by blast
+
+lemma DFSFSfre34:
+  fixes n :: nat
+  assumes \<open>n \<ge> 1\<close> \<open>\<forall> k :: nat. k dvd n \<and> odd k \<longrightarrow> k = 1\<close>
+  shows \<open> \<exists> e::nat. n = 2^e\<close>
+  using Pow2Odd 
+  using assms(1) assms(2) numeral_le_one_iff semiring_norm(69) by blast
+
+lemma OddPartL3:
+  fixes n d :: nat
+  assumes \<open>n \<ge> 1\<close> and \<open>n = d * (OddPart n)\<close>
+  shows \<open> \<exists> e::nat. d = 2^e\<close>
+proof-
+  from  \<open>n \<ge> 1\<close>  \<open>n = d * (OddPart n)\<close>
+  have \<open>\<forall> k :: nat. k dvd d \<and> odd k \<longrightarrow> k = 1\<close> 
+    using OddPartL2 by blast
+  then show ?thesis using DFSFSfre34 \<open>n \<ge> 1\<close> 
+    by (metis assms(2) dvd_imp_le mult_is_0 neq0_conv one_dvd)
+qed
+
+
+lemma preExp2OddPartChar2X2:
+  fixes n :: nat
+  assumes \<open>n \<ge> 1\<close>
+  shows \<open>\<exists> e :: nat.  n = 2^e*(OddPart n) \<close>
+proof-
+  have \<open>(OddPart n) dvd n\<close> 
+    using OddPartL1 assms by blast
+  then obtain d :: nat where \<open>n = d * (OddPart n)\<close> 
+    by (metis dvd_div_mult_self)
+  then obtain e :: nat where \<open>d = 2^e\<close> 
+    using OddPartL3 assms by blast
+  then show ?thesis 
+    using \<open>n = d * OddPart n\<close> by blast
+qed
+
+lemma preExp2OddPartChar2:
+  fixes n :: nat
+  assumes \<open>n \<ge> 1\<close>
+  shows \<open> n = 2^(Exp2 n)*(OddPart n) \<close>
+proof-
+  obtain k :: nat where \<open>n = 2^(Exp2 n)*k\<close> and \<open>odd k\<close> 
+    using assms preExp2OddPartChar2X1 by blast
+  obtain e :: nat where \<open>n = 2^e*(OddPart n)\<close> and \<open>odd (OddPart n)\<close> 
+    using assms preExp2OddPartChar2X2 preExp2OddPartChar1 by presburger
+  from  \<open>n = 2^(Exp2 n)*k\<close> \<open>n = 2^e*(OddPart n)\<close> \<open>odd k\<close> \<open>odd (OddPart n)\<close> 
+  have \<open>(OddPart n) = k\<close> 
+    by (metis UniqnessOddEven)
+  then have \<open>2^(Exp2 n) = 2^e\<close> 
+    by (metis UniqnessOddEven \<open>n = 2 ^ Exp2 n * k\<close> \<open>n = 2 ^ e * OddPart n\<close> \<open>odd (OddPart n)\<close>)
+  then show ?thesis 
+    by (smt \<open>n = 2 ^ e * OddPart n\<close>)
+qed
+
+lemma preExp2OddPartChar:
+  fixes n :: nat
+  assumes \<open>n \<ge> 1\<close>
+  shows \<open> n = 2^(Exp2 n)*(OddPart n) \<and> odd (OddPart n)  \<close>
+  using assms preExp2OddPartChar1 preExp2OddPartChar2 by blast
+
+corollary Exp2OddPartChar:
+   \<open> (\<forall> n. (Exp2 0 = 0 \<and> OddPart 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(Exp2 n)*(OddPart n) \<and> odd (OddPart n) )) ) \<close>
+  using  preExp2OddPartChar 
+  by (simp add: Exp2_def OddPart_def)
+
+corollary CoroUniqEvenPart:
+  fixes f g :: \<open>nat \<Rightarrow> nat\<close>
+  assumes \<open>(\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) ) \<close>
+  shows \<open>f = Exp2 \<and> g = OddPart\<close>
+  using UniqEvenPart Exp2OddPartChar
+  by (metis (no_types, hide_lams) Exp2_def OddPart_def assms preUniqEvenPartSQE)
+
 end
