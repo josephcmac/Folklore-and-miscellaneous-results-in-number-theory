@@ -705,4 +705,20 @@ corollary CoroUniqEvenPart:
   using UniqEvenPart Exp2OddPartChar
   by (metis (no_types, hide_lams) Exp2_def OddPart_def assms preUniqEvenPartSQE)
 
+lemma Exp2ValueAt1: \<open>Exp2 (1::nat) = 0\<close>
+proof-
+  have \<open>(1::nat) = 2^(Exp2 (1::nat))*OddPart (1::nat)\<close> 
+    using preExp2OddPartChar by blast
+  then show ?thesis 
+    by simp
+qed
+
+lemma OddPartValueAt1: \<open>OddPart (1::nat) = 1\<close>
+proof-
+  have \<open>(1::nat) = 2^(Exp2 (1::nat))*OddPart (1::nat)\<close> 
+    using preExp2OddPartChar by blast
+  then show ?thesis 
+    by simp
+qed
+
 end
