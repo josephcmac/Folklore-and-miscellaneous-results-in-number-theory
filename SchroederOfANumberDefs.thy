@@ -8,7 +8,7 @@ Author: Jose Manuel Rodriguez Caballero
 
 theory SchroederOfANumberDefs
 
-imports Complex_Main PowOfTwo
+imports Complex_Main 
 
 begin
 
