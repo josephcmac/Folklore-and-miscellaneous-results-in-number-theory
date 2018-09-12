@@ -16,7 +16,7 @@ theorem SchroederArithmB :
 
 theory SchroederOfANumberUniq
 
-imports Complex_Main PowOfTwo SchroederOfANumberDefs
+imports Complex_Main  SchroederOfANumberDefs
 
 begin
 
