@@ -804,8 +804,9 @@ lemma SchroederHeightSumRec:
   shows \<open>SchroederHeight (a # w) = (\<Sum>j < length (a # w). SchroederCode( (a # w) ! j ))\<close>
 proof-
   have \<open>SchroederHeight (a # w) = (SchroederCode a) + (SchroederHeight w)\<close> 
-    by (metis (no_types, hide_lams) SCHR.distinct(1) SCHR.exhaust SchroederCode_def SchroederHeight.simps(2) SchroederHeight.simps(3) SchroederHeight.simps(4)  diff_add_eq linordered_field_class.sign_simps(2) minus_int_code(2) plus_int_code(2))
-  have \<open>(a # w) ! 0 = a\<close> 
+    using SchroederCode_def SchroederHeight_def  HeightLetterwise.simps(1)  HeightLetterwise.simps(2)
+    by (smt SCHR.exhaust SchroederHeightLetter.simps(1) SchroederHeightLetter.simps(2) SchroederHeightLetter.simps(3))
+    have \<open>(a # w) ! 0 = a\<close>
     by simp
   have \<open>length (a # w) = Suc (length w)\<close> 
     by simp
@@ -828,7 +829,7 @@ lemma SchroederHeightSum:
 proof(induction w)
   case Nil
   then show ?case 
-    by simp
+        by (simp add: SchroederHeight_def)
 next
   case (Cons a w)
   then show ?case 
@@ -914,7 +915,8 @@ lemma SchroederArithmL3 :
   fixes n :: nat and w :: \<open>SCHR list\<close> 
   assumes \<open>n \<ge> 1\<close> and \<open> WordToFun w = Jsigns n \<close>
   shows \<open>SchroederPath w\<close>
-  using JsignsWordToFunId JsignsWordToFunPSeq0 SchroederArithmL3B SchroederPath_def assms(1) assms(2) by presburger
+  using  AbstractPath_def  JsignsWordToFunId JsignsWordToFunPSeq0 SchroederArithmL3B SchroederPath_def assms(1) assms(2) 
+  by (metis (full_types)  )
 
 lemma FromFunToThreeWordE1QRec:
   fixes  K :: nat and f :: \<open>nat\<Rightarrow>int\<close>
