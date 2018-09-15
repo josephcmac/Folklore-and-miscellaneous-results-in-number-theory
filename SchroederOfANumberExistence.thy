@@ -1000,7 +1000,7 @@ lemma SchroederArithmL1 :
   shows \<open>\<exists> w :: SCHR list.  WordToFun w = Jsigns n \<and> SchroederPath w \<close>
   using FromFunToThreeWordE SchroederArithmL2 SchroederArithmL3 assms by fastforce
 
-section {* Main result *}
+section {* Main Result *}
 
 theorem SchroederArithmA :
   fixes n :: nat
