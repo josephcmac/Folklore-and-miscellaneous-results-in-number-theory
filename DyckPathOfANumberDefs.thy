@@ -35,7 +35,7 @@ definition AbstractPath :: \<open>('a list \<Rightarrow> int) \<Rightarrow> ('a 
 (\<forall> v :: 'a list.  prefix v w \<longrightarrow>  h v \<ge> 0 ) 
 \<and> ( h w = 0)\<close>
 
-section {* Schrieder Paths *}
+section {* Schroeder Paths *}
 
 datatype SCHR = UP | DOWN | STRANGE 
 
