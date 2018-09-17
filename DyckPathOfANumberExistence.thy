@@ -4,7 +4,7 @@ Author: Jose Manuel Rodriguez Caballero
 
 We associate to any 2-letter word w, a set of positive 
 natural numbers, denoted DyckClass w. We prove that this
-family of sets cover the set of positive natural numbers.
+family of sets covers the set of positive natural numbers.
 Furthermore, we prove that each non-empty set in this family
 admits a representative which is a Dyck path. More concretely,
 we prove the following theorem from [caballero2017symmetric].
