@@ -1681,4 +1681,24 @@ theorem DyckExistsUniq :
   using qDyckExists ADyckExistsUniqExt ADyckExistsUniq 
   by auto 
 
+
+section {* Specification *}
+
+definition DyckType :: \<open>nat \<Rightarrow> DCHR list\<close> where
+\<open>DyckType \<equiv> (SOME f :: nat \<Rightarrow> DCHR list. ((f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n)) ))\<close>
+ 
+proposition DyckType0: \<open>(DyckType 0 = [])\<close>
+  using qDyckExists DyckType_def someI_ex
+  by (smt qDyckExists DyckType_def someI_ex)
+
+proposition DyckType1: \<open>n \<ge> 1 \<Longrightarrow>  n \<in> DyckClass (DyckType n)\<close>
+  by (smt qDyckExists DyckType_def someI_ex)
+
+proposition DyckType2: \<open>n \<ge> 1 \<Longrightarrow>  DyckPath (DyckType n)\<close>
+  by (smt qDyckExists DyckType_def someI_ex)
+
+proposition DyckType3: \<open>n \<ge> 1 \<Longrightarrow>  n \<in> DyckClass w  \<Longrightarrow> w = DyckType n\<close>
+  using DyckType1 DyckUniq by blast
+
+
 end
