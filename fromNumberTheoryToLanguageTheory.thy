@@ -92,5 +92,24 @@ proposition RepFunNOT :
  \<open>ArithmFun (NOT F) = NOT (ArithmFun F) \<close>
   by (simp add: ArithmFun_def NOT_funt)
 
+section {* Split *}
+
+proposition DyckTypeToArithmFun:
+  fixes f :: \<open>nat \<Rightarrow> bool\<close> and g :: \<open>DCHR list \<Rightarrow> bool\<close>
+  assumes \<open>\<forall> n.(g (DyckType n) \<longrightarrow> f n)\<close> and  \<open>\<forall> n.(f n \<longrightarrow> g (DyckType n))\<close>
+  shows \<open>ArithmFun g = f\<close>
+proof-
+  from \<open>\<forall> n.(g (DyckType n) \<longrightarrow> f n)\<close> 
+  have \<open>\<forall> n.((ArithmFun g) n \<longrightarrow> f n)\<close> 
+    by (simp add: ArithmFun_def)
+  from \<open>\<forall> n.(f n \<longrightarrow> g (DyckType n))\<close>
+  have  \<open>\<forall> n.(f n \<longrightarrow> (ArithmFun g) n )\<close> 
+    by (simp add: ArithmFun_def)
+  have \<open>\<forall> n.((ArithmFun g) n \<longleftrightarrow> f n)\<close> 
+    using \<open>\<forall>n. ArithmFun g n \<longrightarrow> f n\<close> \<open>\<forall>n. f n \<longrightarrow> ArithmFun g n\<close> by blast
+  then show ?thesis using ext by blast
+qed
+
+
 
 end
