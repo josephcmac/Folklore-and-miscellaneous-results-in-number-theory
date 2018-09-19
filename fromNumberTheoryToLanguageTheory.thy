@@ -15,6 +15,33 @@ imports Complex_Main DyckPathOfANumberExistenceUniq
 
 begin
 
+section {* Equality *}
+
+text {* Equality ignoring the value of the functions at zero *}
+abbreviation eqSuc_abb :: \<open>(nat \<Rightarrow> 'a) \<Rightarrow> (nat \<Rightarrow> 'a) \<Rightarrow> bool\<close>
+(infixr "\<doteq>" 65)
+where
+\<open>f \<doteq> g \<equiv>  f \<circ> Suc = g \<circ> Suc\<close>
+
+section {* DyckType *}
+
+definition DyckType :: \<open>nat \<Rightarrow> DCHR list\<close> where
+\<open>DyckType \<equiv> (SOME f :: nat \<Rightarrow> DCHR list. ((f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n)) ))\<close>
+
+proposition DyckType0: \<open>(DyckType 0 = [])\<close>
+  by (smt qDyckExists DyckType_def someI_ex)
+
+proposition DyckType1: \<open>n \<ge> 1 \<Longrightarrow>  n \<in> DyckClass (DyckType n)\<close>
+  by (smt qDyckExists DyckType_def someI_ex)
+
+proposition DyckType2: \<open>n \<ge> 1 \<Longrightarrow>  DyckPath (DyckType n)\<close>
+  by (smt qDyckExists DyckType_def someI_ex)
+
+proposition DyckType3: \<open>n \<ge> 1 \<Longrightarrow>  n \<in> DyckClass w  \<Longrightarrow> w = DyckType n\<close>
+  using DyckType1 DyckUniq by blast
+
+
+
 text {* ArithmFun transforms a language theoretic function into an arithmetical function *}
 
 definition ArithmFun :: \<open>(DCHR list \<Rightarrow> 'a) \<Rightarrow> (nat \<Rightarrow> 'a)\<close> where
@@ -46,6 +73,10 @@ proposition RepFunAND :
  \<open>ArithmFun (F AND G) = (ArithmFun F) AND (ArithmFun G) \<close>
   by (simp add: AND_funt ArithmFun_def)
 
+proposition RepFunANDdot : 
+ \<open>ArithmFun (F AND G) \<doteq> (ArithmFun F) AND (ArithmFun G) \<close>
+  using RepFunAND by auto
+
 
 subsection {* OR *}
 
@@ -72,6 +103,10 @@ proposition RepFunOR :
  \<open>ArithmFun (F OR G) = (ArithmFun F) OR (ArithmFun G) \<close>
   by (simp add: ArithmFun_def OR_funt)
 
+proposition RepFunORdot : 
+ \<open>ArithmFun (F OR G) \<doteq> (ArithmFun F) OR (ArithmFun G) \<close>
+  by (simp add: RepFunOR)
+
 subsection {* NOT *}
 
 definition NOT :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close> where
@@ -85,30 +120,37 @@ shows  \<open>\<forall> x. (NOT f) x \<longleftrightarrow> \<not> (f x)\<close>
 lemma NOT_funt_ext: \<open>\<forall>x. ((NOT f) \<circ> h) x =  (NOT (f \<circ> h)) x\<close>
   by (simp add: NOTQ)
 
-lemma NOT_funt: \<open>(NOT f) \<circ> h  = NOT (f \<circ> h)\<close>
+lemma NOT_funt: \<open>(NOT f) \<circ> h = NOT (f \<circ> h)\<close>
   using NOT_funt_ext ext by fastforce
 
 proposition RepFunNOT : 
  \<open>ArithmFun (NOT F) = NOT (ArithmFun F) \<close>
   by (simp add: ArithmFun_def NOT_funt)
 
+proposition RepFunNOTdot : 
+ \<open>ArithmFun (NOT F) \<doteq> NOT (ArithmFun F) \<close>
+  using RepFunNOT by auto
+
 section {* Split *}
+
+text {* We assume that both the empty word and the number zero 
+does not satisfy the properties *}
 
 proposition DyckTypeToArithmFun:
   fixes f :: \<open>nat \<Rightarrow> bool\<close> and g :: \<open>DCHR list \<Rightarrow> bool\<close>
-  assumes \<open>\<forall> n.(g (DyckType n) \<longrightarrow> f n)\<close> and  \<open>\<forall> n.(f n \<longrightarrow> g (DyckType n))\<close>
-  shows \<open>ArithmFun g = f\<close>
+  assumes  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> ((g (DyckType n) \<longrightarrow> f n))\<close> and  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> (f n \<longrightarrow> g (DyckType n))\<close>
+shows \<open>(ArithmFun g) \<doteq> f \<close>
 proof-
-  from \<open>\<forall> n.(g (DyckType n) \<longrightarrow> f n)\<close> 
-  have \<open>\<forall> n.((ArithmFun g) n \<longrightarrow> f n)\<close> 
+  from \<open>\<forall> n. n \<ge> 1 \<longrightarrow> (g (DyckType n) \<longrightarrow> f n)\<close> 
+  have \<open>\<forall> n. n \<ge> 1 \<longrightarrow>((ArithmFun g) n \<longrightarrow> f n)\<close> 
     by (simp add: ArithmFun_def)
-  from \<open>\<forall> n.(f n \<longrightarrow> g (DyckType n))\<close>
-  have  \<open>\<forall> n.(f n \<longrightarrow> (ArithmFun g) n )\<close> 
-    by (simp add: ArithmFun_def)
-  have \<open>\<forall> n.((ArithmFun g) n \<longleftrightarrow> f n)\<close> 
-    using \<open>\<forall>n. ArithmFun g n \<longrightarrow> f n\<close> \<open>\<forall>n. f n \<longrightarrow> ArithmFun g n\<close> by blast
-  then show ?thesis using ext by blast
-qed
+  from \<open>\<forall> n. n \<ge> 1 \<longrightarrow> (g (DyckType n) \<longrightarrow> f n)\<close> 
+  have  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> (f n \<longrightarrow> (ArithmFun g) n )\<close> 
+    by (metis ArithmFun_def assms(2) o_apply)
+    have \<open>\<forall> n. n \<ge> 1 \<longrightarrow>((ArithmFun g) n \<longleftrightarrow> f n)\<close>
+      using \<open>\<forall>n\<ge>1. ArithmFun g n \<longrightarrow> f n\<close> \<open>\<forall>n\<ge>1. f n \<longrightarrow> ArithmFun g n\<close> by blast
+    then show ?thesis using ext by auto
+  qed
 
 
 
