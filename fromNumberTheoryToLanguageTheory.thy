@@ -2,6 +2,10 @@
 Title: Reduction from number theory to language theory
 Author: Jose Manuel Rodriguez Caballero
 
+We define a homomorphism ArithmFun from the Boolean algebra of
+functions (DCHR list \<Rightarrow> bool) to the Boolean algebra of functions
+(nat \<Rightarrow> bool).
+
 (This code  was verified in Isabelle2018)
 *)
 
@@ -11,9 +15,15 @@ imports Complex_Main DyckPathOfANumberExistenceUniq
 
 begin
 
-definition RepFun :: \<open>(nat \<Rightarrow> 'a) \<Rightarrow> (DCHR list \<Rightarrow> 'a) \<Rightarrow> bool\<close> where
-\<open>RepFun \<equiv> \<lambda> f. \<lambda> g. (f = g \<circ> DyckType)\<close>
+text {* ArithmFun transforms a language theoretic function into an arithmetical function *}
 
+definition ArithmFun :: \<open>(DCHR list \<Rightarrow> 'a) \<Rightarrow> (nat \<Rightarrow> 'a)\<close> where
+\<open>ArithmFun \<equiv> \<lambda> g. (g \<circ> DyckType)\<close>
+
+section {* Pointwise Boolean operations *}
+
+
+subsection {* AND *}
 definition AND_op :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close> where
 \<open>AND_op \<equiv> \<lambda> f g. (\<lambda> x. (f x)\<and>(g x))\<close> 
 
@@ -21,22 +31,6 @@ abbreviation AND_abb :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Right
 (infixr "AND" 65)
 where
 \<open>f AND g \<equiv> AND_op f g\<close>
-
-definition OR_op :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close> where
-\<open>OR_op \<equiv> \<lambda> f g. (\<lambda> x. (f x)\<or>(g x))\<close>
-
-abbreviation OR_abb :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close>
-(infixr "OR" 65)
-where
-\<open>f OR g \<equiv> OR_op f g\<close>
-
-
-definition NOT :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close> where
-\<open>NOT \<equiv> \<lambda> f. (\<lambda> x. \<not>(f x))\<close>
-
-
-lemma RepFunInj : \<open>RepFun f h \<Longrightarrow> RepFun g h \<Longrightarrow>  f = g\<close>
-  by (simp add: RepFun_def)
 
 lemma ANDQ : 
   shows  \<open>\<forall> x. (f AND g) x \<longleftrightarrow> f x \<and> g x\<close>
@@ -49,22 +43,20 @@ lemma AND_funt: \<open>(f \<circ> h) AND (g \<circ> h) = (f AND g) \<circ> h\<cl
   by (simp add: AND_funt_ext ext)
 
 proposition RepFunAND : 
- \<open>RepFun f F \<Longrightarrow> RepFun g G \<Longrightarrow> RepFun (f AND g) (F AND G)\<close>
-proof-
-  assume \<open>RepFun f F\<close>
-  assume \<open>RepFun g G\<close>
-  from \<open>RepFun f F\<close> have \<open>f = F \<circ> DyckType\<close> 
-    by (simp add: RepFun_def)
-  from \<open>RepFun g G\<close> have \<open>g = G \<circ> DyckType\<close> 
-    by (simp add: RepFun_def)
-  from  \<open>f = F \<circ> DyckType\<close> \<open>g = G \<circ> DyckType\<close> 
-  have \<open>f AND g = (F \<circ> DyckType) AND (G \<circ> DyckType)\<close>
-    by blast
-  then  have \<open>f AND g =  ((F AND G) \<circ> DyckType)\<close>
-    using AND_funt by auto
-  then show ?thesis 
-    by (simp add: RepFun_def)
-qed
+ \<open>ArithmFun (F AND G) = (ArithmFun F) AND (ArithmFun G) \<close>
+  by (simp add: AND_funt ArithmFun_def)
+
+
+subsection {* OR *}
+
+definition OR_op :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close> where
+\<open>OR_op \<equiv> \<lambda> f g. (\<lambda> x. (f x)\<or>(g x))\<close>
+
+abbreviation OR_abb :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close>
+(infixr "OR" 65)
+where
+\<open>f OR g \<equiv> OR_op f g\<close>
+
 
 lemma ORQ : 
   shows  \<open>\<forall> x. (f OR g) x \<longleftrightarrow> f x \<or> g x\<close>
@@ -77,22 +69,13 @@ lemma OR_funt: \<open>(f \<circ> h) OR (g \<circ> h) = (f OR g) \<circ> h\<close
   by (simp add: OR_funt_ext ext)
 
 proposition RepFunOR : 
- \<open>RepFun f F \<Longrightarrow> RepFun g G \<Longrightarrow> RepFun (f OR g) (F OR G)\<close>
-proof-
-  assume \<open>RepFun f F\<close>
-  assume \<open>RepFun g G\<close>
-  from \<open>RepFun f F\<close> have \<open>f = F \<circ> DyckType\<close> 
-    by (simp add: RepFun_def)
-  from \<open>RepFun g G\<close> have \<open>g = G \<circ> DyckType\<close> 
-    by (simp add: RepFun_def)
-  from  \<open>f = F \<circ> DyckType\<close> \<open>g = G \<circ> DyckType\<close> 
-  have \<open>f OR g = (F \<circ> DyckType) OR (G \<circ> DyckType)\<close>
-    by blast
-  then  have \<open>f OR g =  ((F OR G) \<circ> DyckType)\<close>
-    using OR_funt by auto
-  then show ?thesis 
-    by (simp add: RepFun_def)
-qed
+ \<open>ArithmFun (F OR G) = (ArithmFun F) OR (ArithmFun G) \<close>
+  by (simp add: ArithmFun_def OR_funt)
+
+subsection {* NOT *}
+
+definition NOT :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close> where
+\<open>NOT \<equiv> \<lambda> f. (\<lambda> x. \<not>(f x))\<close>
 
 
 lemma NOTQ : 
@@ -106,15 +89,8 @@ lemma NOT_funt: \<open>(NOT f) \<circ> h  = NOT (f \<circ> h)\<close>
   using NOT_funt_ext ext by fastforce
 
 proposition RepFunNOT : 
- \<open>RepFun f F \<Longrightarrow> RepFun (NOT f) (NOT F)\<close>
-proof-
-  assume \<open>RepFun f F\<close>
-  from \<open>RepFun f F\<close> have \<open>f = F \<circ> DyckType\<close> 
-    by (simp add: RepFun_def)
-  then have \<open>NOT f  = (NOT F) \<circ> DyckType\<close>
-    by (simp add: NOT_funt)
-  then show ?thesis 
-    by (simp add: RepFun_def)
-qed
+ \<open>ArithmFun (NOT F) = NOT (ArithmFun F) \<close>
+  by (simp add: ArithmFun_def NOT_funt)
+
 
 end
