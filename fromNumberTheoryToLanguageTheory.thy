@@ -153,5 +153,24 @@ proof-
   qed
 
 
+corollary DyckTypeToArithmFunB:
+  fixes f :: \<open>nat \<Rightarrow> bool\<close> and g :: \<open>DCHR list \<Rightarrow> bool\<close>
+  assumes  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> ((g (DyckType n) \<longleftrightarrow> f n))\<close>
+shows \<open>(ArithmFun g) \<doteq> f \<close>
+  by (simp add: DyckTypeToArithmFun assms)
+
+proposition DyckTypeToArithmFunC:
+  fixes f :: \<open>nat \<Rightarrow> 'a\<close> and g :: \<open>DCHR list \<Rightarrow> 'a\<close>
+  assumes  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> ((g (DyckType n) = f n))\<close>
+shows \<open>(ArithmFun g) \<doteq> f \<close>
+proof-
+  from  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> ((g (DyckType n) = f n))\<close>
+  have \<open>\<forall> n.((g (DyckType (Suc n)) = f (Suc n)))\<close>
+    by simp
+  then have \<open>g \<circ> DyckType \<circ> Suc = f \<circ> Suc \<close> 
+    by auto
+  then show ?thesis 
+    by (simp add: ArithmFun_def)
+qed
 
 end
