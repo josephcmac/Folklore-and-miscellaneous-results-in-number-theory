@@ -365,9 +365,12 @@ lemma DyckTypeDivLength:
   using fromJdvdToDvd fromJsignsToJdvd DyckTypeDivLengthJsigns
   by auto
 
+definition sigmaOdd :: \<open>nat \<Rightarrow> nat\<close>
+  where \<open>sigmaOdd \<equiv> \<lambda> n. card {d | d :: nat. d dvd n \<and> odd d}\<close>
+
 proposition DyckTypeDivLengthArithmFun : 
-\<open>ArithmFun (\<lambda> w. length w) \<doteq> (\<lambda> n. 2*(card {d | d :: nat. d dvd n \<and> odd d}))\<close>
-  using DyckTypeDivLength
-  by (simp add: DyckTypeToArithmFunC)
+\<open>ArithmFun length \<doteq> ( \<lambda> n. 2*(sigmaOdd n) )\<close>
+  using DyckTypeDivLength sigmaOdd_def
+  by (simp add: sigmaOdd_def DyckTypeToArithmFunC)
 
 end
