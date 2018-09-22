@@ -807,14 +807,14 @@ lemma preJsignsWordToFunId :
   shows \<open>SchroederCode (w ! j) = (Jsigns n) j \<close>
   by (metis WordToFun_def assms(2) assms(3))
 
-lemma SchroederHeightSumRec:
+lemma SchroederPHeightSumRec:
   fixes  w :: \<open>SCHR list\<close> and a :: SCHR 
-  assumes \<open>SchroederHeight w = (\<Sum>j < length w. SchroederCode( w ! j ))\<close>
-  shows \<open>SchroederHeight (a # w) = (\<Sum>j < length (a # w). SchroederCode( (a # w) ! j ))\<close>
+  assumes \<open>SchroederPHeight w = (\<Sum>j < length w. SchroederCode( w ! j ))\<close>
+  shows \<open>SchroederPHeight (a # w) = (\<Sum>j < length (a # w). SchroederCode( (a # w) ! j ))\<close>
 proof-
-  have \<open>SchroederHeight (a # w) = (SchroederCode a) + (SchroederHeight w)\<close> 
-    using SchroederCode_def SchroederHeight_def  HeightLetterwise.simps(1)  HeightLetterwise.simps(2)
-    by (smt SCHR.exhaust SchroederHeightLetter.simps(1) SchroederHeightLetter.simps(2) SchroederHeightLetter.simps(3))
+  have \<open>SchroederPHeight (a # w) = (SchroederCode a) + (SchroederPHeight w)\<close> 
+    using SchroederCode_def SchroederPHeight_def  PHeightLetterwise.simps(1)  PHeightLetterwise.simps(2)
+    by (smt SCHR.exhaust SchroederPHeightLetter.simps(1) SchroederPHeightLetter.simps(2) SchroederPHeightLetter.simps(3))
     have \<open>(a # w) ! 0 = a\<close>
     by simp
   have \<open>length (a # w) = Suc (length w)\<close> 
@@ -825,36 +825,36 @@ proof-
     by simp
   then have  \<open>(\<Sum>j < length w. SchroederCode( w ! j ) )+(SchroederCode a) = (\<Sum>j < length w. SchroederCode( (a # w) ! (Suc j) ) )+ SchroederCode( (a # w) ! 0)\<close>
    using \<open>(a # w) ! 0 = a\<close> by presburger
-  then have \<open>SchroederHeight (a # w) = (\<Sum>j < length w. SchroederCode( (a # w) ! (Suc j) ) )+ SchroederCode( (a # w) ! 0)\<close>
-    using \<open>SchroederHeight (a # w) = SchroederCode a + SchroederHeight w\<close> assms by linarith
+  then have \<open>SchroederPHeight (a # w) = (\<Sum>j < length w. SchroederCode( (a # w) ! (Suc j) ) )+ SchroederCode( (a # w) ! 0)\<close>
+    using \<open>SchroederPHeight (a # w) = SchroederCode a + SchroederPHeight w\<close> assms by linarith
   then show ?thesis 
     by (smt \<open>length (a # w) = Suc (length w)\<close> sum.cong sum_lessThan_Suc_shift)
 qed
 
-lemma SchroederHeightSum:
+lemma SchroederPHeightSum:
   fixes  w :: \<open>SCHR list\<close> 
-  shows \<open>SchroederHeight w = (\<Sum>j < length w. SchroederCode( w ! j ))\<close>
+  shows \<open>SchroederPHeight w = (\<Sum>j < length w. SchroederCode( w ! j ))\<close>
 proof(induction w)
   case Nil
   then show ?case 
-        by (simp add: SchroederHeight_def)
+        by (simp add: SchroederPHeight_def)
 next
   case (Cons a w)
   then show ?case 
-    using SchroederHeightSumRec by blast
+    using SchroederPHeightSumRec by blast
 qed
 
 lemma JsignsWordToFunId :
   fixes n :: nat and w :: \<open>SCHR list\<close> 
   assumes \<open>n \<ge> 1\<close> and \<open> WordToFun w = Jsigns n \<close>
-  shows \<open>SchroederHeight w = (\<Sum>j < length w. (Jsigns n) j) \<close>
-  by (metis (no_types, lifting) SchroederHeightSum WordToFun_def assms(2) lessThan_iff sum.cong)
+  shows \<open>SchroederPHeight w = (\<Sum>j < length w. (Jsigns n) j) \<close>
+  by (metis (no_types, lifting) SchroederPHeightSum WordToFun_def assms(2) lessThan_iff sum.cong)
 
 lemma JsignsWordToFunIdprefix :
   fixes n :: nat and v w :: \<open>SCHR list\<close> 
   assumes \<open>n \<ge> 1\<close> and \<open> WordToFun w = Jsigns n \<close> and \<open>prefix v w\<close>
-  shows \<open>SchroederHeight v = (\<Sum>j < length v. (Jsigns n) j) \<close>
-  by (smt SchroederHeightSum WordToFun_def assms(2) assms(3) lessThan_iff less_le_trans prefix_def sum.cong)
+  shows \<open>SchroederPHeight v = (\<Sum>j < length v. (Jsigns n) j) \<close>
+  by (smt SchroederPHeightSum WordToFun_def assms(2) assms(3) lessThan_iff less_le_trans prefix_def sum.cong)
 
 lemma preJsignsWordToFunPSgeq0prefix :
   fixes n k :: nat 
@@ -907,14 +907,14 @@ proof-
 lemma SchroederArithmL3A :
   fixes n :: nat and w :: \<open>SCHR list\<close> 
   assumes \<open>n \<ge> 1\<close> and \<open> WordToFun w = Jsigns n \<close> and \<open>length w = 2*n\<close>
-  shows \<open>SchroederHeight w = 0\<close>
+  shows \<open>SchroederPHeight w = 0\<close>
   using assms JsignsWordToFunId JsignsWordToFunPSeq0 
   by simp
 
 lemma SchroederArithmL3B :
   fixes n :: nat and v w :: \<open>SCHR list\<close> 
   assumes \<open>n \<ge> 1\<close> and \<open> WordToFun w = Jsigns n \<close> and \<open>prefix v w\<close>  
-  shows \<open>SchroederHeight v \<ge> 0\<close>
+  shows \<open>SchroederPHeight v \<ge> 0\<close>
   using assms JsignsWordToFunIdprefix JsignsWordToFunPSgeq0prefix by simp
 
 lemma SchroederArithmL3 :
@@ -1016,7 +1016,7 @@ proposition SchroederArithmA :
 section {* Dyck Paths *}
 
 definition STRANGEL :: \<open>SCHR list \<Rightarrow> int\<close> where 
-\<open>STRANGEL \<equiv> (HeightLetterwise (\<lambda> c::SCHR. (if c = STRANGE then (1::int) else (0::int)))) \<close>
+\<open>STRANGEL \<equiv> (PHeightLetterwise (\<lambda> c::SCHR. (if c = STRANGE then (1::int) else (0::int)))) \<close>
 
 lemma STRANGELCHAR:
   fixes w :: \<open>SCHR list\<close> and a :: SCHR
@@ -1070,23 +1070,23 @@ next
     using DyckToSchroederSchroederToDyckRec by blast
 qed
 
-lemma HeightZeroStrange:
+lemma PHeightZeroStrange:
   fixes w :: \<open>DCHR list\<close>
-shows \<open>SchroederHeight (DyckToSchroeder w) = DyckHeight w\<close>
+shows \<open>SchroederPHeight (DyckToSchroeder w) = DyckPHeight w\<close>
 proof(induction w)
   case Nil
   then show ?case 
-    by (simp add: DyckHeight_def SchroederHeight_def)
+    by (simp add: DyckPHeight_def SchroederPHeight_def)
 next
   case (Cons a w)
   then show ?case 
-    by (metis (full_types) DCHR.exhaust DyckHeightLetter.simps(1) DyckHeightLetter.simps(2) DyckHeight_def DyckToSchroeder.simps(2) DyckToSchroederCode_def HeightLetterwise.simps(2) SchroederHeightLetter.simps(1) SchroederHeightLetter.simps(2) SchroederHeight_def)
+    by (metis (full_types) DCHR.exhaust DyckPHeightLetter.simps(1) DyckPHeightLetter.simps(2) DyckPHeight_def DyckToSchroeder.simps(2) DyckToSchroederCode_def PHeightLetterwise.simps(2) SchroederPHeightLetter.simps(1) SchroederPHeightLetter.simps(2) SchroederPHeight_def)
 qed
 
 lemma DyckIsSchroederH0:
   fixes w :: \<open>DCHR list\<close>
-  shows \<open>SchroederHeight (DyckToSchroeder w) = 0 \<longrightarrow> DyckHeight w = 0\<close>
-  using HeightZeroStrange by auto
+  shows \<open>SchroederPHeight (DyckToSchroeder w) = 0 \<longrightarrow> DyckPHeight w = 0\<close>
+  using PHeightZeroStrange by auto
 
 lemma prefixL1:
   fixes u w :: \<open>'b list\<close> 
@@ -1173,8 +1173,8 @@ qed
 
 lemma DyckIsSchroederPrefix:
   fixes w :: \<open>DCHR list\<close>
-  shows \<open>(\<forall> v::SCHR list. (prefix v (DyckToSchroeder w) \<longrightarrow> SchroederHeight v \<ge> 0)) \<longrightarrow> (\<forall> u::DCHR list. (prefix u w \<longrightarrow> DyckHeight u \<ge> 0))\<close>
-  using HeightZeroStrange DyckIsSchroederPrefixOnto
+  shows \<open>(\<forall> v::SCHR list. (prefix v (DyckToSchroeder w) \<longrightarrow> SchroederPHeight v \<ge> 0)) \<longrightarrow> (\<forall> u::DCHR list. (prefix u w \<longrightarrow> DyckPHeight u \<ge> 0))\<close>
+  using PHeightZeroStrange DyckIsSchroederPrefixOnto
   by fastforce
 
 lemma DyckIsSchroeder:
@@ -1234,30 +1234,30 @@ next
     by simp
 qed
 
-lemma SchroederHeightAdd:
+lemma SchroederPHeightAdd:
   fixes u :: \<open>SCHR list\<close>
-  shows \<open>\<forall> v. SchroederHeight (u @ v) = (SchroederHeight u)+(SchroederHeight v)\<close>
+  shows \<open>\<forall> v. SchroederPHeight (u @ v) = (SchroederPHeight u)+(SchroederPHeight v)\<close>
 proof(induction u)
   case Nil
-have \<open> (SchroederHeight Nil) = 0\<close> 
-  by (metis DyckHeight_def DyckToSchroeder.simps(1) HeightLetterwise.simps(1) HeightZeroStrange) 
+have \<open> (SchroederPHeight Nil) = 0\<close> 
+  by (metis DyckPHeight_def DyckToSchroeder.simps(1) PHeightLetterwise.simps(1) PHeightZeroStrange) 
   then show ?case 
     by simp
 next
   case (Cons a u)
   then show ?case 
-    by (smt Cons_eq_appendI HeightLetterwise.simps(2) SchroederHeight_def)
+    by (smt Cons_eq_appendI PHeightLetterwise.simps(2) SchroederPHeight_def)
 qed
 
-lemma SchroederHeightSTRANGE:
-  \<open>SchroederHeight [STRANGE] = 0\<close>
-  by (simp add: SchroederHeight_def)
+lemma SchroederPHeightSTRANGE:
+  \<open>SchroederPHeight [STRANGE] = 0\<close>
+  by (simp add: SchroederPHeight_def)
 
-lemma SchroederPathIsNotStrangeHeightZero:
+lemma SchroederPathIsNotStrangePHeightZero:
   fixes u v :: \<open>SCHR list\<close>
-  assumes \<open>SchroederHeight (u @ [STRANGE] @ v) = 0\<close>
-  shows \<open>SchroederHeight (u @ v) = 0\<close>
-  using SchroederHeightAdd SchroederHeightSTRANGE assms by presburger
+  assumes \<open>SchroederPHeight (u @ [STRANGE] @ v) = 0\<close>
+  shows \<open>SchroederPHeight (u @ v) = 0\<close>
+  using SchroederPHeightAdd SchroederPHeightSTRANGE assms by presburger
 
 lemma prefixLX:
   fixes p u v :: \<open>'a list\<close>
@@ -1415,16 +1415,16 @@ lemma prefixZ:
   shows \<open>prefix (u @ x @ q) (u @ x @ v)\<close> 
   using assms prefixZ1 prefixZ2 by blast
 
-lemma SchroederPathIsNotStrangeHeightREC:
+lemma SchroederPathIsNotStrangePHeightREC:
   fixes u v p :: \<open>SCHR list\<close>
-  assumes \<open>\<forall> p :: SCHR list. prefix p (u @ [STRANGE] @ v) \<longrightarrow> SchroederHeight p \<ge> 0\<close>
+  assumes \<open>\<forall> p :: SCHR list. prefix p (u @ [STRANGE] @ v) \<longrightarrow> SchroederPHeight p \<ge> 0\<close>
     and \<open>prefix p (u @ v)\<close>
-  shows  \<open>SchroederHeight p \<ge> 0\<close>
+  shows  \<open>SchroederPHeight p \<ge> 0\<close>
 proof(cases \<open>prefix p u\<close>)
   case True
   then have \<open> prefix p (u @ [STRANGE] @ v) \<close> 
     by (simp add: prefixLX)
-  then have  \<open>SchroederHeight p \<ge> 0\<close> 
+  then have  \<open>SchroederPHeight p \<ge> 0\<close> 
     using assms(1) by blast
   then show ?thesis by blast
 next
@@ -1433,10 +1433,10 @@ next
     using assms(2) prefixY by blast
   have \<open>prefix (u @ [STRANGE] @ q) (u @ [STRANGE] @ v)\<close> 
     using \<open>p = u @ q\<close> assms(2) prefixZ by blast
-then have \<open>SchroederHeight (u @ [STRANGE] @ q) \<ge> 0\<close> 
+then have \<open>SchroederPHeight (u @ [STRANGE] @ q) \<ge> 0\<close> 
   using assms(1) by blast
-  then have  \<open>SchroederHeight (u @  q) \<ge> 0\<close> 
-    using SchroederHeightAdd SchroederHeightSTRANGE by smt
+  then have  \<open>SchroederPHeight (u @  q) \<ge> 0\<close> 
+    using SchroederPHeightAdd SchroederPHeightSTRANGE by smt
   then show ?thesis 
     using \<open>p = u @ q\<close> by blast
 qed
@@ -1447,18 +1447,18 @@ lemma SchroederPathIsNotStrange:
   shows \<open>SchroederPath (u @ v)\<close>
 proof-
   from \<open>SchroederPath (u @ [STRANGE] @ v)\<close>
-  have \<open>SchroederHeight (u @ [STRANGE] @ v) = 0\<close> using AbstractPath_def SchroederPath_def SchroederHeight_def
+  have \<open>SchroederPHeight (u @ [STRANGE] @ v) = 0\<close> using AbstractPath_def SchroederPath_def SchroederPHeight_def
     by (metis (full_types) )
-  then have  \<open>SchroederHeight (u @ v) = 0\<close> using SchroederPathIsNotStrangeHeightZero 
+  then have  \<open>SchroederPHeight (u @ v) = 0\<close> using SchroederPathIsNotStrangePHeightZero 
     by blast
   from \<open>SchroederPath (u @ [STRANGE] @ v)\<close>
-  have  \<open>\<forall> p :: SCHR list. prefix p (u @ [STRANGE] @ v) \<longrightarrow> SchroederHeight p \<ge> 0\<close>
- using AbstractPath_def SchroederPath_def SchroederHeight_def
+  have  \<open>\<forall> p :: SCHR list. prefix p (u @ [STRANGE] @ v) \<longrightarrow> SchroederPHeight p \<ge> 0\<close>
+ using AbstractPath_def SchroederPath_def SchroederPHeight_def
   by (metis (full_types) )
-  then have   \<open>\<forall> p :: SCHR list. prefix p (u @ v) \<longrightarrow> SchroederHeight p \<ge> 0\<close>
-    using SchroederPathIsNotStrangeHeightREC by blast
-  show ?thesis using  \<open>SchroederHeight (u @ v) = 0\<close>  \<open>\<forall> p :: SCHR list. prefix p (u @ v) \<longrightarrow> SchroederHeight p \<ge> 0\<close>
-  AbstractPath_def SchroederPath_def SchroederHeight_def
+  then have   \<open>\<forall> p :: SCHR list. prefix p (u @ v) \<longrightarrow> SchroederPHeight p \<ge> 0\<close>
+    using SchroederPathIsNotStrangePHeightREC by blast
+  show ?thesis using  \<open>SchroederPHeight (u @ v) = 0\<close>  \<open>\<forall> p :: SCHR list. prefix p (u @ v) \<longrightarrow> SchroederPHeight p \<ge> 0\<close>
+  AbstractPath_def SchroederPath_def SchroederPHeight_def
     by (metis (full_types) )
 qed
 

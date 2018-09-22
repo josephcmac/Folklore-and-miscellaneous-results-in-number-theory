@@ -26,9 +26,9 @@ definition prefix :: \<open>'a list \<Rightarrow> 'a list \<Rightarrow> bool\<cl
 \<open>prefix \<equiv> \<lambda> v w. ( (length v \<le> length w)
  \<and> (\<forall> j. j < length v \<longrightarrow>  v ! j =  w ! j ) )\<close>
 
-fun HeightLetterwise :: \<open>('a \<Rightarrow> int) \<Rightarrow> ('a list \<Rightarrow> int)\<close> where
-  \<open>HeightLetterwise h []  = 0\<close>
-|  \<open> HeightLetterwise h (a # x) = (HeightLetterwise h x) + (h a) \<close>
+fun PHeightLetterwise :: \<open>('a \<Rightarrow> int) \<Rightarrow> ('a list \<Rightarrow> int)\<close> where
+  \<open>PHeightLetterwise h [] = 0\<close>
+|  \<open> PHeightLetterwise h (a # x) = (PHeightLetterwise h x) + (h a) \<close>
 
 definition AbstractPath :: \<open>('a list \<Rightarrow> int) \<Rightarrow> ('a list \<Rightarrow>  bool)\<close> where
   \<open>AbstractPath \<equiv> \<lambda> h.  \<lambda> w.
@@ -39,16 +39,16 @@ section {* Schroeder Paths *}
 
 datatype SCHR = UP | DOWN | STRANGE 
 
-fun SchroederHeightLetter ::\<open>SCHR \<Rightarrow> int\<close> where 
-\<open>SchroederHeightLetter UP = 1\<close>
-| \<open>SchroederHeightLetter DOWN = -1\<close>
-| \<open>SchroederHeightLetter STRANGE = 0\<close>
+fun SchroederPHeightLetter ::\<open>SCHR \<Rightarrow> int\<close> where 
+\<open>SchroederPHeightLetter UP = 1\<close>
+| \<open>SchroederPHeightLetter DOWN = -1\<close>
+| \<open>SchroederPHeightLetter STRANGE = 0\<close>
 
-definition SchroederHeight :: \<open>(SCHR list) \<Rightarrow> int\<close> where
-\<open> SchroederHeight \<equiv> (HeightLetterwise SchroederHeightLetter)  \<close>
+definition SchroederPHeight :: \<open>(SCHR list) \<Rightarrow> int\<close> where
+\<open> SchroederPHeight \<equiv> (PHeightLetterwise SchroederPHeightLetter)  \<close>
 
 definition SchroederPath :: \<open>(SCHR list) \<Rightarrow> bool\<close> where
-  \<open>SchroederPath \<equiv> AbstractPath SchroederHeight \<close>
+  \<open>SchroederPath \<equiv> AbstractPath SchroederPHeight \<close>
 
 text {* 3-letter word  *}
 definition ThreeWord :: \<open>(nat \<Rightarrow> int) \<Rightarrow> bool\<close> where 
@@ -80,15 +80,15 @@ section {* Dyck Paths *}
 
 datatype DCHR = up | down
 
-fun DyckHeightLetter ::\<open>DCHR \<Rightarrow> int\<close> where 
-\<open>DyckHeightLetter up = 1\<close>
-| \<open>DyckHeightLetter down = -1\<close>
+fun DyckPHeightLetter ::\<open>DCHR \<Rightarrow> int\<close> where 
+\<open>DyckPHeightLetter up = 1\<close>
+| \<open>DyckPHeightLetter down = -1\<close>
 
-definition DyckHeight :: \<open>(DCHR list) \<Rightarrow> int\<close> where
-\<open> DyckHeight \<equiv> (HeightLetterwise DyckHeightLetter)  \<close>
+definition DyckPHeight :: \<open>(DCHR list) \<Rightarrow> int\<close> where
+\<open> DyckPHeight \<equiv> (PHeightLetterwise DyckPHeightLetter)  \<close>
 
 definition DyckPath :: \<open>(DCHR list) \<Rightarrow> bool\<close> where
-  \<open>DyckPath \<equiv> AbstractPath DyckHeight \<close>
+  \<open>DyckPath \<equiv> AbstractPath DyckPHeight \<close>
 
 definition DyckToSchroederCode :: \<open>DCHR \<Rightarrow> SCHR\<close> where
 \<open>DyckToSchroederCode \<equiv> \<lambda> c. (if c = up then  UP

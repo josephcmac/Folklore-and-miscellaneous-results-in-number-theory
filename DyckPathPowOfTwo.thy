@@ -80,14 +80,14 @@ proof-
     by (metis Cons_nth_drop_Suc One_nat_def Suc_1 add_diff_cancel_left' append.simps(1) id_take_nth_drop length_0_conv length_tl lessI list.sel(3) plus_1_eq_Suc pos2 take0)
   have \<open>prefix [w ! 0] w\<close> 
     by (simp add: \<open>length w = 2\<close> prefix_def) 
-  then have  \<open>DyckHeight [w ! 0] \<ge> 0\<close> using \<open>DyckPath w\<close>
+  then have  \<open>DyckPHeight [w ! 0] \<ge> 0\<close> using \<open>DyckPath w\<close>
     by (simp add: AbstractPath_def DyckPath_def)
   then have \<open>w ! 0 = up\<close> 
-    by (smt DCHR.exhaust DyckHeightLetter.simps(2) DyckHeight_def HeightLetterwise.simps(1) HeightLetterwise.simps(2))
-  have \<open>DyckHeight w = 0\<close> using \<open>DyckPath w\<close>
+    by (smt DCHR.exhaust DyckPHeightLetter.simps(2) DyckPHeight_def PHeightLetterwise.simps(1) PHeightLetterwise.simps(2))
+  have \<open>DyckPHeight w = 0\<close> using \<open>DyckPath w\<close>
     by (simp add: AbstractPath_def DyckPath_def)
   then have \<open>w ! 1 = down\<close> using \<open>w ! 0 = up\<close> \<open>w = [w!0, w!1]\<close> 
-    by (smt DCHR.exhaust DyckHeightLetter.simps(1) DyckHeight_def HeightLetterwise.simps(2) \<open>0 \<le> DyckHeight [w ! 0]\<close>)
+    by (smt DCHR.exhaust DyckPHeightLetter.simps(1) DyckPHeight_def PHeightLetterwise.simps(2) \<open>0 \<le> DyckPHeight [w ! 0]\<close>)
   show ?thesis 
     using \<open>w ! 0 = up\<close> \<open>w ! 1 = down\<close> \<open>w = [w ! 0, w ! 1]\<close> by auto
 qed
