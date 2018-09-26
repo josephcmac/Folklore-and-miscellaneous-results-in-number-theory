@@ -110,4 +110,5 @@ text {* Dyck class of n *}
 definition  DyckClass :: \<open> DCHR list \<Rightarrow> nat set\<close> where
 \<open>DyckClass \<equiv> \<lambda> w. {n | n :: nat. n \<ge> 1 \<and> (\<exists> v::SCHR list. SchroederToDyck v = w \<and> WordToFun v = Jsigns n)} \<close>
 
+
 end
