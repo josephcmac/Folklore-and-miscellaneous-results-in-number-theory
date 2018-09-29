@@ -40,7 +40,22 @@ proposition DyckType2: \<open>n \<ge> 1 \<Longrightarrow>  DyckPath (DyckType n)
 proposition DyckType3: \<open>n \<ge> 1 \<Longrightarrow>  n \<in> DyckClass w  \<Longrightarrow> w = DyckType n\<close>
   using DyckType1 DyckUniq by blast
 
-
+proposition DyckType4: \<open>n \<ge> 1 \<Longrightarrow>  DyckType n \<noteq> []\<close>
+proof-
+  assume \<open>n \<ge> 1\<close>
+  obtain w where \<open>n \<in> DyckClass w\<close> 
+    using DyckType1 \<open>1 \<le> n\<close> by blast
+  from  \<open>n \<in> DyckClass w\<close> obtain v where \<open>WordToFun v = Jsigns n\<close> and \<open>SchroederToDyck v = w\<close>
+     by (smt CollectD DyckClass_def)
+  from \<open>n \<ge> 1\<close> have \<open>(Jsigns n) 0 = 1\<close> 
+    by (metis Jdvd_def add.right_neutral dvd_0_right even_Suc preJsignsSumToDiffCardPlus times_nat.simps(1) times_nat.simps(2))
+  from  \<open>WordToFun v = Jsigns n\<close>  \<open>(Jsigns n) 0 = 1\<close>  have \<open>v ! 0 = UP\<close> 
+    by (smt SchroederCode_def WordToFun_def)
+  from  \<open>v ! 0 = UP\<close>  \<open>SchroederToDyck v = w\<close> have \<open>w ! 0 = up\<close>
+    by (metis Groups.add_ac(2) One_nat_def SchroederToDyck.elims SchroederToDyckCode_def WordToFun_def \<open>Jsigns n 0 = 1\<close> \<open>WordToFun v = Jsigns n\<close> less_numeral_extra(1) less_numeral_extra(3) list.size(3) list.size(4) nth_Cons_0 nth_append plus_1_eq_Suc)
+  show ?thesis 
+    by (metis (no_types, hide_lams) DyckType3 Nil_is_append_conv SchroederToDyck.elims SchroederToDyckCode_def WordToFun_def \<open>1 \<le> n\<close> \<open>Jsigns n 0 = 1\<close> \<open>SchroederToDyck v = w\<close> \<open>WordToFun v = Jsigns n\<close> \<open>n \<in> DyckClass w\<close> \<open>v ! 0 = UP\<close>  list.discI  list.size(3) nth_Cons_0 rel_simps(93) zero_order(3))
+qed
 
 text {* ArithmFun transforms a language theoretic function into an arithmetical function *}
 
