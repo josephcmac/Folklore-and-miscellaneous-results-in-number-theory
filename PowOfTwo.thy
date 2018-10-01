@@ -721,8 +721,6 @@ proof-
     by simp
 qed
 
-
-
 lemma OddDivPow2: 
 \<open>(n::nat) \<ge> 1 \<Longrightarrow> (\<forall> d. d dvd n \<and> odd d \<longrightarrow> d = 1) \<longleftrightarrow> (\<exists> k. n = 2^k)\<close>
   using DFSFSfre34 TrapezoidalNumbersNec2_5recA dvd_div_mult_self by blast
