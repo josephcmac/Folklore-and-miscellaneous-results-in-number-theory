@@ -11,20 +11,18 @@ definition ErdosNicolasSet :: \<open> nat \<Rightarrow> nat \<Rightarrow> nat se
 definition ErdosNicolas :: \<open>nat \<Rightarrow> nat\<close>
   where \<open>ErdosNicolas \<equiv> \<lambda> n :: nat. Max { card (ErdosNicolasSet n d) | d :: nat. d dvd n}\<close>
 
-The set of odd divisors not exceeding certain bound is defined as follows:
+We prove the following characterization of this function, involving only odd divisors:
 
-definition OddDivSet :: \<open>nat \<Rightarrow> real \<Rightarrow> nat set\<close> where
-\<open>OddDivSet \<equiv> \<lambda> n::nat. \<lambda> x::real.  {d | d :: nat. d dvd n \<and> odd d \<and> d \<le> x }\<close>
-
-We prove the following identity:
-
-theorem ErdosNicolasOddDivSet:
+theorem ErdosNicolasOddDivSetOdd:
   fixes n k m :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> 
-  shows \<open>ErdosNicolas n
-   = Max{ (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1)))) 
-          |d :: nat. d dvd n \<and> odd d}\<close>
+  shows \<open>ErdosNicolas n = Max { card (ErdosNicolasSetOdd n k d) | d :: nat. d dvd n \<and> odd d}\<close>
 
+where 
+
+definition ErdosNicolasSetOdd :: \<open> nat \<Rightarrow> nat \<Rightarrow> nat \<Rightarrow> nat set \<close> 
+  where \<open>ErdosNicolasSetOdd \<equiv> \<lambda> n :: nat. \<lambda> k::nat. \<lambda> d :: nat.
+ {e | e :: nat. e dvd n \<and> odd e \<and> e \<le> d \<and> d < 2^(k+1)*e}\<close>
 
 
 References:
@@ -73,13 +71,18 @@ definition ErdosNicolasSet :: \<open> nat \<Rightarrow> nat \<Rightarrow> nat se
 definition ErdosNicolas :: \<open>nat \<Rightarrow> nat\<close>
   where \<open>ErdosNicolas \<equiv> \<lambda> n :: nat. Max { card (ErdosNicolasSet n d) | d :: nat. d dvd n}\<close>
 
+definition ErdosNicolasSetOdd :: \<open> nat \<Rightarrow> nat \<Rightarrow> nat \<Rightarrow> nat set \<close> 
+  where \<open>ErdosNicolasSetOdd \<equiv> \<lambda> n :: nat. \<lambda> k::nat. \<lambda> d :: nat.
+ {e | e :: nat. e dvd n \<and> odd e \<and> e \<le> d \<and> d < 2^(k+1)*e}\<close>
+
+
+section {* Auxiliary Results *}
+
 
 definition OddDivSet :: \<open>nat \<Rightarrow> real \<Rightarrow> nat set\<close> where
 \<open>OddDivSet \<equiv> \<lambda> n::nat. \<lambda> x::real.  {d | d :: nat. d dvd n \<and> odd d \<and> d \<le> x }\<close>
 
 
-
-section {* Auxiliary Results *}
 
 
 lemma ErdosNicolasOdd7AXAL:
@@ -834,10 +837,7 @@ lemma ErdosNicolasSetOddDivSetLL:
   by (metis diff_add_inverse2)
 
 
-section {* Main Result *}
-
-
-theorem ErdosNicolasOddDivSet:
+proposition ErdosNicolasOddDivSet:
   fixes n k m :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> 
   shows \<open>ErdosNicolas n
@@ -854,6 +854,116 @@ proof-
     by (smt Collect_cong)
 qed
 
+
+
+lemma preErdosNicolasSetDiffIncl:
+  fixes n k m :: nat
+  assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close> 
+  shows \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) \<subseteq> (OddDivSet n (real d))\<close>
+proof-
+  have \<open>(OddDivSet n (real d)) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)}\<close> 
+    using OddDivSet_def by presburger
+  have \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)/(2::real)^(k+1)}\<close> 
+    using OddDivSet_def by presburger
+  have \<open>(real d)/(2::real)^(k+1) \<le> (real d)\<close> 
+    by (smt assms(4) div_by_1 frac_le odd_pos of_nat_0_less_iff one_le_power)
+  then have \<open>\<forall> e :: nat. e \<le> (real d)/(2::real)^(k+1) \<longrightarrow> e \<le> (real d)\<close> 
+    using order_trans by blast
+  show ?thesis using  \<open>\<forall> e :: nat. e \<le> (real d)/(2::real)^(k+1) \<longrightarrow> e \<le> (real d)\<close>
+ \<open>(OddDivSet n (real d)) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)}\<close> 
+ \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)/(2::real)^(k+1)}\<close> 
+    by blast
+qed
+
+
+lemma preErdosNicolasSetDiff:
+  fixes n k m :: nat
+  assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close> 
+  shows \<open>ErdosNicolasSetOdd n k d  = (OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))\<close>
+proof-
+  have \<open>(OddDivSet n (real d)) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)}\<close> 
+    using OddDivSet_def by presburger
+  then have \<open>(OddDivSet n (real d)) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le>  d}\<close> 
+    by auto
+  have \<open>(2::nat)^(k+1) > 0\<close> 
+    by simp
+  have \<open>\<forall> e :: nat.  e \<le> (real d)/(2::real)^(k+1) \<longleftrightarrow> e \<le> d/(2::nat)^(k+1)\<close>
+    by simp
+  then have \<open>\<forall> e :: nat.  e \<le> (real d)/(2::real)^(k+1) \<longleftrightarrow> e*(2::nat)^(k+1) \<le> (d/(2::nat)^(k+1))*(2::nat)^(k+1)\<close>
+    using  \<open>(2::nat)^(k+1) > 0\<close>  
+    by (smt of_nat_0_less_iff of_nat_mult real_mult_less_iff1)
+  then have \<open>\<forall> e :: nat.  e \<le> (real d)/(2::real)^(k+1) \<longleftrightarrow> e*(2::nat)^(k+1) \<le> d*((2::nat)^(k+1)/(2::nat)^(k+1))\<close>
+    by simp
+  then have  \<open>\<forall> e :: nat.  e \<le> (real d)/(2::real)^(k+1) \<longleftrightarrow> e*(2::nat)^(k+1) \<le> d*1\<close>
+    by simp
+  then have  \<open>\<forall> e :: nat.  e \<le> (real d)/(2::real)^(k+1) \<longleftrightarrow> e*(2::nat)^(k+1) \<le> d\<close>
+    by simp
+  have \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)/(2::real)^(k+1)}\<close>
+    using OddDivSet_def by presburger
+  then have  \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d }\<close>
+    using  \<open>\<forall> e :: nat.  e \<le> (real d)/(2::real)^(k+1) \<longleftrightarrow> e*(2::nat)^(k+1) \<le> d\<close> 
+    by (smt Collect_cong of_nat_le_iff of_nat_mult) 
+  from  \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d }\<close>
+  have \<open> - (OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. \<not>(e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d) }\<close>
+    by auto
+  from  \<open>(OddDivSet n (real d)) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> d}\<close>
+\<open> - (OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. \<not>(e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d) }\<close>
+    have \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
+        = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> d} \<inter> {e | e::nat. \<not>(e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d) }\<close>
+      by auto    
+    then have  \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
+        = {e | e::nat. (e dvd n \<and> odd e \<and> e \<le> d) \<and>  \<not>(e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d) }\<close>
+      by blast
+    then have   \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
+        = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> d \<and>  \<not>( e*(2::nat)^(k+1) \<le> d) }\<close>
+      by auto
+    then have   \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
+        = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> d \<and>  d < 2^(k+1)*e }\<close>
+      by (smt Collect_cong Groups.mult_ac(2) linorder_not_le)
+  have \<open>ErdosNicolasSetOdd n k d = {e | e::nat. e dvd n \<and> odd e \<and>  e \<le> d \<and> d < 2^(k+1)*e}\<close>
+    using ErdosNicolasSetOdd_def by presburger
+  show ?thesis 
+    using \<open>ErdosNicolasSetOdd n k d = {e |e. e dvd n \<and> odd e \<and> e \<le> d \<and> d < 2 ^ (k + 1) * e}\<close> \<open>OddDivSet n (real d) - OddDivSet n (real d / 2 ^ (k + 1)) = {e |e. e dvd n \<and> odd e \<and> e \<le> d \<and> d < 2 ^ (k + 1) * e}\<close> by auto
+qed
+
+lemma ErdosNicolasSetDiff:
+  fixes n k m :: nat
+  assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close> 
+  shows \<open>card (ErdosNicolasSetOdd n k d) = (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1))))\<close>
+proof-
+have \<open>finite (ErdosNicolasSetOdd n k d)\<close> 
+  by (metis (no_types, lifting) CollectD ErdosNicolasSetOdd_def finite_nat_set_iff_bounded_le   )
+  have \<open>finite (OddDivSet n (real d))\<close> 
+    by (metis (no_types, lifting) CollectD OddDivSet_def finite_nat_set_iff_bounded_le of_nat_le_iff) 
+  have \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) \<subseteq> (OddDivSet n (real d))\<close> 
+    using assms(1) assms(2) assms(3) assms(4) preErdosNicolasSetDiffIncl by blast
+  then have \<open>finite (OddDivSet n ((real d)/(2::real)^(k+1)))\<close> using \<open>finite (OddDivSet n (real d))\<close> 
+    by (meson finite_nat_set_iff_bounded_le subsetCE)
+  have  \<open>ErdosNicolasSetOdd n k d  = (OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))\<close>
+    using assms(1) assms(2) assms(3) assms(4) preErdosNicolasSetDiff by blast
+  show ?thesis 
+    using \<open>ErdosNicolasSetOdd n k d = OddDivSet n (real d) - OddDivSet n (real d / 2 ^ (k + 1))\<close> \<open>OddDivSet n (real d / 2 ^ (k + 1)) \<subseteq> OddDivSet n (real d)\<close> \<open>finite (OddDivSet n (real d / 2 ^ (k + 1)))\<close> card_Diff_subset by auto
+qed
+
+section {* Main Result *}
+
+theorem ErdosNicolasOddDivSetOdd:
+  fixes n k m :: nat
+  assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> 
+  shows \<open>ErdosNicolas n = Max { card (ErdosNicolasSetOdd n k d) | d :: nat. d dvd n \<and> odd d}\<close>
+proof-
+  have \<open>ErdosNicolas n
+   = Max{ (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1)))) 
+          |d :: nat. d dvd n \<and> odd d}\<close> 
+    using ErdosNicolasOddDivSet assms(1) assms(2) by auto
+  have \<open>\<forall> d :: nat. d dvd n \<and> odd d \<longrightarrow> card (ErdosNicolasSetOdd n k d)  = (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1))))\<close>
+    using ErdosNicolasSetDiff assms(1) assms(2) by blast
+    show ?thesis  using  \<open>ErdosNicolas n
+   = Max{ (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1)))) 
+          |d :: nat. d dvd n \<and> odd d}\<close> 
+ \<open>\<forall> d :: nat. d dvd n \<and> odd d \<longrightarrow> card (ErdosNicolasSetOdd n k d)  = (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1))))\<close>
+    by (smt Collect_cong)
+qed
 
 end
 
