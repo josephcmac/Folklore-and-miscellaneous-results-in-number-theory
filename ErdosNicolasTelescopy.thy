@@ -195,7 +195,7 @@ proof-
   then have \<open>(2::nat)^k*(OddPart d) \<ge> d\<close> using  \<open>(2::nat)^j*(OddPart d) = d\<close> 
     by (metis mult_le_mono1)
   then have \<open>(2::real)^k*(OddPart d) \<ge> d\<close> 
-    by (metis mult_of_nat_commute numeral_power_eq_of_nat_cancel_iff of_nat_le_iff of_nat_mult )
+    by (metis  numeral_power_eq_of_nat_cancel_iff of_nat_le_iff of_nat_mult )
   have \<open>(2::real)^k > 0\<close> 
     by simp
   then  show ?thesis using  \<open>(2::real)^k*(OddPart d) \<ge> d\<close>
@@ -334,7 +334,7 @@ proof-
     using assms(5) by blast
   from  \<open>y \<in> (OddDivBound n ((d::real)/(2::real)^(k+1)))\<close>
   have \<open>odd y\<close> 
-    by (metis (mono_tags, lifting) CollectD OddDivBound_def One_nat_def add.right_neutral add_Suc_right of_nat_numeral one_add_one)
+    by (metis (mono_tags, lifting) CollectD OddDivBound_def One_nat_def add.right_neutral add_Suc_right  one_add_one)
   then have \<open>y \<ge> 1\<close> 
     by (simp add: dvd_imp_le odd_pos)
   then have \<open>y = OddPart y\<close> using  \<open>odd y\<close>
