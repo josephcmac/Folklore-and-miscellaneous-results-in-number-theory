@@ -26,7 +26,7 @@ Reference.
 }
 
 
-(This code  was verified in Isabelle2018-RC4/HOL)
+(This code  was verified in Isabelle2018)
 
 *)
 
@@ -38,15 +38,15 @@ begin
 
 text {* u and v are consecutive divisors of n *}
 definition ConsecDiv :: \<open>nat \<Rightarrow> nat \<Rightarrow> nat \<Rightarrow> bool\<close> where
-\<open>ConsecDiv \<equiv> \<lambda> n u v::nat. (u dvd n \<and> v dvd n \<and> u < v \<and> (\<forall> d:: nat. d dvd n \<longrightarrow> d \<le> u \<or> v \<le> d ))\<close>
+  \<open>ConsecDiv \<equiv> \<lambda> n u v::nat. (u dvd n \<and> v dvd n \<and> u < v \<and> (\<forall> d:: nat. d dvd n \<longrightarrow> d \<le> u \<or> v \<le> d ))\<close>
 
 text {* n is a 2-densely divisible number *}
 definition TwoDD :: \<open>nat \<Rightarrow> bool\<close> where
- \<open>TwoDD \<equiv> \<lambda> n. ( \<forall> u v. ConsecDiv n u v \<longrightarrow> v \<le> 2*u )\<close>
+  \<open>TwoDD \<equiv> \<lambda> n. ( \<forall> u v. ConsecDiv n u v \<longrightarrow> v \<le> 2*u )\<close>
 
 text {* n is the semiperimeter of a Pythagorean triangle  *}
 definition SemiPeriPytha :: "nat \<Rightarrow> bool" where
-\<open>SemiPeriPytha \<equiv> \<lambda> n. (\<exists> a b c :: nat. a*b*c \<noteq> 0 \<and> a^2 + b^2 = c^2 \<and> a + b + c = 2*n )\<close>
+  \<open>SemiPeriPytha \<equiv> \<lambda> n. (\<exists> a b c :: nat. a*b*c \<noteq> 0 \<and> a^2 + b^2 = c^2 \<and> a + b + c = 2*n )\<close>
 
 section {* Auxiliary results *}
 
@@ -73,7 +73,7 @@ lemma TribPow24234qweaBBBOddTRIVIALQ:
   fixes k :: nat
   shows \<open>\<forall> d::nat. d dvd ((2::nat)^k) \<and> odd d \<longrightarrow> d = 1\<close>
 proof (induction k)
-case 0
+  case 0
   then show ?case 
     by simp
 next
@@ -111,7 +111,7 @@ lemma TribPow24234qwea:
 
 lemma Pow2DivLQRec:
   fixes k  d :: nat
-assumes \<open>d dvd ((2::nat)^(Suc k))\<close> and \<open>\<forall> d::nat. d dvd ((2::nat)^k) \<longrightarrow> (\<exists> j :: nat. d = (2::nat)^j)\<close>
+  assumes \<open>d dvd ((2::nat)^(Suc k))\<close> and \<open>\<forall> d::nat. d dvd ((2::nat)^k) \<longrightarrow> (\<exists> j :: nat. d = (2::nat)^j)\<close>
   shows \<open>\<exists> j :: nat. d = (2::nat)^j\<close> 
 proof(cases \<open>d = (2::nat)^(Suc k)\<close>)
   case True
@@ -186,7 +186,7 @@ lemma Pow2DivIndRecS:
     and \<open>ConsecDiv (2^(Suc k)) u v\<close>
   shows \<open>v = 2*u\<close>
 proof (cases \<open>v = 2^(Suc k)\<close>)
-case True
+  case True
   then show ?thesis 
     using Pow2DivIndRecSTrivial assms(2) power_Suc by blast
 next
@@ -284,24 +284,24 @@ proof (rule classical)
   assume \<open>\<not> ( \<exists> u :: nat. ConsecDiv n u v )\<close>
   then have \<open>\<forall> u :: nat. \<not> (ConsecDiv n u v)\<close> 
     by auto
-   then have \<open>\<forall> d :: nat. d dvd n \<and> d < v \<longrightarrow> (\<exists> e :: nat. e dvd n \<and> d < e \<and> e < v )\<close>
-     by (meson ConsecDiv_def assms(2) not_less)
-   then have \<open>\<forall> d :: nat. \<exists> e :: nat. ( d dvd n \<and> d < v \<longrightarrow> ( e dvd n \<and> d < e \<and> e < v ) )\<close>
-     by blast
-   from \<open>\<forall> d :: nat. \<exists> e :: nat. ( d dvd n \<and> d < v \<longrightarrow> ( e dvd n \<and> d < e \<and> e < v ) )\<close>
-   obtain f :: \<open>nat \<Rightarrow> nat\<close> where \<open>\<forall> d :: nat.  ( d dvd n \<and> d < v \<longrightarrow> ( (f d) dvd n \<and> d < (f d) \<and> (f d) < v ) )\<close>
-     by metis
-   obtain x :: \<open>nat \<Rightarrow> nat\<close> where  \<open>x \<equiv> powOP f\<close> 
-     by simp
-   have \<open>x n > n\<close> using Pow2DivConvOddTRGenX 
-     using \<open>\<forall>d. d dvd n \<and> d < v \<longrightarrow> f d dvd n \<and> d < f d \<and> f d < v\<close> \<open>x \<equiv> powOP f\<close> assms(1) assms(2) by blast
-   then have \<open>(x n) dvd n\<close> 
-     using Pow2DivConvOddTRGenY \<open>\<forall>d. d dvd n \<and> d < v \<longrightarrow> f d dvd n \<and> d < f d \<and> f d < v\<close> \<open>x \<equiv> powOP f\<close> assms(1) assms(2) by auto
-   have False 
-     by (metis  Suc_leI  \<open>\<forall>d. d dvd n \<and> d < v \<longrightarrow> (\<exists>e. e dvd n \<and> d < e \<and> e < v)\<close> \<open>n < x n\<close> \<open>x n dvd n\<close> assms(1) dvd_triv_left gr0I      less_or_eq_imp_le less_trans_Suc  mult_is_0 nat_dvd_not_less  not_le not_less_eq_eq numerals(2) old.nat.exhaust)
-   then show ?thesis 
-     by blast
- qed
+  then have \<open>\<forall> d :: nat. d dvd n \<and> d < v \<longrightarrow> (\<exists> e :: nat. e dvd n \<and> d < e \<and> e < v )\<close>
+    by (meson ConsecDiv_def assms(2) not_less)
+  then have \<open>\<forall> d :: nat. \<exists> e :: nat. ( d dvd n \<and> d < v \<longrightarrow> ( e dvd n \<and> d < e \<and> e < v ) )\<close>
+    by blast
+  from \<open>\<forall> d :: nat. \<exists> e :: nat. ( d dvd n \<and> d < v \<longrightarrow> ( e dvd n \<and> d < e \<and> e < v ) )\<close>
+  obtain f :: \<open>nat \<Rightarrow> nat\<close> where \<open>\<forall> d :: nat.  ( d dvd n \<and> d < v \<longrightarrow> ( (f d) dvd n \<and> d < (f d) \<and> (f d) < v ) )\<close>
+    by metis
+  obtain x :: \<open>nat \<Rightarrow> nat\<close> where  \<open>x \<equiv> powOP f\<close> 
+    by simp
+  have \<open>x n > n\<close> using Pow2DivConvOddTRGenX 
+    using \<open>\<forall>d. d dvd n \<and> d < v \<longrightarrow> f d dvd n \<and> d < f d \<and> f d < v\<close> \<open>x \<equiv> powOP f\<close> assms(1) assms(2) by blast
+  then have \<open>(x n) dvd n\<close> 
+    using Pow2DivConvOddTRGenY \<open>\<forall>d. d dvd n \<and> d < v \<longrightarrow> f d dvd n \<and> d < f d \<and> f d < v\<close> \<open>x \<equiv> powOP f\<close> assms(1) assms(2) by auto
+  have False 
+    by (metis  Suc_leI  \<open>\<forall>d. d dvd n \<and> d < v \<longrightarrow> (\<exists>e. e dvd n \<and> d < e \<and> e < v)\<close> \<open>n < x n\<close> \<open>x n dvd n\<close> assms(1) dvd_triv_left gr0I      less_or_eq_imp_le less_trans_Suc  mult_is_0 nat_dvd_not_less  not_le not_less_eq_eq numerals(2) old.nat.exhaust)
+  then show ?thesis 
+    by blast
+qed
 
 
 lemma Pow2DivConv:
@@ -344,28 +344,28 @@ lemma DivisorRepulsionPythConverse1:
   shows \<open> \<exists> u v. ConsecDiv n u v \<and> v < 2*u\<close>
 proof-
   from \<open>SemiPeriPytha n\<close> obtain a b c :: nat where
-\<open>a * b * c \<noteq> 0\<close> and \<open>a^2 + b^2 = c^2\<close> and \<open>2*n = a + b + c\<close>
+    \<open>a * b * c \<noteq> 0\<close> and \<open>a^2 + b^2 = c^2\<close> and \<open>2*n = a + b + c\<close>
     by (metis SemiPeriPytha_def)
   from \<open>a * b * c \<noteq> 0\<close> have  \<open>a \<noteq> 0\<close> by simp
   from \<open>a * b * c \<noteq> 0\<close> have  \<open>b \<noteq> 0\<close> by simp
   from \<open>a * b * c \<noteq> 0\<close> have  \<open>c \<noteq> 0\<close> by simp
   from \<open>n \<ge> 1\<close> and  \<open>a \<noteq> 0\<close> and  \<open>b \<noteq> 0\<close> and  \<open>c \<noteq> 0\<close> and \<open>a^2 + b^2 = c^2\<close> and \<open>2*n = a + b + c\<close>
-     have \<open>\<exists> d e. d dvd n \<and> e dvd n \<and> d < e \<and> e < 2*d\<close>
-       using PeriPythToShortDiv 
-       by (metis le_numeral_extra(2))
-     then obtain d e :: nat where \<open>d dvd n\<close> and \<open>e dvd n\<close> 
-          and \<open>d < e\<close> and \<open>e < 2*d\<close> 
-       by blast
-     from \<open>d dvd n\<close>  \<open>e dvd n\<close>  \<open>d < e\<close> 
-     obtain u :: nat where \<open>ConsecDiv n u e\<close>
-       by (metis Pow2DivConvOddTRGen Suc_leI assms(1) dvd_pos_nat less_le_trans not_less_eq numerals(2) zero_less_one)
-     from \<open>ConsecDiv n u e\<close> \<open>d < e\<close> \<open>d dvd n\<close> have \<open>d \<le> u\<close> 
-       by (meson ConsecDiv_def leD)
-     then have \<open>e < 2*u\<close> using \<open>e < 2*d\<close> 
-       by linarith
-     show ?thesis 
-       using \<open>ConsecDiv n u e\<close> \<open>e < 2 * u\<close> by blast
-   qed
+  have \<open>\<exists> d e. d dvd n \<and> e dvd n \<and> d < e \<and> e < 2*d\<close>
+    using PeriPythToShortDiv 
+    by (metis le_numeral_extra(2))
+  then obtain d e :: nat where \<open>d dvd n\<close> and \<open>e dvd n\<close> 
+    and \<open>d < e\<close> and \<open>e < 2*d\<close> 
+    by blast
+  from \<open>d dvd n\<close>  \<open>e dvd n\<close>  \<open>d < e\<close> 
+  obtain u :: nat where \<open>ConsecDiv n u e\<close>
+    by (metis Pow2DivConvOddTRGen Suc_leI assms(1) dvd_pos_nat less_le_trans not_less_eq numerals(2) zero_less_one)
+  from \<open>ConsecDiv n u e\<close> \<open>d < e\<close> \<open>d dvd n\<close> have \<open>d \<le> u\<close> 
+    by (meson ConsecDiv_def leD)
+  then have \<open>e < 2*u\<close> using \<open>e < 2*d\<close> 
+    by linarith
+  show ?thesis 
+    using \<open>ConsecDiv n u e\<close> \<open>e < 2 * u\<close> by blast
+qed
 
 
 lemma DivisorRepulsionPythConverse:
@@ -387,21 +387,21 @@ lemma twoDNotDSemiPeriPythaPow2:
 lemma Pow2twoDNotDSemiPeriPytha:
   fixes n :: nat
   assumes \<open>n \<ge> 1\<close> \<open>\<exists> k :: nat. n = 2^k\<close>
- shows  \<open>\<not>(SemiPeriPytha n) \<and> TwoDD n\<close> 
+  shows  \<open>\<not>(SemiPeriPytha n) \<and> TwoDD n\<close> 
   by (metis DivisorRepulsionPythConverse Pow2Div TwoDD_def assms(1) assms(2) order_refl)
 
 lemma Pow2CharacterizationONLYIF:
-\<open>\<forall> n::nat. n \<ge> 1 \<longrightarrow>((\<exists> k :: nat. n = 2^k) \<longrightarrow> TwoDD n \<and> \<not>(SemiPeriPytha n)) \<close>
+  \<open>\<forall> n::nat. n \<ge> 1 \<longrightarrow>((\<exists> k :: nat. n = 2^k) \<longrightarrow> TwoDD n \<and> \<not>(SemiPeriPytha n)) \<close>
   using Pow2twoDNotDSemiPeriPytha by blast
 
 lemma Pow2CharacterizationIF:
-\<open>\<forall> n::nat. n \<ge> 1 \<longrightarrow> (TwoDD n \<and> \<not>(SemiPeriPytha n) \<longrightarrow> (\<exists> k :: nat. n = 2^k))\<close>
+  \<open>\<forall> n::nat. n \<ge> 1 \<longrightarrow> (TwoDD n \<and> \<not>(SemiPeriPytha n) \<longrightarrow> (\<exists> k :: nat. n = 2^k))\<close>
   by (simp add: twoDNotDSemiPeriPythaPow2)
 
 section {* Main results *}
 
 theorem Pow2Characterization:
-\<open>\<forall> n::nat. n \<ge> 1 \<longrightarrow> ( (\<exists> k :: nat. n = 2^k) \<longleftrightarrow> TwoDD n \<and> \<not>(SemiPeriPytha n) ) \<close>
+  \<open>\<forall> n::nat. n \<ge> 1 \<longrightarrow> ( (\<exists> k :: nat. n = 2^k) \<longleftrightarrow> TwoDD n \<and> \<not>(SemiPeriPytha n) ) \<close>
   using Pow2CharacterizationIF Pow2CharacterizationONLYIF by blast
 
 end

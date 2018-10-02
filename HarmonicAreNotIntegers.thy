@@ -11,7 +11,7 @@ Suppose that n \<ge> 2.  we will prove that H(n) is not an integer (this result 
 We use some results from the file PowOfTwo.thy in the same repository.
 
 
-(This code  was verified in Isabelle2018-RC4/HOL)
+(This code  was verified in Isabelle2018)
 
 *)
 
@@ -24,7 +24,7 @@ begin
 section {* Generalization *}
 
 definition depth :: \<open>rat \<Rightarrow> nat \<Rightarrow> bool\<close> where
-\<open>depth \<equiv> \<lambda> t::rat. \<lambda> k::nat. (\<exists> r s::int. odd r \<and> odd s \<and> Fract r (2^k*s) = t)\<close>
+  \<open>depth \<equiv> \<lambda> t::rat. \<lambda> k::nat. (\<exists> r s::int. odd r \<and> odd s \<and> Fract r (2^k*s) = t)\<close>
 
 lemma FundLemTwoDeno1:
   fixes r rr s ss :: int and k kk :: nat
@@ -68,15 +68,13 @@ proof-
   obtain rrr sss :: int where \<open>rrr = r*2^(j+1)*ss + rr*s\<close> and \<open>sss = s*ss\<close>
     by blast
   from \<open>rrr = r*2^(j+1)*ss + rr*s\<close> \<open>sss = s*ss\<close> \<open> Fract r (2^k*s) + Fract rr (2^kk*ss) =  Fract (r*2^(j+1)*ss + rr*s) (2^kk*(s*ss))\<close>
-    have \<open>Fract r (2^k*s) + Fract rr (2^kk*ss) = Fract rrr (2^kk*sss)\<close> 
-      by blast
+  have \<open>Fract r (2^k*s) + Fract rr (2^kk*ss) = Fract rrr (2^kk*sss)\<close> 
+    by blast
   from  \<open>odd (r*2^(j+1)*ss + rr*s)\<close>  \<open>rrr = r*2^(j+1)*ss + rr*s\<close> have \<open>odd rrr\<close> by blast
   from \<open>odd (s*ss)\<close>  \<open>sss = s*ss\<close> have \<open>odd sss\<close> by blast
   show ?thesis 
     using \<open>Fract r (2 ^ k * s) + Fract rr (2 ^ kk * ss) = Fract rrr (2 ^ kk * sss)\<close> \<open>odd rrr\<close> \<open>odd sss\<close> by blast
 qed   
-
-
 
 lemma FundLemTwoDenoDepth:
   fixes u uu :: rat  and k kk :: nat
@@ -98,7 +96,6 @@ proof-
   then show ?thesis 
     by (metis depth_def)
 qed
-
 
 lemma FundLemTwoDenoDepthGen:
   fixes uu :: rat  and n kk :: nat
@@ -162,13 +159,13 @@ qed
 lemma ErdosLemmaHarmonicEnd:
   fixes n i0 :: nat and u :: \<open>nat \<Rightarrow> rat\<close> and k :: \<open>nat \<Rightarrow> nat\<close>
   assumes \<open>\<forall> i. (i \<noteq> i0 \<longrightarrow>  k i < k i0)\<close> and \<open>\<forall> i.  depth (u i) (k i)\<close>
-and \<open>i0 = n\<close>
+    and \<open>i0 = n\<close>
   shows \<open>depth (\<Sum>i=0..n. u i) (k i0)\<close>
 proof (cases n)
-case 0
+  case 0
   then show ?thesis 
     by (simp add: assms(2) assms(3))
-  next
+next
   case (Suc nat)
   then obtain t :: nat where \<open>n = Suc t\<close> 
     by blast
@@ -180,10 +177,10 @@ case 0
     by simp
   then have \<open>\<forall> i. (i \<le> t \<longrightarrow>  k i < k i0)\<close> 
     by (simp add: \<open>n = Suc t\<close> assms(3))
-    have \<open>depth (u i0) (k i0)\<close> 
-      by (simp add: assms(2))
-      have  \<open>depth ( (\<Sum>i=0..t. u i)+(u i0) ) (k i0)\<close>
-        using FundLemTwoDenoDepthGenRestr \<open>\<forall>i\<le>t. k i < k i0\<close> assms(2) by blast
+  have \<open>depth (u i0) (k i0)\<close> 
+    by (simp add: assms(2))
+  have  \<open>depth ( (\<Sum>i=0..t. u i)+(u i0) ) (k i0)\<close>
+    using FundLemTwoDenoDepthGenRestr \<open>\<forall>i\<le>t. k i < k i0\<close> assms(2) by blast
   then show ?thesis
     by (simp add: \<open>sum u {0..n} = sum u {0..t} + u i0\<close>)
 qed
@@ -191,18 +188,18 @@ qed
 lemma ErdosLemmaHarmonicBegin:
   fixes n i0 :: nat and u :: \<open>nat \<Rightarrow> rat\<close> and k :: \<open>nat \<Rightarrow> nat\<close>
   assumes \<open>\<forall> i. (i \<noteq> i0 \<longrightarrow>  k i < k i0)\<close> and \<open>\<forall> i.  depth (u i) (k i)\<close>
-and \<open>0 = i0\<close>
+    and \<open>0 = i0\<close>
   shows \<open>depth (\<Sum>i=0..n. u i) (k i0)\<close>
 proof(cases n )
   case 0
   then show ?thesis 
     by (simp add: assms(2) assms(3))
-  next
+next
   case (Suc nat)
   then obtain t :: nat where \<open>n = Suc t\<close> 
     by blast
   obtain v :: \<open>nat \<Rightarrow> rat\<close> where 
-\<open>v \<equiv> \<lambda> i. (if i = 0 then (u n) else 
+    \<open>v \<equiv> \<lambda> i. (if i = 0 then (u n) else 
 (if i = n then (u 0) else u i))\<close> 
     by auto
   have \<open>(\<Sum>i=0..n. u i) = (u 0) + (\<Sum>i=1..n. u i)\<close> 
@@ -223,7 +220,7 @@ proof(cases n )
     by (simp add: \<open>n = Suc t\<close> sum_head_Suc)
 
   obtain kappa :: \<open>nat \<Rightarrow> nat\<close> where 
-\<open>kappa \<equiv> \<lambda> i. (if i = 0 then (k n) else 
+    \<open>kappa \<equiv> \<lambda> i. (if i = 0 then (k n) else 
 (if i = n then (k 0) else k i))\<close> 
     by auto
   from \<open>\<forall> i. (i \<noteq> i0 \<longrightarrow>  k i < k i0)\<close> have \<open>\<forall> i. (i \<noteq> n \<longrightarrow>  kappa i < kappa n)\<close>
@@ -233,19 +230,17 @@ proof(cases n )
   have \<open>depth (u i0) (k i0)\<close> 
     by (simp add: assms(2))
   from \<open>depth (u i0) (k i0)\<close> have \<open>depth (v i0) (kappa i0)\<close>
-      by (simp add: \<open>\<forall>i. depth (v i) (kappa i)\<close>)
-      
-      have \<open>depth (\<Sum>i=0..n. v i) (kappa n)\<close>
-        using ErdosLemmaHarmonicEnd \<open>\<forall>i. depth (v i) (kappa i)\<close> \<open>\<forall>i. i \<noteq> n \<longrightarrow> kappa i < kappa n\<close> by blast
+    by (simp add: \<open>\<forall>i. depth (v i) (kappa i)\<close>)   
+  have \<open>depth (\<Sum>i=0..n. v i) (kappa n)\<close>
+    using ErdosLemmaHarmonicEnd \<open>\<forall>i. depth (v i) (kappa i)\<close> \<open>\<forall>i. i \<noteq> n \<longrightarrow> kappa i < kappa n\<close> by blast
   then have \<open>depth (\<Sum>i=0..n. u i) (k i0)\<close>
     by (metis \<open>kappa \<equiv> \<lambda>i. if i = 0 then k n else if i = n then k 0 else k i\<close> \<open>sum u {0..n} = sum v {0..n}\<close> assms(3))
-    show ?thesis 
+  show ?thesis 
     using \<open>depth (sum u {0..n}) (k i0)\<close> by blast
 qed
 
-
 lemma SumChangeVariableQQ:
-   fixes m :: nat and  u :: \<open>nat \<Rightarrow> rat\<close>
+  fixes m :: nat and  u :: \<open>nat \<Rightarrow> rat\<close>
   shows  \<open>\<forall> a :: nat.  (\<Sum>i=a..a+m. u i) = (\<Sum>i=0..m. u (a+i))\<close>
 proof(induction m)
   case 0
@@ -258,13 +253,12 @@ next
 qed
 
 lemma SumChangeVariableQ:
-   fixes m :: nat and  u :: \<open>nat \<Rightarrow> rat\<close>
+  fixes m :: nat and  u :: \<open>nat \<Rightarrow> rat\<close>
   shows  \<open>\<forall> a n :: nat. a + m = n \<longrightarrow> (\<Sum>i=a..n. u i) = (\<Sum>i=0..m. u (a+i))\<close>
   using SumChangeVariableQQ by blast
 
-
 lemma SumChangeVariable:
-   fixes n m a :: nat and u :: \<open>nat \<Rightarrow> rat\<close>
+  fixes n m a :: nat and u :: \<open>nat \<Rightarrow> rat\<close>
   assumes \<open>a + m = n\<close>
   shows \<open>(\<Sum>i=a..n. u i) = (\<Sum>i=0..m. u (a+i))\<close>
   using SumChangeVariableQ assms by blast
@@ -272,37 +266,29 @@ lemma SumChangeVariable:
 lemma ErdosLemmaHarmonicMiddle:
   fixes n i0 :: nat and u :: \<open>nat \<Rightarrow> rat\<close> and k :: \<open>nat \<Rightarrow> nat\<close>
   assumes \<open>\<forall> i. (i \<noteq> i0 \<longrightarrow>  k i < k i0)\<close> and \<open>\<forall> i.  depth (u i) (k i)\<close>
-and \<open>0 < i0\<close> and \<open>i0 < n\<close>
+    and \<open>0 < i0\<close> and \<open>i0 < n\<close>
   shows \<open>depth (\<Sum>i=0..n. u i) (k i0)\<close>
 proof-
   have \<open>(\<Sum>i=0..n. u i) = (\<Sum>i=0..i0. u i) + (\<Sum>i=i0+1..n. u i) \<close>
     using assms(4) atLeast0AtMost less_imp_add_positive sum_up_index_split by fastforce
   have \<open>depth (\<Sum>i=0..i0. u i) (k i0)\<close> 
     using ErdosLemmaHarmonicEnd assms(1) assms(2) assms(3) by blast
-
   obtain a :: nat where \<open>a = i0+1\<close> 
     by blast
-
   obtain m :: nat where \<open>a + m = n\<close> 
     by (metis (full_types) Suc_eq_plus1 Suc_le_mono \<open>a = i0 + 1\<close> add.comm_neutral  assms(4) le_add1 le_antisym le_simps(3)  less_imp_add_positive nat_neq_iff )
   from  \<open>a + m = n\<close>  have \<open>(\<Sum>i=a..n. u i) = (\<Sum>i=0..m. u (a+i))\<close> 
     using SumChangeVariable by blast
-
   obtain v :: \<open>nat \<Rightarrow> rat\<close> where \<open>v \<equiv> \<lambda> i. (u (a + i))\<close> 
     by simp
-
   from \<open>(\<Sum>i=a..n. u i) = (\<Sum>i=0..m. u (a+i))\<close> have  \<open>(\<Sum>i=a..n. u i) = (\<Sum>i=0..m. v i)\<close>
     using \<open>v \<equiv> \<lambda>i. u (a + i)\<close> by blast
-
   obtain kappa :: \<open>nat \<Rightarrow> nat\<close> where \<open>kappa \<equiv> \<lambda> i. (k (a + i))\<close> 
     by simp
-
   from \<open>\<forall> i. (i \<noteq> i0 \<longrightarrow>  k i < k i0)\<close> have \<open>\<forall> i. (kappa i < k i0)\<close> 
     by (simp add: \<open>a = i0 + 1\<close> \<open>kappa \<equiv> \<lambda>i. k (a + i)\<close>)
-
   from  \<open>\<forall> i. depth (u i) (k i)\<close> have  \<open>\<forall> i. depth (v i) (kappa i)\<close>
     by (simp add: \<open>kappa \<equiv> \<lambda>i. k (a + i)\<close> \<open>v \<equiv> \<lambda>i. u (a + i)\<close>)
-
   from  \<open>\<forall> i. depth (v i) (kappa i)\<close>  \<open>\<forall> i. (kappa i < k i0)\<close> \<open>depth (\<Sum>i=0..i0. u i) (k i0)\<close> 
   have \<open>depth ( (\<Sum>i=0..m. v i)+(\<Sum>i=0..i0. u i) ) (k i0)\<close> 
     using FundLemTwoDenoDepthGen by blast
@@ -325,35 +311,26 @@ lemma ErdosLemmaHarmonicBounded:
 proof-
   from \<open>n \<noteq> 0\<close> obtain j0 :: nat where \<open>j0 \<noteq> i0\<close> and \<open>j0 \<le> n\<close> 
     by (metis le_simps(3) nat_le_linear neq0_conv)
-
   obtain v :: \<open>nat \<Rightarrow> rat\<close> where
-\<open>v \<equiv> \<lambda> i. (if i \<le> n then u i else u j0)\<close> 
+    \<open>v \<equiv> \<lambda> i. (if i \<le> n then u i else u j0)\<close> 
     by simp
-
   obtain kappa :: \<open>nat \<Rightarrow> nat\<close> where
-\<open>kappa \<equiv> \<lambda> i. (if i \<le> n then k i else k j0)\<close>
+    \<open>kappa \<equiv> \<lambda> i. (if i \<le> n then k i else k j0)\<close>
     by simp
-
-    have \<open>(\<Sum>i=0..n. u i) = (\<Sum>i=0..n. v i) \<close> 
-      using \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close> by auto
-
-    from \<open>\<forall> i. (i \<le> n \<longrightarrow> depth (u i) (k i))\<close>
-      have \<open>\<forall> i. (i \<noteq> i0 \<and> i \<le> n \<longrightarrow> depth (v i) (kappa i))\<close>
-        by (simp add: \<open>kappa \<equiv> \<lambda>i. if i \<le> n then k i else k j0\<close> \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close>)
-
-      have  \<open>depth (v j0) (k j0)\<close> 
-        using \<open>j0 \<le> n\<close> \<open>j0 \<noteq> i0\<close> \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close> assms(2) by auto
-
-      then have \<open>\<forall> i. (\<not>(i \<le> n) \<longrightarrow> depth (v i) (kappa i))\<close> 
-        using \<open>kappa \<equiv> \<lambda>i. if i \<le> n then k i else k j0\<close> \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close> by auto
-
-      have \<open>depth (\<Sum>i=0..n. v i) (k i0)\<close> 
-        by (metis ErdosLemmaHarmonic \<open>j0 \<le> n\<close> \<open>j0 \<noteq> i0\<close> \<open>kappa \<equiv> \<lambda>i. if i \<le> n then k i else k j0\<close> \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close> assms(1) assms(2) assms(3))
-
-      then show ?thesis 
-        by (simp add: \<open>sum u {0..n} = sum v {0..n}\<close>)
-    qed
-
+  have \<open>(\<Sum>i=0..n. u i) = (\<Sum>i=0..n. v i) \<close> 
+    using \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close> by auto
+  from \<open>\<forall> i. (i \<le> n \<longrightarrow> depth (u i) (k i))\<close>
+  have \<open>\<forall> i. (i \<noteq> i0 \<and> i \<le> n \<longrightarrow> depth (v i) (kappa i))\<close>
+    by (simp add: \<open>kappa \<equiv> \<lambda>i. if i \<le> n then k i else k j0\<close> \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close>)
+  have  \<open>depth (v j0) (k j0)\<close> 
+    using \<open>j0 \<le> n\<close> \<open>j0 \<noteq> i0\<close> \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close> assms(2) by auto
+  then have \<open>\<forall> i. (\<not>(i \<le> n) \<longrightarrow> depth (v i) (kappa i))\<close> 
+    using \<open>kappa \<equiv> \<lambda>i. if i \<le> n then k i else k j0\<close> \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close> by auto
+  have \<open>depth (\<Sum>i=0..n. v i) (k i0)\<close> 
+    by (metis ErdosLemmaHarmonic \<open>j0 \<le> n\<close> \<open>j0 \<noteq> i0\<close> \<open>kappa \<equiv> \<lambda>i. if i \<le> n then k i else k j0\<close> \<open>v \<equiv> \<lambda>i. if i \<le> n then u i else u j0\<close> assms(1) assms(2) assms(3))
+  then show ?thesis 
+    by (simp add: \<open>sum u {0..n} = sum v {0..n}\<close>)
+qed
 
 lemma ErdosLemmaHarmonicBoundedGen:
   fixes n i0 a :: nat and u :: \<open>nat \<Rightarrow> rat\<close> and k :: \<open>nat \<Rightarrow> nat\<close>
@@ -365,17 +342,13 @@ proof-
   obtain v :: \<open>nat \<Rightarrow> rat\<close> where 
     \<open>v \<equiv> \<lambda> i. (u (a + i))\<close> 
     by simp
-
   obtain kappa :: \<open>nat \<Rightarrow> nat\<close> where
     \<open>kappa \<equiv> \<lambda> i. (k  (a + i))\<close> 
     by simp
-
   obtain j0 :: nat where \<open>a + j0 = i0\<close> 
     using assms(3) nat_le_iff_add by auto
-
   obtain m :: nat where \<open>a + m = n\<close> 
     using assms(5) less_imp_add_positive by auto
-
   from \<open>\<forall> i. (i \<noteq> i0 \<and> a \<le> i \<and> i \<le> n \<longrightarrow>  k i < k i0)\<close>
   have \<open>\<forall> i. (i \<noteq> a+j0 \<and> a \<le> i \<and> i \<le> a+m \<longrightarrow>  k i < k (a+j0))\<close> 
     using \<open>a + j0 = i0\<close> \<open>a + m = n\<close> by blast
@@ -387,33 +360,29 @@ proof-
     by simp
   then  have  \<open>\<forall> i. (i \<noteq> j0 \<and> i \<le> m \<longrightarrow>  kappa i < kappa j0)\<close>  
     using \<open>kappa \<equiv> \<lambda>i. k (a + i)\<close> by blast
-
   from \<open>\<forall> i. (a \<le> i \<and> i \<le> n \<longrightarrow> depth (u i) (k i))\<close>
-    have  \<open>\<forall> i. ( a+i \<le> a+m \<longrightarrow> depth (u (a+i)) (k (a+i)))\<close>
-      by (simp add: \<open>a + m = n\<close>)
-    then  have  \<open>\<forall> i. ( i \<le> m \<longrightarrow> depth (u (a+i)) (k (a+i)))\<close>
-      by simp
-      then have  \<open>\<forall> i. ( i \<le> m \<longrightarrow> depth (u (a+i)) (kappa i))\<close>
-        using \<open>kappa \<equiv> \<lambda>i. k (a + i)\<close> by blast
-      then have  \<open>\<forall> i. ( i \<le> m \<longrightarrow> depth (v i) (kappa i))\<close>
-        using \<open>v \<equiv> \<lambda>i. u (a + i)\<close> by blast
-
-      have \<open>depth (\<Sum>i=0..m. v i) (kappa j0)\<close> 
-        using ErdosLemmaHarmonicBounded \<open>\<forall>i. i \<noteq> j0 \<and> i \<le> m \<longrightarrow> kappa i < kappa j0\<close> \<open>\<forall>i\<le>m. depth (v i) (kappa i)\<close> \<open>a + j0 = i0\<close> \<open>a + m = n\<close> assms(4) assms(5) by auto
-      then have  \<open>depth (\<Sum>i=0..m. u (a + i)) (k (a + j0))\<close> 
-        using \<open>kappa \<equiv> \<lambda>i. k (a + i)\<close> \<open>v \<equiv> \<lambda>i. u (a + i)\<close> by blast
-      then have  \<open>depth (\<Sum>i=a..a+m. (u i)) (k i0)\<close> 
-        by (metis SumChangeVariable \<open>a + j0 = i0\<close> \<open>a + m = n\<close>) 
-      then show ?thesis 
-        using \<open>a + m = n\<close> by blast
-    qed
+  have  \<open>\<forall> i. ( a+i \<le> a+m \<longrightarrow> depth (u (a+i)) (k (a+i)))\<close>
+    by (simp add: \<open>a + m = n\<close>)
+  then  have  \<open>\<forall> i. ( i \<le> m \<longrightarrow> depth (u (a+i)) (k (a+i)))\<close>
+    by simp
+  then have  \<open>\<forall> i. ( i \<le> m \<longrightarrow> depth (u (a+i)) (kappa i))\<close>
+    using \<open>kappa \<equiv> \<lambda>i. k (a + i)\<close> by blast
+  then have  \<open>\<forall> i. ( i \<le> m \<longrightarrow> depth (v i) (kappa i))\<close>
+    using \<open>v \<equiv> \<lambda>i. u (a + i)\<close> by blast
+  have \<open>depth (\<Sum>i=0..m. v i) (kappa j0)\<close> 
+    using ErdosLemmaHarmonicBounded \<open>\<forall>i. i \<noteq> j0 \<and> i \<le> m \<longrightarrow> kappa i < kappa j0\<close> \<open>\<forall>i\<le>m. depth (v i) (kappa i)\<close> \<open>a + j0 = i0\<close> \<open>a + m = n\<close> assms(4) assms(5) by auto
+  then have  \<open>depth (\<Sum>i=0..m. u (a + i)) (k (a + j0))\<close> 
+    using \<open>kappa \<equiv> \<lambda>i. k (a + i)\<close> \<open>v \<equiv> \<lambda>i. u (a + i)\<close> by blast
+  then have  \<open>depth (\<Sum>i=a..a+m. (u i)) (k i0)\<close> 
+    by (metis SumChangeVariable \<open>a + j0 = i0\<close> \<open>a + m = n\<close>) 
+  then show ?thesis 
+    using \<open>a + m = n\<close> by blast
+qed
 
 
 section {* Application to Harmonic Numbers *}
 
 subsection {* Trivial Auxiliary Results *}
-
-
 
 lemma Pow2inj:
   fixes n m::nat
@@ -425,36 +394,36 @@ lemma oneovernlem:
   fixes n k:: nat
   assumes \<open>n \<noteq> 0\<close> \<open>depth (Fract 1 n) k \<close>
   shows \<open>\<exists> t :: nat. n = (2::nat)^k*t \<and> odd t \<close>
-  proof-
-    obtain r s :: int where \<open>odd r\<close> and \<open>odd s\<close> and \<open>Fract 1 n = Fract r ((2::int)^k * s)\<close>
-      by (metis assms(2) depth_def)
-    have \<open>(2::int)^k * s = n * r\<close>
-      by (smt \<open>Fract 1 (int n) = Fract r (2 ^ k * s)\<close> \<open>odd s\<close> assms(1) eq_rat(1) even_zero mult.assoc mult.commute mult_cancel_left of_nat_eq_0_iff one_power2 power2_eq_square power_eq_0_iff)    
-    then have \<open>r dvd ((2::int)^k * s)\<close>
-      by simp
-    have \<open>coprime r ((2::int)^k)\<close> 
-      by (simp add: \<open>odd r\<close>)
-    then have \<open>r dvd s\<close> 
-      using \<open>r dvd 2 ^ k * s\<close> coprime_dvd_mult_right_iff by blast
-    then obtain e :: int where \<open>r * e = s\<close> 
-      by blast
-    then have \<open>(2::int)^k * r * e = n * r\<close> 
-      by (simp add: \<open>2 ^ k * s = int n * r\<close> mult.assoc)
-    then have \<open>(2::int)^k * e = n\<close> 
-      using \<open>odd r\<close> by auto
-    have \<open>odd e\<close> 
-      using \<open>odd s\<close> \<open>r * e = s\<close> even_mult_iff by blast
-    have \<open>e \<ge> 0\<close> 
-      by (smt One_nat_def Suc_nat_eq_nat_zadd1 \<open>2 ^ k * e = int n\<close> add.right_neutral add_Suc_right arith_special(3) assms(1) mult_zero_right nat_1 nat_int nat_le_0 nat_mult_distrib nat_power_eq power_eq_0_iff rel_simps(76))
-    from \<open>e \<ge> 0\<close> \<open>odd e\<close> \<open>(2::int)^k * e = n\<close>  show ?thesis 
-      by (smt One_nat_def Suc_eq_plus1 Suc_nat_eq_nat_zadd1 arith_special(3) even_nat_iff nat_1 nat_int nat_mult_distrib nat_power_eq zero_le_power)
-  qed
+proof-
+  obtain r s :: int where \<open>odd r\<close> and \<open>odd s\<close> and \<open>Fract 1 n = Fract r ((2::int)^k * s)\<close>
+    by (metis assms(2) depth_def)
+  have \<open>(2::int)^k * s = n * r\<close>
+    by (smt \<open>Fract 1 (int n) = Fract r (2 ^ k * s)\<close> \<open>odd s\<close> assms(1) eq_rat(1) even_zero mult.assoc mult.commute mult_cancel_left of_nat_eq_0_iff one_power2 power2_eq_square power_eq_0_iff)    
+  then have \<open>r dvd ((2::int)^k * s)\<close>
+    by simp
+  have \<open>coprime r ((2::int)^k)\<close> 
+    by (simp add: \<open>odd r\<close>)
+  then have \<open>r dvd s\<close> 
+    using \<open>r dvd 2 ^ k * s\<close> coprime_dvd_mult_right_iff by blast
+  then obtain e :: int where \<open>r * e = s\<close> 
+    by blast
+  then have \<open>(2::int)^k * r * e = n * r\<close> 
+    by (simp add: \<open>2 ^ k * s = int n * r\<close> mult.assoc)
+  then have \<open>(2::int)^k * e = n\<close> 
+    using \<open>odd r\<close> by auto
+  have \<open>odd e\<close> 
+    using \<open>odd s\<close> \<open>r * e = s\<close> even_mult_iff by blast
+  have \<open>e \<ge> 0\<close> 
+    by (smt One_nat_def Suc_nat_eq_nat_zadd1 \<open>2 ^ k * e = int n\<close> add.right_neutral add_Suc_right arith_special(3) assms(1) mult_zero_right nat_1 nat_int nat_le_0 nat_mult_distrib nat_power_eq power_eq_0_iff rel_simps(76))
+  from \<open>e \<ge> 0\<close> \<open>odd e\<close> \<open>(2::int)^k * e = n\<close>  show ?thesis 
+    by (smt One_nat_def Suc_eq_plus1 Suc_nat_eq_nat_zadd1 arith_special(3) even_nat_iff nat_1 nat_int nat_mult_distrib nat_power_eq zero_le_power)
+qed
 
 subsection {* Auxiliary Results V *}
 
 lemma ErdosFSDFDSFSDFSWEFDEW:
   assumes \<open>\<exists> t::nat. (2::nat)^(a+1) = (2::nat)^(k (2^(a+1) ))*t \<and> odd t\<close>
-shows \<open>a+1 = k ((2::nat)^(a+1))\<close> 
+  shows \<open>a+1 = k ((2::nat)^(a+1))\<close> 
 proof-
   obtain t::nat where \<open>(2::nat)^(a+1) = (2::nat)^(k (2^(a+1) ))*t\<close> and \<open>odd t\<close> 
     using assms by blast
@@ -463,13 +432,13 @@ proof-
     using \<open>odd t\<close> by presburger
   have \<open> t dvd ((2::nat)^(a+1)) \<close>
     by (metis \<open>2 ^ (a + 1) = 2 ^ k (2 ^ (a + 1)) * t\<close> dvd_triv_right)
-    then have \<open>t = 1\<close> using \<open>odd t\<close>  \<open>t \<noteq> 0\<close> 
-      by (metis TrapezoidalNumbersNec2_5recA \<open>2 ^ (a + 1) = 2 ^ k (2 ^ (a + 1)) * t\<close>)
-      then have \<open>(2::nat)^(a+1) = (2::nat)^(k (2^(a+1) ))\<close> using \<open>(2::nat)^(a+1) = (2::nat)^(k (2^(a+1) ))*t\<close>
-      by simp
-    then show ?thesis 
-      using Pow2inj by blast
-  qed
+  then have \<open>t = 1\<close> using \<open>odd t\<close>  \<open>t \<noteq> 0\<close> 
+    by (metis TrapezoidalNumbersNec2_5recA \<open>2 ^ (a + 1) = 2 ^ k (2 ^ (a + 1)) * t\<close>)
+  then have \<open>(2::nat)^(a+1) = (2::nat)^(k (2^(a+1) ))\<close> using \<open>(2::nat)^(a+1) = (2::nat)^(k (2^(a+1) ))*t\<close>
+    by simp
+  then show ?thesis 
+    using Pow2inj by blast
+qed
 
 lemma WeakEuclidPow2A:
   fixes n::nat
@@ -519,14 +488,14 @@ lemma ErdosLemmaHarmonicBoundedGenCaseA5trivial1:
   assumes \<open>n \<ge> 1\<close> \<open>n = 2^k*t\<close> \<open>odd t\<close>
   shows \<open>depth (Fract 1 n) k\<close>
 proof-
-    have \<open>Fract (of_nat 1) (of_nat n) = Fract (of_nat 1) (2^k*(of_nat t))\<close>
-     by (simp add: \<open>n = 2 ^ k * t\<close>)
-   have \<open>odd (of_nat 1)\<close> by simp
-   have \<open>odd (of_nat t)\<close> 
-     by (simp add: assms(3))
+  have \<open>Fract (of_nat 1) (of_nat n) = Fract (of_nat 1) (2^k*(of_nat t))\<close>
+    by (simp add: \<open>n = 2 ^ k * t\<close>)
+  have \<open>odd (of_nat 1)\<close> by simp
+  have \<open>odd (of_nat t)\<close> 
+    by (simp add: assms(3))
   from \<open>odd (of_nat 1)\<close> \<open>odd (of_nat t)\<close> \<open>Fract (of_nat 1) (of_nat n) = Fract (of_nat 1) (2^k*(of_nat t))\<close> 
-    have \<open>depth (Fract (of_nat 1) (of_nat n)) k\<close> 
-      by (smt depth_def)
+  have \<open>depth (Fract (of_nat 1) (of_nat n)) k\<close> 
+    by (smt depth_def)
   then show ?thesis 
     by simp
 qed
@@ -538,7 +507,7 @@ lemma ErdosLemmaHarmonicBoundedGenCaseA5trivial1A:
   using ErdosLemmaHarmonicBoundedGenCaseA5trivial1 ParityDescomposition assms by blast
 
 lemma ErdosLemmaHarmonicBoundedGenCaseA5trivial1B:
- \<open>\<forall> n :: nat. \<exists> k:: nat. (\<exists> t::nat. (n \<ge> 1 \<longrightarrow> (n = 2^k*t \<and> odd t \<and> depth (Fract 1 n) k) ) )\<close>
+  \<open>\<forall> n :: nat. \<exists> k:: nat. (\<exists> t::nat. (n \<ge> 1 \<longrightarrow> (n = 2^k*t \<and> odd t \<and> depth (Fract 1 n) k) ) )\<close>
 proof -
   obtain nn :: "nat \<Rightarrow> nat" and nna :: "nat \<Rightarrow> nat" where
     f1: "\<forall>n. depth (Fract 1 (int n)) (nn n) \<and> odd (nna n) \<and> 2 ^ nn n * nna n = n \<or> \<not> 1 \<le> n"
@@ -549,15 +518,13 @@ proof -
     using f1 by (metis (no_types) of_nat_1 of_nat_eq_of_nat_power_cancel_iff of_nat_le_of_nat_power_cancel_iff of_nat_mult power_one real_of_nat_eq_numeral_power_cancel_iff)
 qed
 
-
 lemma ErdosLemmaHarmonicBoundedGenCaseA5trivial1Choice:
   \<open>\<forall> n :: nat. \<exists> k:: nat. (\<exists> t::nat. (n \<ge> 1 \<longrightarrow> (n = 2^k*t \<and> odd t \<and> depth (Fract 1 n) k) ) ) \<Longrightarrow> \<exists> k:: nat\<Rightarrow>nat. \<forall> n :: nat. (\<exists> t::nat. (n \<ge> 1 \<longrightarrow> (n = 2^(k n)*t \<and> odd t \<and> depth (Fract 1 n) (k n)) ) )\<close>
-   by (rule Hilbert_Choice.choice) 
+  by (rule Hilbert_Choice.choice) 
 
 lemma ErdosLemmaHarmonicBoundedGenCaseA5trivial1C:
- \<open>\<exists> k:: nat\<Rightarrow>nat. \<forall> n :: nat. (\<exists> t::nat. (n \<ge> 1 \<longrightarrow> (n = 2^(k n)*t \<and> odd t \<and> depth (Fract 1 n) (k n)) ) )\<close>
+  \<open>\<exists> k:: nat\<Rightarrow>nat. \<forall> n :: nat. (\<exists> t::nat. (n \<ge> 1 \<longrightarrow> (n = 2^(k n)*t \<and> odd t \<and> depth (Fract 1 n) (k n)) ) )\<close>
   using ErdosLemmaHarmonicBoundedGenCaseA5trivial1A ErdosLemmaHarmonicBoundedGenCaseA5trivial1Choice by auto
-
 
 lemma ErdosLemmaHarmonicBoundedGenCaseA5trivialZ:
   fixes n :: nat 
@@ -584,8 +551,6 @@ lemma ErdosLemmaHarmonicBoundedGenCaseA5trivialXY:
   fixes a b :: nat 
   shows \<open>\<exists>  k :: nat \<Rightarrow> nat. ( a+1 = k (2^(a+1)) ) \<and>( \<forall> i. (1 \<le> i \<and> i \<le> 2^(a+1)+b  \<longrightarrow> ((depth (Fract 1 i) (k i))) )) \<close>
   using ErdosFSDFDSFSDFSWEFDEW ErdosLemmaHarmonicBoundedGenCaseA5trivialXZ by blast
-
-
 
 lemma ErdosLemmaHarmonicBoundedGenCaseA5trivial:
   fixes a b :: nat 
@@ -627,11 +592,11 @@ qed
 lemma HarmonicNumbersParityNumeratorDenominator3X1ZlessSimp:
   fixes a b i :: nat and  k :: \<open>nat \<Rightarrow> nat\<close>
   assumes \<open>b < 2^(a+1)\<close> and \<open>\<forall> i. (1 \<le> i \<and> i \<le> 2^(a+1)+b  \<longrightarrow> depth (Fract 1 i) (k i))\<close>
-and \<open>i < 2^(a+1)\<close> and \<open>1 \<le> i\<close> and \<open>i \<le> 2^(a+1)+b\<close> 
+    and \<open>i < 2^(a+1)\<close> and \<open>1 \<le> i\<close> and \<open>i \<le> 2^(a+1)+b\<close> 
   shows \<open>k i < k (2^(a+1) )\<close>
 proof-
   have \<open>k (2^(a+1) ) = a+1\<close> 
-     using LemTrivialFSWRWER assms(1) assms(2) by blast
+    using LemTrivialFSWRWER assms(1) assms(2) by blast
   have \<open>depth (Fract 1 i) (k i)\<close> 
     using assms(2) assms(4) assms(5) by blast
   then obtain r s :: int where \<open>odd r\<close> and \<open>odd s\<close> and \<open>Fract 1 i = Fract r (2^(k i) * s)\<close> 
@@ -648,18 +613,17 @@ proof-
     using \<open>k (2 ^ (a + 1)) = a + 1\<close> by linarith
 qed
 
-
 lemma HarmonicNumbersParityNumeratorDenominator3X1ZmoreSimpbnon0:
   fixes a b i :: nat and  k :: \<open>nat \<Rightarrow> nat\<close>
   assumes \<open>b < 2^(a+1)\<close> and \<open>\<forall> i. (1 \<le> i \<and> i \<le> 2^(a+1)+b  \<longrightarrow> depth (Fract 1 i) (k i))\<close>
-and \<open>i > 2^(a+1)\<close> and \<open>1 \<le> i\<close> and \<open>i \<le> 2^(a+1)+b\<close> and \<open>b \<noteq> 0\<close>
+    and \<open>i > 2^(a+1)\<close> and \<open>1 \<le> i\<close> and \<open>i \<le> 2^(a+1)+b\<close> and \<open>b \<noteq> 0\<close>
   shows \<open> k i < k (2^(a+1))\<close>
 proof (rule classical)
   assume \<open>\<not> (k i < k (2^(a+1)))\<close>
   then have \<open>k i \<ge>  k (2^(a+1))\<close> 
     using not_le by blast
- have \<open>k (2^(a+1) ) = a+1\<close> 
-   using LemTrivialFSWRWER assms(1) assms(2) by blast
+  have \<open>k (2^(a+1) ) = a+1\<close> 
+    using LemTrivialFSWRWER assms(1) assms(2) by blast
   then have \<open>k i \<ge> a+1\<close> using \<open>k i \<ge>  k (2^(a+1))\<close> 
     by linarith 
   have \<open>depth (Fract 1 i) (k i)\<close> 
@@ -668,24 +632,18 @@ proof (rule classical)
     by (metis depth_def)
   obtain t::nat where \<open>i = 2^(k i) * t\<close> and \<open>odd t\<close>  
     by (metis \<open>depth (Fract 1 (int i)) (k i)\<close> assms(4) less_one linorder_not_le oneovernlem)
-
   obtain j :: nat where \<open>2^(a+1) + j = i\<close> 
     using assms(3) less_imp_add_positive by blast
   have \<open>j \<le> b\<close> 
     using \<open>2 ^ (a + 1) + j = i\<close> add_le_cancel_left assms(5) by blast
-
   then have \<open>j < 2^(a+1)\<close> 
     using assms(1) by linarith
-
   have \<open>2^(a+1) dvd i\<close> 
     by (metis \<open>i = 2 ^ k i * t\<close> \<open>k (2 ^ (a + 1)) = a + 1\<close> \<open>k (2 ^ (a + 1)) \<le> k i\<close> dvd_mult2 le_imp_power_dvd)
-
   have \<open>2^(a+1) dvd j\<close> 
     using \<open>2 ^ (a + 1) + j = i\<close> \<open>2 ^ (a + 1) dvd i\<close> dvd_add_triv_left_iff by blast
-
   from \<open>j < (2::nat)^(a+1)\<close>  \<open>(2::nat)^(a+1) dvd j\<close>  have \<open>j = 0\<close> 
     using dvd_imp_le linorder_not_le by auto
-
   have \<open>i = 2^(a+1) \<close> 
     using \<open>2 ^ (a + 1) + j = i\<close> \<open>j = 0\<close> add.right_neutral by blast
   have False 
@@ -698,14 +656,14 @@ qed
 lemma HarmonicNumbersParityNumeratorDenominator3X1ZmoreSimpb0:
   fixes a b i :: nat and  k :: \<open>nat \<Rightarrow> nat\<close>
   assumes \<open>b < 2^(a+1)\<close> and \<open>\<forall> i. (1 \<le> i \<and> i \<le> 2^(a+1)+b  \<longrightarrow> depth (Fract 1 i) (k i))\<close>
-and \<open>i > 2^(a+1)\<close> and \<open>1 \<le> i\<close> and \<open>i \<le> 2^(a+1)+b\<close> and \<open>b = 0\<close>
+    and \<open>i > 2^(a+1)\<close> and \<open>1 \<le> i\<close> and \<open>i \<le> 2^(a+1)+b\<close> and \<open>b = 0\<close>
   shows \<open> k i < k (2^(a+1) )\<close>
   using assms(3) assms(5) assms(6) by linarith
 
 lemma HarmonicNumbersParityNumeratorDenominator3X1ZmoreSimp:
   fixes a b i :: nat and  k :: \<open>nat \<Rightarrow> nat\<close>
   assumes \<open>b < 2^(a+1)\<close> and \<open>\<forall> i. (1 \<le> i \<and> i \<le> 2^(a+1)+b  \<longrightarrow> depth (Fract 1 i) (k i))\<close>
-and \<open>i > 2^(a+1)\<close> and \<open>1 \<le> i\<close> and \<open>i \<le> 2^(a+1)+b\<close> 
+    and \<open>i > 2^(a+1)\<close> and \<open>1 \<le> i\<close> and \<open>i \<le> 2^(a+1)+b\<close> 
   shows \<open> k i < k (2^(a+1) )\<close>
   using HarmonicNumbersParityNumeratorDenominator3X1ZmoreSimpbnon0 assms(1) assms(2) assms(3) assms(5) by auto
 
@@ -756,7 +714,7 @@ lemma ErdosLemmaHarmonicBoundedGenCaseA3:
 
 lemma ErdosLemmaHarmonicBoundedGenCaseA4trivial:
   fixes a b :: nat
-shows  \<open>1 \<le> (2::nat)^(a+1) \<and> (2::nat)^(a+1) \<le> 2^(a+1)+b \<and> 1 < (2::nat)^(a+1) + b \<close>
+  shows  \<open>1 \<le> (2::nat)^(a+1) \<and> (2::nat)^(a+1) \<le> 2^(a+1)+b \<and> 1 < (2::nat)^(a+1) + b \<close>
   by (metis (no_types, lifting) One_nat_def le_add1 le_add2 le_eq_less_or_eq less_le_trans nat_power_eq_Suc_0_iff num.distinct(1) numeral_One numeral_eq_iff one_le_numeral one_le_power zero_less_one)
 
 
@@ -766,7 +724,6 @@ lemma ErdosLemmaHarmonicBoundedGenCaseA4:
     and \<open>\<forall> i. (1 \<le> i \<and> i \<le> 2^(a+1)+b  \<longrightarrow> depth (Fract 1 i) (k i))\<close>
   shows \<open>depth (\<Sum>i=1..2^(a+1) + b . Fract 1 i) (k (2^(a+1) ))\<close>
   using ErdosLemmaHarmonicBoundedGenCaseA2 ErdosLemmaHarmonicBoundedGenCaseA4trivial assms(1) assms(2) by blast
-
 
 lemma ErdosLemmaHarmonicBoundedGenCaseA5:
   fixes a b :: nat  and k :: \<open>nat \<Rightarrow> nat\<close>
@@ -804,27 +761,27 @@ proof-
     by linarith
   have \<open>s \<noteq> 0\<close> 
     by (smt \<open>Fract r s = Fract r0 (2 ^ (a + 1) * s0)\<close> \<open>odd r0\<close> \<open>odd s0\<close> dvd_0_right minus_rat mult_eq_0_iff mult_minus_left positive_rat power_eq_0_iff)
-    have  \<open>2^(a+1)*s0 \<noteq> 0\<close> 
+  have  \<open>2^(a+1)*s0 \<noteq> 0\<close> 
     using \<open>odd s0\<close> by auto
   from \<open>Fract r s = Fract r0 (2^(a+1)*s0)\<close> \<open>s \<noteq> 0\<close> \<open>2^(a+1)*s0 \<noteq> 0\<close> \<open>coprime r s\<close>
-    obtain d :: int where \<open>r*d = r0\<close> and \<open>s*d = 2^(a+1)*s0\<close> 
-      using FractPropor by blast
-    have \<open>odd d\<close> 
-      using \<open>odd r0\<close> \<open>r * d = r0\<close> even_mult_iff by blast
-    have \<open>odd r\<close> 
-      using \<open>odd r0\<close> \<open>r * d = r0\<close> even_mult_iff by blast
-    from \<open>odd d\<close>  \<open>s*d = 2^(a+1)*s0\<close> have \<open>coprime d (2^(a+1))\<close> 
-      using coprime_power_right_iff coprime_right_2_iff_odd by blast
-    from  \<open>s*d = 2^(a+1)*s0\<close> have \<open>d dvd (2^(a+1)*s0)\<close> 
-      by (metis dvd_triv_right)
-    from  \<open>coprime d (2^(a+1))\<close> \<open>d dvd (2^(a+1)*s0)\<close> have \<open>d dvd s0\<close> 
-      using coprime_dvd_mult_right_iff by blast
-    then  obtain e :: int where \<open>s0 = d*e\<close> 
-      by blast
-    have \<open>odd e\<close> 
-      using \<open>odd s0\<close> \<open>s0 = d * e\<close> even_mult_iff by blast
-    have \<open>s = 2^(a+1)*e\<close> 
-      using \<open>odd d\<close> \<open>s * d = 2 ^ (a+1) * s0\<close> \<open>s0 = d * e\<close> by auto
+  obtain d :: int where \<open>r*d = r0\<close> and \<open>s*d = 2^(a+1)*s0\<close> 
+    using FractPropor by blast
+  have \<open>odd d\<close> 
+    using \<open>odd r0\<close> \<open>r * d = r0\<close> even_mult_iff by blast
+  have \<open>odd r\<close> 
+    using \<open>odd r0\<close> \<open>r * d = r0\<close> even_mult_iff by blast
+  from \<open>odd d\<close>  \<open>s*d = 2^(a+1)*s0\<close> have \<open>coprime d (2^(a+1))\<close> 
+    using coprime_power_right_iff coprime_right_2_iff_odd by blast
+  from  \<open>s*d = 2^(a+1)*s0\<close> have \<open>d dvd (2^(a+1)*s0)\<close> 
+    by (metis dvd_triv_right)
+  from  \<open>coprime d (2^(a+1))\<close> \<open>d dvd (2^(a+1)*s0)\<close> have \<open>d dvd s0\<close> 
+    using coprime_dvd_mult_right_iff by blast
+  then  obtain e :: int where \<open>s0 = d*e\<close> 
+    by blast
+  have \<open>odd e\<close> 
+    using \<open>odd s0\<close> \<open>s0 = d * e\<close> even_mult_iff by blast
+  have \<open>s = 2^(a+1)*e\<close> 
+    using \<open>odd d\<close> \<open>s * d = 2 ^ (a+1) * s0\<close> \<open>s0 = d * e\<close> by auto
   show ?thesis 
     using \<open>odd e\<close> \<open>odd r\<close> \<open>s = 2 ^ (a + 1) * e\<close> by blast
 qed
@@ -858,12 +815,12 @@ lemma HarmNumAreRat1:
   shows \<open>(\<Sum> k = 1..n+1. (Fract 1 (of_nat k)) ) \<in> \<rat>\<close>
 proof (induction n)
   case 0
-   have \<open> (\<Sum> k = 1..0+1. (Fract 1 k) ) = (\<Sum> k = 1..1. (Fract 1 k) ) \<close> 
-     by simp
-   then have  \<open> (\<Sum> k = 1..0+1. (Fract 1 k) ) =  (Fract 1 1) \<close> 
-     by simp
-   then have  \<open> (\<Sum> k = 1..0+1. (Fract 1 k) ) \<in> \<rat> \<close> 
-     using One_rat_def by auto
+  have \<open> (\<Sum> k = 1..0+1. (Fract 1 k) ) = (\<Sum> k = 1..1. (Fract 1 k) ) \<close> 
+    by simp
+  then have  \<open> (\<Sum> k = 1..0+1. (Fract 1 k) ) =  (Fract 1 1) \<close> 
+    by simp
+  then have  \<open> (\<Sum> k = 1..0+1. (Fract 1 k) ) \<in> \<rat> \<close> 
+    using One_rat_def by auto
   then show ?case 
     by simp
 next
@@ -876,8 +833,8 @@ next
     using Rats_add Suc.IH by blast
   have \<open> (\<Sum> k = 1..(Suc n)+1. (Fract 1 (of_nat k)) ) = (\<Sum> k = 1..n+1. (Fract 1 (of_nat k)) ) + Fract 1 (of_nat ((Suc n) + 1)) \<close>
     by simp
-    then show ?case 
-      using \<open>(\<Sum>k = 1..n + 1. Fract 1 (int k)) + Fract 1 (int (Suc n + 1)) \<in> \<rat>\<close> by auto
+  then show ?case 
+    using \<open>(\<Sum>k = 1..n + 1. Fract 1 (int k)) + Fract 1 (int (Suc n + 1)) \<in> \<rat>\<close> by auto
 qed
 
 lemma HarmNumAreRat:
@@ -926,7 +883,7 @@ proof (rule classical)
     using HarmonicNumbersParityNumeratorDenominator by blast
   have \<open>s \<noteq> 0\<close> 
     by (metis HarmonicNumbersParityNumeratorDenominator \<open>(\<Sum>k = 1..n. Fract 1 (int k)) = Fract r s\<close> \<open>coprime r s\<close> assms coprime_commute eq_rat(3) rat_number_collapse(6))
-    from  \<open>odd r\<close>  \<open>even s\<close> \<open>s \<noteq> 0\<close>  \<open> Fract r s \<in> \<int> \<close> have False
+  from  \<open>odd r\<close>  \<open>even s\<close> \<open>s \<noteq> 0\<close>  \<open> Fract r s \<in> \<int> \<close> have False
     using FractOddNumEvenDen by blast
   then show ?thesis 
     by blast 

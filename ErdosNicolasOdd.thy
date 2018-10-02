@@ -80,7 +80,7 @@ section {* Auxiliary Results *}
 
 
 definition OddDivSet :: \<open>nat \<Rightarrow> real \<Rightarrow> nat set\<close> where
-\<open>OddDivSet \<equiv> \<lambda> n::nat. \<lambda> x::real.  {d | d :: nat. d dvd n \<and> odd d \<and> d \<le> x }\<close>
+  \<open>OddDivSet \<equiv> \<lambda> n::nat. \<lambda> x::real.  {d | d :: nat. d dvd n \<and> odd d \<and> d \<le> x }\<close>
 
 
 
@@ -88,27 +88,27 @@ definition OddDivSet :: \<open>nat \<Rightarrow> real \<Rightarrow> nat set\<clo
 lemma ErdosNicolasOdd7AXAL:
   fixes n d:: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close>
-shows \<open> \<exists> e :: nat. e dvd n \<and> e \<le> d \<and> d < 2*e \<close>
+  shows \<open> \<exists> e :: nat. e dvd n \<and> e \<le> d \<and> d < 2*e \<close>
   by (metis One_nat_def arith_special(3) assms(1) assms(2) dvd_pos_nat lessI less_le_trans n_less_m_mult_n nat_le_linear plus_1_eq_Suc)
 
 lemma ErdosNicolasOdd7AXA:
   fixes n d:: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close>
-shows \<open> d \<in> (ErdosNicolasSet n d)\<close>
+  shows \<open> d \<in> (ErdosNicolasSet n d)\<close>
   using assms ErdosNicolasOdd7AXAL 
   by (smt ErdosNicolasSet_def dvd_def dvd_refl le_neq_implies_less mem_Collect_eq mult.commute mult_le_mono nat_le_linear not_le)
 
 lemma ErdosNicolasOdd7AXB:
   fixes n d e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open> d \<notin> (ErdosNicolasSet n e)\<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open> d \<notin> (ErdosNicolasSet n e)\<close>
 proof-
   have \<open>\<forall> j. j \<in> (ErdosNicolasSet n e) \<longrightarrow> j \<le> e\<close> 
     by (simp add: ErdosNicolasSet_def)
   then have  \<open>\<forall> j. j \<in> (ErdosNicolasSet n e) \<longrightarrow> j \<noteq> d\<close> 
     using  \<open>e < d\<close> 
-     less_le_trans by blast
+      less_le_trans by blast
   then show ?thesis 
     by blast
 qed
@@ -116,18 +116,18 @@ qed
 lemma ErdosNicolasOdd7AX:
   fixes n d e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open> d \<in> (ErdosNicolasSet n d) - (ErdosNicolasSet n e)\<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open> d \<in> (ErdosNicolasSet n d) - (ErdosNicolasSet n e)\<close>
   using  assms ErdosNicolasOdd7AXA ErdosNicolasOdd7AXB
   by blast
 
 lemma ErdosNicolasOdd7AY:
   fixes n d dd e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-and \<open> d \<in> (ErdosNicolasSet n d) - (ErdosNicolasSet n e)\<close>
-and \<open> dd \<in> (ErdosNicolasSet n d) - (ErdosNicolasSet n e)\<close>
-shows \<open>d = dd\<close> 
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+    and \<open> d \<in> (ErdosNicolasSet n d) - (ErdosNicolasSet n e)\<close>
+    and \<open> dd \<in> (ErdosNicolasSet n d) - (ErdosNicolasSet n e)\<close>
+  shows \<open>d = dd\<close> 
   by (metis (no_types, lifting) CollectD CollectI DiffE ErdosNicolasSet_def assms(5) assms(6) assms(8) dual_order.strict_iff_order less_le_trans)
 
 lemma singletonSplit:
@@ -138,23 +138,23 @@ lemma singletonSplit:
 lemma ErdosNicolasOdd7A:
   fixes n d e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open> (ErdosNicolasSet n d) - (ErdosNicolasSet n e) = {d}\<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open> (ErdosNicolasSet n d) - (ErdosNicolasSet n e) = {d}\<close>
   using assms ErdosNicolasOdd7AX ErdosNicolasOdd7AY singletonSplit
   by metis
 
 lemma ErdosNicolasOdd7BXAL:
   fixes n d e:: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open> (d div 2) dvd n \<and> (d div 2) \<le> e \<and> e < 2*(d div 2)\<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open> (d div 2) dvd n \<and> (d div 2) \<le> e \<and> e < 2*(d div 2)\<close>
   using Suc_le_lessD assms(1) assms(2) assms(3) assms(5) assms(6) by fastforce
 
 lemma ErdosNicolasOdd7BX:
   fixes n d e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open>d div 2 \<in> (ErdosNicolasSet n e)\<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open>d div 2 \<in> (ErdosNicolasSet n e)\<close>
   using assms ErdosNicolasOdd7BXAL 
   by (metis (no_types, lifting) CollectI ErdosNicolasSet_def dvd_mult_div_cancel)
 
@@ -162,24 +162,24 @@ shows \<open>d div 2 \<in> (ErdosNicolasSet n e)\<close>
 lemma ErdosNicolasOdd7BY:
   fixes n d e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open>d div 2 \<notin> (ErdosNicolasSet n d)\<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open>d div 2 \<notin> (ErdosNicolasSet n d)\<close>
   by (simp add: ErdosNicolasSet_def leD)
 
 
 lemma ErdosNicolasOdd7BXYFusion:
   fixes n d e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open>d div 2 \<in> (ErdosNicolasSet n e) - (ErdosNicolasSet n d)\<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open>d div 2 \<in> (ErdosNicolasSet n e) - (ErdosNicolasSet n d)\<close>
   using ErdosNicolasOdd7BX ErdosNicolasOdd7BY assms(1) assms(2) assms(3) assms(4) assms(5) assms(6) by auto
 
 
 lemma ErdosNicolasOdd7B:
   fixes n d e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open>card((ErdosNicolasSet n e) - (ErdosNicolasSet n d)) \<ge> 1\<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open>card((ErdosNicolasSet n e) - (ErdosNicolasSet n d)) \<ge> 1\<close>
 proof-
   have \<open>finite (ErdosNicolasSet n e)\<close> 
     by (metis (mono_tags, lifting) CollectD ErdosNicolasSet_def assms(5)  finite_nat_set_iff_bounded less_le_trans  not_le)
@@ -192,10 +192,10 @@ proof-
 qed
 
 lemma SymDiffThisProblem:
- fixes n d e :: nat
+  fixes n d e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open>card((ErdosNicolasSet n d) - (ErdosNicolasSet n e)) \<le> card((ErdosNicolasSet n e) - (ErdosNicolasSet n d)) \<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open>card((ErdosNicolasSet n d) - (ErdosNicolasSet n e)) \<le> card((ErdosNicolasSet n e) - (ErdosNicolasSet n d)) \<close>
   by (metis ErdosNicolasOdd7A ErdosNicolasOdd7B One_nat_def assms(1) assms(2) assms(3) assms(4) assms(5) assms(6) card.empty card_insert_if empty_iff finite.emptyI)
 
 lemma SymDiff:
@@ -213,8 +213,8 @@ qed
 lemma ErdosNicolasOdd6:
   fixes n d e :: nat
   assumes \<open>n \<ge> 1\<close> and \<open>d dvd n\<close> and \<open>even d\<close> and \<open>e dvd n\<close> and \<open>e < d\<close>
-and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
-shows \<open> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e)\<close>
+    and \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close>
+  shows \<open> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e)\<close>
 proof-
   have \<open>finite (ErdosNicolasSet n d)\<close> 
     by (metis (no_types, lifting) CollectD ErdosNicolasSet_def  finite_nat_set_iff_bounded_le  )
@@ -248,13 +248,13 @@ proof-
   from  \<open>e = Max  {e | e :: nat.  e dvd n \<and> e < d }\<close> 
   have \<open>\<forall> ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close> 
     by simp
-show ?thesis 
-  using \<open>\<forall>ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close> \<open>e < d\<close> \<open>e dvd n\<close> by blast
+  show ?thesis 
+    using \<open>\<forall>ee. ee dvd n \<and> ee < d \<longrightarrow> ee \<le> e\<close> \<open>e < d\<close> \<open>e dvd n\<close> by blast
 qed
 
 lemma ErdosNicolasOdd4:
   assumes  \<open>n \<ge> 1\<close> and \<open>d \<le> Suc k\<close> and \<open>d dvd n\<close> and \<open>even d\<close>
-shows \<open>\<exists> e. e dvd n \<and> e \<le> k \<and> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e)\<close>
+  shows \<open>\<exists> e. e dvd n \<and> e \<le> k \<and> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e)\<close>
 proof-
   obtain k where \<open>2*k = d\<close> 
     using assms(4) by blast
@@ -268,12 +268,12 @@ qed
 
 lemma ErdosNicolasOdd3:
   assumes \<open>\<forall> n d.  n \<ge> 1 \<and> d \<le> k  \<and> d dvd n  \<longrightarrow> ( \<exists> e. e dvd n \<and> odd e \<and> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e) )\<close>
-and \<open>n \<ge> 1\<close> and \<open>d \<le> Suc k\<close>  and \<open>d dvd n\<close>
-shows \<open>\<exists> e. e dvd n \<and> odd e \<and> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e)\<close>
+    and \<open>n \<ge> 1\<close> and \<open>d \<le> Suc k\<close>  and \<open>d dvd n\<close>
+  shows \<open>\<exists> e. e dvd n \<and> odd e \<and> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e)\<close>
 proof(induction k)
-case 0
-then show ?case 
-  by (smt ErdosNicolasOdd4 assms(1) assms(2) assms(3) assms(4) order_refl order_trans)
+  case 0
+  then show ?case 
+    by (smt ErdosNicolasOdd4 assms(1) assms(2) assms(3) assms(4) order_refl order_trans)
 next
   case (Suc k)
   then show ?case using ErdosNicolasOdd4 
@@ -282,7 +282,7 @@ qed
 
 
 lemma ErdosNicolasOdd2:
-\<open>\<forall> n d.  n \<ge> 1 \<and> d \<le> k  \<and> d dvd n  \<longrightarrow> ( \<exists> e. e dvd n \<and> odd e \<and> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e) )\<close>
+  \<open>\<forall> n d.  n \<ge> 1 \<and> d \<le> k  \<and> d dvd n  \<longrightarrow> ( \<exists> e. e dvd n \<and> odd e \<and> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e) )\<close>
 proof(induction k)
   case 0
   then show ?case 
@@ -293,13 +293,13 @@ next
 qed
 
 lemma ErdosNicolasOdd1:
-\<open>n \<ge> 1 \<Longrightarrow> d dvd n  \<Longrightarrow> \<exists> e. e dvd n \<and> odd e \<and> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e) \<close>
+  \<open>n \<ge> 1 \<Longrightarrow> d dvd n  \<Longrightarrow> \<exists> e. e dvd n \<and> odd e \<and> card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e) \<close>
   using ErdosNicolasOdd2 
   by (metis   Suc_n_not_le_n dual_order.trans    nat_le_linear  )
 
 
 proposition ErdosNicolasOdd:
-\<open>n \<ge> 1 \<Longrightarrow> ErdosNicolas n = Max { card (ErdosNicolasSet n d) | d :: nat. d dvd n \<and> odd d}\<close>
+  \<open>n \<ge> 1 \<Longrightarrow> ErdosNicolas n = Max { card (ErdosNicolasSet n d) | d :: nat. d dvd n \<and> odd d}\<close>
 proof-
   assume \<open>n \<ge> 1\<close>
   have \<open>{ card (ErdosNicolasSet n d) | d :: nat. d dvd n} \<noteq> {}\<close>
@@ -308,31 +308,31 @@ proof-
     using \<open>1 \<le> n\<close> by auto
   then have \<open>{ card (ErdosNicolasSet n d) | d :: nat. d dvd n} = { card (ErdosNicolasSet n d) | d :: nat. d dvd n \<and> d \<le> n}\<close>
     by blast
-    have \<open>finite { d | d :: nat. d dvd n \<and> d \<le> n}\<close>
-      using finite_nat_set_iff_bounded_le by blast
-    then have \<open>finite { card (ErdosNicolasSet n d) | d :: nat. d dvd n \<and> d \<le> n}\<close>
-      by auto
+  have \<open>finite { d | d :: nat. d dvd n \<and> d \<le> n}\<close>
+    using finite_nat_set_iff_bounded_le by blast
+  then have \<open>finite { card (ErdosNicolasSet n d) | d :: nat. d dvd n \<and> d \<le> n}\<close>
+    by auto
   then have \<open>finite { card (ErdosNicolasSet n d) | d :: nat. d dvd n}\<close>
     using  \<open>{ card (ErdosNicolasSet n d) | d :: nat. d dvd n} = { card (ErdosNicolasSet n d) | d :: nat. d dvd n \<and> d \<le> n}\<close>
     by auto
   have \<open>{ card (ErdosNicolasSet n d) | d :: nat. d dvd n \<and> odd d} \<subseteq> { card (ErdosNicolasSet n d) | d :: nat. d dvd n}\<close>
     by blast
   then have  \<open>Max { card (ErdosNicolasSet n d) | d :: nat. d dvd n \<and> odd d} \<le> Max { card (ErdosNicolasSet n d) | d :: nat. d dvd n}\<close>
-proof -
-have "\<exists>na nb. na = card (ErdosNicolasSet n nb) \<and> nb dvd n \<and> odd nb"
-  by (meson odd_one one_dvd)
-  then show ?thesis
-    by (simp add: Max.subset_imp \<open>finite {card (ErdosNicolasSet n d) |d. d dvd n}\<close> \<open>{card (ErdosNicolasSet n d) |d. d dvd n \<and> odd d} \<subseteq> {card (ErdosNicolasSet n d) |d. d dvd n}\<close>)
-qed
+  proof -
+    have "\<exists>na nb. na = card (ErdosNicolasSet n nb) \<and> nb dvd n \<and> odd nb"
+      by (meson odd_one one_dvd)
+    then show ?thesis
+      by (simp add: Max.subset_imp \<open>finite {card (ErdosNicolasSet n d) |d. d dvd n}\<close> \<open>{card (ErdosNicolasSet n d) |d. d dvd n \<and> odd d} \<subseteq> {card (ErdosNicolasSet n d) |d. d dvd n}\<close>)
+  qed
 
   obtain d::nat where \<open>card (ErdosNicolasSet n d)  = Max { card (ErdosNicolasSet n d) | d :: nat. d dvd n}\<close>
-      proof -
-          assume a1: "\<And>d. card (ErdosNicolasSet n d) = Max {card (ErdosNicolasSet n d) |d. d dvd n} \<Longrightarrow> thesis"
-            have "\<exists>na. Max {card (ErdosNicolasSet n na) |na. na dvd n} = card (ErdosNicolasSet n na)"
-                using Max_in \<open>finite {card (ErdosNicolasSet n d) |d. d dvd n}\<close> by auto
-                then show ?thesis
-                    using a1 by force
-     qed
+  proof -
+    assume a1: "\<And>d. card (ErdosNicolasSet n d) = Max {card (ErdosNicolasSet n d) |d. d dvd n} \<Longrightarrow> thesis"
+    have "\<exists>na. Max {card (ErdosNicolasSet n na) |na. na dvd n} = card (ErdosNicolasSet n na)"
+      using Max_in \<open>finite {card (ErdosNicolasSet n d) |d. d dvd n}\<close> by auto
+    then show ?thesis
+      using a1 by force
+  qed
 
   obtain e :: nat where \<open>card (ErdosNicolasSet n d) \<le> card (ErdosNicolasSet n e)\<close> and \<open>e dvd n\<close> and \<open>odd e\<close>
     by (smt CollectD ErdosNicolasOdd1 Max_in \<open>1 \<le> n\<close> \<open>card (ErdosNicolasSet n d) = Max {card (ErdosNicolasSet n d) |d. d dvd n}\<close> \<open>finite {card (ErdosNicolasSet n d) |d. d dvd n}\<close> \<open>{card (ErdosNicolasSet n d) |d. d dvd n} \<noteq> {}\<close>)
@@ -385,9 +385,9 @@ qed
 lemma WLGOddPartShortIntervalX:
   fixes x y i j :: nat
   assumes \<open>OddPart x = OddPart y\<close> and \<open>y < 2*x\<close> and \<open>x \<le> y\<close>
-and \<open>x = (2::nat)^i*(OddPart x)\<close> and \<open>y = (2::nat)^j*(OddPart y)\<close>
-and \<open>i \<le> j\<close>
-shows \<open>x = y\<close>
+    and \<open>x = (2::nat)^i*(OddPart x)\<close> and \<open>y = (2::nat)^j*(OddPart y)\<close>
+    and \<open>i \<le> j\<close>
+  shows \<open>x = y\<close>
 proof-
   have \<open>OddPart x > 0\<close> 
     using Exp2OddPartChar assms(4) by fastforce
@@ -400,7 +400,7 @@ proof-
     by simp
   then have \<open>(2::nat)^j*(OddPart x) < (2::nat)^(i+1)*(OddPart x)\<close>
     using  \<open>OddPart x = OddPart y\<close> by simp
-   then have  \<open>(2::nat)^j < (2::nat)^(i+1)\<close>
+  then have  \<open>(2::nat)^j < (2::nat)^(i+1)\<close>
     using  \<open>(OddPart x)/(OddPart x) = 1\<close> 
     by simp   
   then have \<open>j < i+1\<close> 
@@ -414,14 +414,14 @@ qed
 lemma OddPartShortIntervalX:
   fixes x y :: nat
   assumes \<open>OddPart x = OddPart y\<close> and \<open>y < 2*x\<close> and \<open>x \<le> y\<close>
-and \<open>x = 2^i*(OddPart x)\<close> and \<open>y = 2^j*(OddPart y)\<close>
-shows \<open>x = y\<close>
+    and \<open>x = 2^i*(OddPart x)\<close> and \<open>y = 2^j*(OddPart y)\<close>
+  shows \<open>x = y\<close>
   by (metis WLGOddPartShortIntervalX antisym assms(1) assms(2) assms(3) assms(4) assms(5) linear mult_le_mono1 one_less_numeral_iff power_increasing_iff semiring_norm(76))
 
 lemma OddPartShortInterval:
   fixes x y :: nat
   assumes \<open>OddPart x = OddPart y\<close> and \<open>y < 2*x\<close> and \<open>x \<le> y\<close>
-shows \<open>x = y\<close>
+  shows \<open>x = y\<close>
 proof-
   obtain i where \<open>x = 2^i*(OddPart x)\<close> 
     by (metis One_nat_def Suc_leI assms(2) assms(3) mult_0_right neq0_conv not_le preExp2OddPartChar2)
@@ -434,10 +434,10 @@ qed
 lemma WLOGErdosNicolasSetOddDivSetInjOnSCaseA:
   fixes n k m d x y :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close>
- and  \<open>x \<in>  (ErdosNicolasSet n d)\<close>
- and  \<open>y \<in>  (ErdosNicolasSet n d)\<close>
-and \<open>OddPart x = OddPart y\<close> and \<open>x \<le> y\<close>
-shows \<open>x = y\<close>
+    and  \<open>x \<in>  (ErdosNicolasSet n d)\<close>
+    and  \<open>y \<in>  (ErdosNicolasSet n d)\<close>
+    and \<open>OddPart x = OddPart y\<close> and \<open>x \<le> y\<close>
+  shows \<open>x = y\<close>
 proof-
   from  \<open>x \<in>  (ErdosNicolasSet n d)\<close>
   have \<open>d < 2*x\<close> 
@@ -455,10 +455,10 @@ qed
 lemma ErdosNicolasSetOddDivSetInjOnSCaseA:
   fixes n k m d x y :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close>
- and  \<open>x \<in>  (ErdosNicolasSet n d)\<close>
- and  \<open>y \<in>  (ErdosNicolasSet n d)\<close>
-and \<open>OddPart x = OddPart y\<close>
-shows \<open>x = y\<close>
+    and  \<open>x \<in>  (ErdosNicolasSet n d)\<close>
+    and  \<open>y \<in>  (ErdosNicolasSet n d)\<close>
+    and \<open>OddPart x = OddPart y\<close>
+  shows \<open>x = y\<close>
   using WLOGErdosNicolasSetOddDivSetInjOnSCaseA assms 
   by (metis nat_le_linear)
 
@@ -496,9 +496,9 @@ qed
 lemma ImpoErdosNicolasSetOddDivSetInjOnSCaseB:
   fixes n k m d :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close>
- and  \<open>x \<in>  (ErdosNicolasSet n d)\<close>
- and  \<open>y \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
-shows \<open>OddPart x \<noteq> OddPart y\<close>
+    and  \<open>x \<in>  (ErdosNicolasSet n d)\<close>
+    and  \<open>y \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
+  shows \<open>OddPart x \<noteq> OddPart y\<close>
 proof-
   have \<open>odd y\<close> 
     using CollectD OddDivSet_def assms(6) by fastforce
@@ -532,10 +532,10 @@ qed
 lemma ErdosNicolasSetOddDivSetInjOnSCaseB:
   fixes n k m d :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close>
- and  \<open>x \<in>  (ErdosNicolasSet n d)\<close>
- and  \<open> y \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
-and \<open>OddPart x = OddPart y\<close>
-shows \<open>x = y\<close>
+    and  \<open>x \<in>  (ErdosNicolasSet n d)\<close>
+    and  \<open> y \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
+    and \<open>OddPart x = OddPart y\<close>
+  shows \<open>x = y\<close>
   using assms ImpoErdosNicolasSetOddDivSetInjOnSCaseB 
   by blast
 
@@ -543,10 +543,10 @@ shows \<open>x = y\<close>
 lemma ErdosNicolasSetOddDivSetInjOnSCaseC:
   fixes n k m d :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close>
- and  \<open> x \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
- and  \<open>y \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
-and \<open>OddPart x = OddPart y\<close>
-shows \<open>x = y\<close>
+    and  \<open> x \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
+    and  \<open>y \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
+    and \<open>OddPart x = OddPart y\<close>
+  shows \<open>x = y\<close>
 proof-
   have \<open>odd x\<close> 
     by (metis (no_types, lifting) OddDivSet_def One_nat_def add.right_neutral add_Suc_right assms(5) mem_Collect_eq)
@@ -554,7 +554,7 @@ proof-
     by (metis One_nat_def Suc_leI odd_pos preExp2OddPartChar1 preExp2OddPartChar2 preUniqnessOddEven_OddPartOneSide)
   have \<open>odd y\<close> 
     using CollectD OddDivSet_def assms(6) by fastforce
-    then have \<open>OddPart y = y\<close>
+  then have \<open>OddPart y = y\<close>
     by (metis One_nat_def Suc_leI odd_pos preExp2OddPartChar1 preExp2OddPartChar2 preUniqnessOddEven_OddPartOneSide)
   show ?thesis 
     using \<open>OddPart x = x\<close> \<open>OddPart y = y\<close> assms(7) by linarith
@@ -564,12 +564,12 @@ qed
 lemma ErdosNicolasSetOddDivSetInjOnS:
   fixes n k m d :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close>
- and  \<open>x \<in>  (ErdosNicolasSet n d) \<or> x \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
- and  \<open>y \<in>  (ErdosNicolasSet n d) \<or> y \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
-and \<open>OddPart x = OddPart y\<close>
-shows \<open>x = y\<close>
+    and  \<open>x \<in>  (ErdosNicolasSet n d) \<or> x \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
+    and  \<open>y \<in>  (ErdosNicolasSet n d) \<or> y \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
+    and \<open>OddPart x = OddPart y\<close>
+  shows \<open>x = y\<close>
   using assms ErdosNicolasSetOddDivSetInjOnSCaseA ErdosNicolasSetOddDivSetInjOnSCaseB
-ErdosNicolasSetOddDivSetInjOnSCaseC 
+    ErdosNicolasSetOddDivSetInjOnSCaseC 
   by metis
 
 lemma ErdosNicolasSetOddDivSetInjOn:
@@ -580,14 +580,14 @@ lemma ErdosNicolasSetOddDivSetInjOn:
   by (smt UnE)
 
 lemma OddPartErdosNicolasSet:
-\<open> OddPart ` ((ErdosNicolasSet n d) \<union> (OddDivSet n ((d::real)/(2::real)^(k+1)))) = (OddPart ` ((ErdosNicolasSet n d))) \<union> (OddPart ` (OddDivSet n ((d::real)/(2::real)^(k+1))))\<close>
+  \<open> OddPart ` ((ErdosNicolasSet n d) \<union> (OddDivSet n ((d::real)/(2::real)^(k+1)))) = (OddPart ` ((ErdosNicolasSet n d))) \<union> (OddPart ` (OddDivSet n ((d::real)/(2::real)^(k+1))))\<close>
   by (simp add: image_Un)
 
 lemma ErdosNicolasSetOddDivSetSurjAIS:
   fixes n k m d :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close> 
-and \<open>x \<in> ((ErdosNicolasSet n d))\<close> 
-shows \<open>OddPart x \<in> (OddDivSet n (d::real))\<close>
+    and \<open>x \<in> ((ErdosNicolasSet n d))\<close> 
+  shows \<open>OddPart x \<in> (OddDivSet n (d::real))\<close>
 proof-
   from  \<open>x \<in> ((ErdosNicolasSet n d))\<close> 
   have \<open>x dvd n\<close> 
@@ -617,8 +617,8 @@ lemma ErdosNicolasSetOddDivSetSurjAI:
 lemma ErdosNicolasSetOddDivSetSurjAIIX:
   fixes n k m d :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close> 
-and \<open>x \<in> (OddPart ` (OddDivSet n ((d::real)/(2::real)^(k+1))))\<close>
-shows \<open> x \<in> (OddDivSet n (d::real))\<close>
+    and \<open>x \<in> (OddPart ` (OddDivSet n ((d::real)/(2::real)^(k+1))))\<close>
+  shows \<open> x \<in> (OddDivSet n (d::real))\<close>
 proof-
   obtain y::nat where \<open>x = OddPart y\<close> and \<open>y \<in> (OddDivSet n ((d::real)/(2::real)^(k+1)))\<close>
     using assms(5) by blast
@@ -666,9 +666,9 @@ lemma ErdosNicolasSetOddDivSetSurjA:
 lemma ErdosNicolasSetOddDivSetSurjBI:
   fixes n k m d :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close> 
-and \<open>x \<in> (OddDivSet n (d::real))\<close>
-and \<open>x \<le> ((d::real)/(2::real)^(k+1))\<close>
-shows \<open>x \<in> (OddPart ` (OddDivSet n ((d::real)/(2::real)^(k+1))))\<close>
+    and \<open>x \<in> (OddDivSet n (d::real))\<close>
+    and \<open>x \<le> ((d::real)/(2::real)^(k+1))\<close>
+  shows \<open>x \<in> (OddPart ` (OddDivSet n ((d::real)/(2::real)^(k+1))))\<close>
 proof-
   from \<open>x \<in> (OddDivSet n (d::real))\<close>
   have \<open>x dvd n\<close> 
@@ -690,9 +690,9 @@ qed
 lemma ErdosNicolasSetOddDivSetSurjBII:
   fixes n k m d :: nat
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close> 
-and \<open>x \<in> (OddDivSet n (d::real))\<close>
-and \<open>x > ((d::real)/(2::real)^(k+1))\<close>
-shows \<open>x \<in> (OddPart ` ((ErdosNicolasSet n d)))\<close>
+    and \<open>x \<in> (OddDivSet n (d::real))\<close>
+    and \<open>x > ((d::real)/(2::real)^(k+1))\<close>
+  shows \<open>x \<in> (OddPart ` ((ErdosNicolasSet n d)))\<close>
 proof-
   from  \<open>x \<in> (OddDivSet n (d::real))\<close>
   have \<open>x dvd n\<close> 
@@ -737,50 +737,50 @@ proof-
   have \<open>d \<ge> x\<close> 
     by (metis (no_types, lifting) CollectD OddDivSet_def assms(5) of_nat_le_iff)
   have \<open>d \<ge> 2^j*x\<close>
-    proof(cases \<open>j = 0\<close>)
-        case True
-          then show ?thesis using \<open>d \<ge> x\<close> \<open>j = 0\<close> by simp
-        next
-          case False
-          then have \<open>j \<noteq> 0\<close> by blast
-          then obtain p::nat where \<open>Suc p = j\<close> 
-            by (metis lessI less_Suc_eq_0_disj)
-            have \<open>d \<ge> 2^j*x\<close>
-            proof(rule classical)
-              assume \<open>\<not>(d \<ge> 2^j*x)\<close>
-              then have \<open>2^(Suc p)*x > d\<close> using \<open>Suc p = j\<close> by auto
-              then have \<open>2*(2^p*x) > d\<close> 
-                by auto
-              then have \<open>2^p*x > (d::real)/(2::real)\<close> 
-                by linarith
-              then have \<open>p \<in> {i | i :: nat. 2^i*x > (d::real)/(2::real)}\<close>
-                by blast
-              have \<open>p < j\<close> 
-                using \<open>Suc p = j\<close> by blast
-              have \<open>p \<ge> j\<close> 
-                by (metis \<open>j = Inf {i |i. real d / 2 < real (2 ^ i * x)}\<close> \<open>p \<in> {i |i. real d / 2 < real (2 ^ i * x)}\<close> bdd_above_bot cInf_lower)
-              show ?thesis using  \<open>p < j\<close> \<open>p \<ge> j\<close>  by auto
-            qed
-        then show ?thesis by blast
-      qed
-      from \<open>2^j*x > (d::real)/(2::real)\<close>
-      have \<open>2^j*x > d/2\<close>
-        by simp
-      then have \<open>2*(2^j*x) > 2*(d/2)\<close> by simp
-      then have  \<open>2*(2^j*x) > d*((2::nat)/2)\<close> by simp
-      then have  \<open>2*(2^j*x) > d*(1::nat)\<close> 
-        by (simp add: of_nat_less_imp_less)
-      then have  \<open>2*(2^j*x) > d\<close> 
-        by linarith 
-    have \<open>2^j*x \<in> ((ErdosNicolasSet n d))\<close>
-      using \<open>d \<ge> 2^j*x\<close> \<open>2*(2^j*x) > d\<close>  \<open>x dvd n\<close> ErdosNicolasSet_def 
-      by (simp add: \<open>ErdosNicolasSet \<equiv> \<lambda>n d. {e |e. e dvd n \<and> e \<le> d \<and> d < 2 * e}\<close> \<open>2 ^ j * x dvd n\<close>)
-    have \<open>OddPart (2^j*x) = x\<close> using \<open>odd x\<close> \<open>x \<ge> 1\<close> UniqnessOddEven
-      by (smt dvd_mult_unit_iff' le_eq_less_or_eq less_1_mult nat_dvd_1_iff_1 one_le_numeral one_le_power preExp2OddPartChar1 preExp2OddPartChar2 preUniqnessOddEven_OddPartOneSide semiring_normalization_rules(12))
-    from  \<open>2^j*x \<in> (ErdosNicolasSet n d)\<close> \<open>OddPart (2^j*x) = x\<close>
-    have \<open>x \<in> OddPart ` (ErdosNicolasSet n d)\<close> 
-      by (metis image_eqI)
+  proof(cases \<open>j = 0\<close>)
+    case True
+    then show ?thesis using \<open>d \<ge> x\<close> \<open>j = 0\<close> by simp
+  next
+    case False
+    then have \<open>j \<noteq> 0\<close> by blast
+    then obtain p::nat where \<open>Suc p = j\<close> 
+      by (metis lessI less_Suc_eq_0_disj)
+    have \<open>d \<ge> 2^j*x\<close>
+    proof(rule classical)
+      assume \<open>\<not>(d \<ge> 2^j*x)\<close>
+      then have \<open>2^(Suc p)*x > d\<close> using \<open>Suc p = j\<close> by auto
+      then have \<open>2*(2^p*x) > d\<close> 
+        by auto
+      then have \<open>2^p*x > (d::real)/(2::real)\<close> 
+        by linarith
+      then have \<open>p \<in> {i | i :: nat. 2^i*x > (d::real)/(2::real)}\<close>
+        by blast
+      have \<open>p < j\<close> 
+        using \<open>Suc p = j\<close> by blast
+      have \<open>p \<ge> j\<close> 
+        by (metis \<open>j = Inf {i |i. real d / 2 < real (2 ^ i * x)}\<close> \<open>p \<in> {i |i. real d / 2 < real (2 ^ i * x)}\<close> bdd_above_bot cInf_lower)
+      show ?thesis using  \<open>p < j\<close> \<open>p \<ge> j\<close>  by auto
+    qed
     then show ?thesis by blast
+  qed
+  from \<open>2^j*x > (d::real)/(2::real)\<close>
+  have \<open>2^j*x > d/2\<close>
+    by simp
+  then have \<open>2*(2^j*x) > 2*(d/2)\<close> by simp
+  then have  \<open>2*(2^j*x) > d*((2::nat)/2)\<close> by simp
+  then have  \<open>2*(2^j*x) > d*(1::nat)\<close> 
+    by (simp add: of_nat_less_imp_less)
+  then have  \<open>2*(2^j*x) > d\<close> 
+    by linarith 
+  have \<open>2^j*x \<in> ((ErdosNicolasSet n d))\<close>
+    using \<open>d \<ge> 2^j*x\<close> \<open>2*(2^j*x) > d\<close>  \<open>x dvd n\<close> ErdosNicolasSet_def 
+    by (simp add: \<open>ErdosNicolasSet \<equiv> \<lambda>n d. {e |e. e dvd n \<and> e \<le> d \<and> d < 2 * e}\<close> \<open>2 ^ j * x dvd n\<close>)
+  have \<open>OddPart (2^j*x) = x\<close> using \<open>odd x\<close> \<open>x \<ge> 1\<close> UniqnessOddEven
+    by (smt dvd_mult_unit_iff' le_eq_less_or_eq less_1_mult nat_dvd_1_iff_1 one_le_numeral one_le_power preExp2OddPartChar1 preExp2OddPartChar2 preUniqnessOddEven_OddPartOneSide semiring_normalization_rules(12))
+  from  \<open>2^j*x \<in> (ErdosNicolasSet n d)\<close> \<open>OddPart (2^j*x) = x\<close>
+  have \<open>x \<in> OddPart ` (ErdosNicolasSet n d)\<close> 
+    by (metis image_eqI)
+  then show ?thesis by blast
 qed
 
 lemma ErdosNicolasSetOddDivSetSurjB:
@@ -870,8 +870,8 @@ proof-
   then have \<open>\<forall> e :: nat. e \<le> (real d)/(2::real)^(k+1) \<longrightarrow> e \<le> (real d)\<close> 
     using order_trans by blast
   show ?thesis using  \<open>\<forall> e :: nat. e \<le> (real d)/(2::real)^(k+1) \<longrightarrow> e \<le> (real d)\<close>
- \<open>(OddDivSet n (real d)) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)}\<close> 
- \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)/(2::real)^(k+1)}\<close> 
+      \<open>(OddDivSet n (real d)) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)}\<close> 
+      \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> (real d)/(2::real)^(k+1)}\<close> 
     by blast
 qed
 
@@ -907,19 +907,19 @@ proof-
   have \<open> - (OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. \<not>(e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d) }\<close>
     by auto
   from  \<open>(OddDivSet n (real d)) = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> d}\<close>
-\<open> - (OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. \<not>(e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d) }\<close>
-    have \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
+    \<open> - (OddDivSet n ((real d)/(2::real)^(k+1))) = {e | e::nat. \<not>(e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d) }\<close>
+  have \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
         = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> d} \<inter> {e | e::nat. \<not>(e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d) }\<close>
-      by auto    
-    then have  \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
+    by auto    
+  then have  \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
         = {e | e::nat. (e dvd n \<and> odd e \<and> e \<le> d) \<and>  \<not>(e dvd n \<and> odd e \<and> e*(2::nat)^(k+1) \<le> d) }\<close>
-      by blast
-    then have   \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
+    by blast
+  then have   \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
         = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> d \<and>  \<not>( e*(2::nat)^(k+1) \<le> d) }\<close>
-      by auto
-    then have   \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
+    by auto
+  then have   \<open>(OddDivSet n (real d)) - (OddDivSet n ((real d)/(2::real)^(k+1)))
         = {e | e::nat. e dvd n \<and> odd e \<and> e \<le> d \<and>  d < 2^(k+1)*e }\<close>
-      by (smt Collect_cong Groups.mult_ac(2) linorder_not_le)
+    by (smt Collect_cong Groups.mult_ac(2) linorder_not_le)
   have \<open>ErdosNicolasSetOdd n k d = {e | e::nat. e dvd n \<and> odd e \<and>  e \<le> d \<and> d < 2^(k+1)*e}\<close>
     using ErdosNicolasSetOdd_def by presburger
   show ?thesis 
@@ -931,8 +931,8 @@ lemma ErdosNicolasSetDiff:
   assumes \<open>n = (2::nat)^k*m\<close> and \<open>odd m\<close> and \<open>d dvd n\<close> and \<open>odd d\<close> 
   shows \<open>card (ErdosNicolasSetOdd n k d) = (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1))))\<close>
 proof-
-have \<open>finite (ErdosNicolasSetOdd n k d)\<close> 
-  by (metis (no_types, lifting) CollectD ErdosNicolasSetOdd_def finite_nat_set_iff_bounded_le   )
+  have \<open>finite (ErdosNicolasSetOdd n k d)\<close> 
+    by (metis (no_types, lifting) CollectD ErdosNicolasSetOdd_def finite_nat_set_iff_bounded_le   )
   have \<open>finite (OddDivSet n (real d))\<close> 
     by (metis (no_types, lifting) CollectD OddDivSet_def finite_nat_set_iff_bounded_le of_nat_le_iff) 
   have \<open>(OddDivSet n ((real d)/(2::real)^(k+1))) \<subseteq> (OddDivSet n (real d))\<close> 
@@ -958,10 +958,10 @@ proof-
     using ErdosNicolasOddDivSet assms(1) assms(2) by auto
   have \<open>\<forall> d :: nat. d dvd n \<and> odd d \<longrightarrow> card (ErdosNicolasSetOdd n k d)  = (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1))))\<close>
     using ErdosNicolasSetDiff assms(1) assms(2) by blast
-    show ?thesis  using  \<open>ErdosNicolas n
+  show ?thesis  using  \<open>ErdosNicolas n
    = Max{ (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1)))) 
           |d :: nat. d dvd n \<and> odd d}\<close> 
- \<open>\<forall> d :: nat. d dvd n \<and> odd d \<longrightarrow> card (ErdosNicolasSetOdd n k d)  = (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1))))\<close>
+      \<open>\<forall> d :: nat. d dvd n \<and> odd d \<longrightarrow> card (ErdosNicolasSetOdd n k d)  = (card (OddDivSet n (real d))) - (card (OddDivSet n ((real d)/(2::real)^(k+1))))\<close>
     by (smt Collect_cong)
 qed
 

@@ -37,7 +37,7 @@ References.
   publisher={Springer}
 }
 
-(This code was verified in Isabelle2018-RC4/HOL)
+(This code was verified in Isabelle2018)
 
 
 *)
@@ -47,7 +47,6 @@ theory PeriPythTriang
 imports Complex_Main "HOL-Number_Theory.Number_Theory"
 
 begin
-
 
 text {*
 the perimeter of a Pythagorean triangle is always even.
@@ -65,7 +64,7 @@ Given a nonzero natural number n, if n has a pair of divisors d and e
 theorem ShortDivToPeriPyth:
   fixes n :: nat
   assumes n0: "n \<noteq> 0"
-      and Edivshotint: "\<exists> d e. d dvd n \<and> e dvd n \<and> d < e \<and> e < 2*d"
+    and Edivshotint: "\<exists> d e. d dvd n \<and> e dvd n \<and> d < e \<and> e < 2*d"
   shows "\<exists> a b c::nat. a \<noteq> 0 \<and> b \<noteq> 0 \<and> a^2 + b^2 = c^2 \<and> a + b + c = 2*n"
 proof -
   from Edivshotint obtain d e where ddvdn: "d dvd n" and edvdn: "e dvd n" and dle: "d < e" and eltwod: "e < 2*d" by auto 
@@ -116,10 +115,10 @@ lemma factorizationinprimes2:  "(k::nat) \<noteq> 0  \<Longrightarrow> (\<Prod>x
 proof-
   assume "k \<noteq> 0"
   then have "k^2 \<noteq> 0" by simp
-    then have  "(\<Prod>x\<in>prime_factors (k^2). x ^ multiplicity x (k^2)) = k^2" using prime_factorization_nat by auto
-    then have "(\<Prod>x\<in>prime_factors (k^2). x ^ ( 2*multiplicity x k )) = k^2" by (metis (no_types, lifting) ASSUMPTION_I \<open>k \<noteq> 0\<close> in_prime_factors_imp_prime prime_elem_multiplicity_power_distrib prime_imp_prime_elem' prod.cong)
-    then show ?thesis by (simp add: prime_factors_power)
-  qed
+  then have  "(\<Prod>x\<in>prime_factors (k^2). x ^ multiplicity x (k^2)) = k^2" using prime_factorization_nat by auto
+  then have "(\<Prod>x\<in>prime_factors (k^2). x ^ ( 2*multiplicity x k )) = k^2" by (metis (no_types, lifting) ASSUMPTION_I \<open>k \<noteq> 0\<close> in_prime_factors_imp_prime prime_elem_multiplicity_power_distrib prime_imp_prime_elem' prod.cong)
+  then show ?thesis by (simp add: prime_factors_power)
+qed
 
 lemma MultSq:
   fixes n k :: nat
@@ -136,7 +135,7 @@ qed
 lemma MultSqConverse:
   fixes n :: nat
   assumes n0: "n \<noteq> 0" and
-PrimePowSq: "\<forall> p. p \<in> prime_factors n \<longrightarrow> even (multiplicity p n)"
+    PrimePowSq: "\<forall> p. p \<in> prime_factors n \<longrightarrow> even (multiplicity p n)"
   shows "\<exists> k. n = k^2"
 proof-
   have "\<forall> p. p \<in> prime_factors n \<longrightarrow> 2*((multiplicity p n) div 2) = multiplicity p n" using PrimePowSq dvd_mult_div_cancel by blast
@@ -150,24 +149,24 @@ qed
 
 
 lemma MultRelPrimes: 
- fixes a b p :: nat
- assumes relprimes: "gcd a b = 1"
-   and "prime p"
+  fixes a b p :: nat
+  assumes relprimes: "gcd a b = 1"
+    and "prime p"
   shows "multiplicity p a = 0 \<or> multiplicity p b = 0"
   by (metis gcd_greatest_iff multiplicity_unit_left not_dvd_imp_multiplicity_0 relprimes)
 
 lemma MultRelPrimes2: 
- fixes a b p :: nat
- assumes relprimes: "gcd a b = 1"
-   and "prime p"
+  fixes a b p :: nat
+  assumes relprimes: "gcd a b = 1"
+    and "prime p"
   shows "multiplicity p a = multiplicity p (a*b) \<or> multiplicity p b =  multiplicity p (a*b)"
   by (smt ASSUMPTION_I MultRelPrimes One_nat_def assms(2) gcd.commute gcd_0_nat gcd_greatest_iff mult.right_neutral mult_is_0 multiplicity_normalize_left multiplicity_one_nat multiplicity_prime_elem_times_other multiplicity_unit_left multiplicity_zero not_dvd_imp_multiplicity_0 prime_elem_multiplicity_mult_distrib prime_imp_prime_elem' relprimes zero_neq_one zero_power2)
 
 lemma EvenMultRelPrimes: 
- fixes a b p :: nat
- assumes relprimes: "gcd a b = 1"
-   and pprime: "prime p"
-   and evenmultab:  "even (multiplicity p (a*b))"
+  fixes a b p :: nat
+  assumes relprimes: "gcd a b = 1"
+    and pprime: "prime p"
+    and evenmultab:  "even (multiplicity p (a*b))"
   shows "even (multiplicity p a)"
   by (metis ASSUMPTION_I add.right_neutral assms(2) assms(3) dvd_0_right gcd_greatest_iff multiplicity_unit_left multiplicity_zero not_dvd_imp_multiplicity_0 prime_elem_multiplicity_mult_distrib prime_imp_prime_elem' relprimes)
 
@@ -233,11 +232,11 @@ qed
 lemma PeriPythToShortDivRelPrimaodd:
   fixes n :: nat
   assumes  n0: "n \<noteq> 0"
-      and aodd:  "odd a"
-      and b0: " b \<noteq> 0"
-      and Pythabc: "a^2 + b^2 = c^2"
-      and sumabc: "a + b + c = 2*n"
-      and Gcdabc1: " Gcd {a, b, c} = 1"
+    and aodd:  "odd a"
+    and b0: " b \<noteq> 0"
+    and Pythabc: "a^2 + b^2 = c^2"
+    and sumabc: "a + b + c = 2*n"
+    and Gcdabc1: " Gcd {a, b, c} = 1"
   shows "\<exists> d e. d dvd n \<and> e dvd n \<and> d < e \<and> e < 2*d"
 proof-
   from aodd have a0: "a \<noteq> 0" by (meson even_zero)
@@ -267,7 +266,7 @@ proof-
   from Gcdabc1 this  have gcduv1: "gcd u v = 1" by simp
   from gcduv1 auv obtain r s::nat where rdef: "r^2 = u" and sdef: "s^2 = v"  
     by (meson a0 sqProdnat)
-    from rdef sdef auv  have "a^2 = (r*s)^2"  by (simp add: power_mult_distrib)
+  from rdef sdef auv  have "a^2 = (r*s)^2"  by (simp add: power_mult_distrib)
   then have ars: "a = r*s" by simp
   from rdef have rodd: "odd r"  using even_power pos2 uodd by blast
   from sdef have sodd: "odd s"  using even_power pos2 vodd by blast
@@ -290,12 +289,12 @@ qed
 lemma PeriPythToShortDivRelPrim:
   fixes n :: nat
   assumes  n0: "n \<noteq> 0"
-      and a0:  "a \<noteq> 0"
-      and b0: " b \<noteq> 0"
-      and Pythabc: "a^2 + b^2 = c^2"
-      and sumabc: "a + b + c = 2*n"
-      and Gcdabc1: " Gcd {a, b, c} = 1" 
-      shows "\<exists> d e. d dvd n \<and> e dvd n \<and> d < e \<and> e < 2*d"
+    and a0:  "a \<noteq> 0"
+    and b0: " b \<noteq> 0"
+    and Pythabc: "a^2 + b^2 = c^2"
+    and sumabc: "a + b + c = 2*n"
+    and Gcdabc1: " Gcd {a, b, c} = 1" 
+  shows "\<exists> d e. d dvd n \<and> e dvd n \<and> d < e \<and> e < 2*d"
 proof (cases "odd a")
   case True
   then have aodd: "odd a" by simp
@@ -317,7 +316,7 @@ Pythagorean triangle then n has a pair of divisors d and e satisfying d < e < 2*
 theorem PeriPythToShortDiv:
   fixes n :: nat
   assumes  n0: "n \<noteq> 0"
-      and peripyth: "\<exists> a b c.  a \<noteq> 0 \<and> b \<noteq> 0 \<and> a^2 + b^2 = c^2 \<and> a + b + c = 2*n"
+    and peripyth: "\<exists> a b c.  a \<noteq> 0 \<and> b \<noteq> 0 \<and> a^2 + b^2 = c^2 \<and> a + b + c = 2*n"
   shows "\<exists> d e. d dvd n \<and> e dvd n \<and> d < e \<and> e < 2*d"
 proof-
   from peripyth obtain a b c :: nat where a0: "a \<noteq> 0" and b0: "b \<noteq> 0" and Pythabc: "a^2 + b^2 = c^2" and sumabc: "a + b + c = 2*n" by auto

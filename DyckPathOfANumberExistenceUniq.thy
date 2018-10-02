@@ -43,17 +43,17 @@ subsubsection {* Polymophic Results *}
 lemma JsignsSumToDiffCardLebesgueGRec1Plus:
   fixes f :: \<open>nat \<Rightarrow> int\<close> and k :: nat
   assumes \<open>f k = 1\<close>
-  and  \<open>(\<Sum>j < k. f j) = 
+    and  \<open>(\<Sum>j < k. f j) = 
           ((card {j | j :: nat. f j = 1 \<and> j < k})::int)
         - ((card {j | j :: nat. f j = -1 \<and> j < k})::int)\<close>
-shows \<open>(\<Sum>j < Suc k. f j) = 
+  shows \<open>(\<Sum>j < Suc k. f j) = 
           ((card {j | j :: nat. f j = 1 \<and> j < Suc k})::int)
         - ((card {j | j :: nat. f j = -1 \<and> j < Suc k})::int)\<close>
 proof-
   have \<open> {j | j :: nat. f j = 1 \<and> j <  k} \<inter>  {j | j :: nat. f j = 1 \<and> j =  k} = {}\<close> 
     by blast
- have \<open> ( {j | j :: nat. (f j = 1 \<and> j <  k) \<or> (f j = 1 \<and> j = k)}) =  {j | j :: nat. f j = 1 \<and> j < Suc k}\<close>
-   using less_Suc_eq by blast
+  have \<open> ( {j | j :: nat. (f j = 1 \<and> j <  k) \<or> (f j = 1 \<and> j = k)}) =  {j | j :: nat. f j = 1 \<and> j < Suc k}\<close>
+    using less_Suc_eq by blast
   then have \<open> {j | j :: nat. (f j = 1 \<and> j <  k)} \<union> {j | j :: nat. (f j = 1 \<and> j = k)} =  {j | j :: nat. f j = 1 \<and> j < Suc k}\<close>
     by blast
   have \<open>finite {j | j :: nat. f j = 1 \<and> j <  k}\<close> 
@@ -62,8 +62,8 @@ proof-
     by auto
   have \<open>card ({j | j :: nat. (f j = 1 \<and> j <  k)} \<union> {j | j :: nat. (f j = 1 \<and> j = k)}) =  (card {j | j :: nat. f j = 1 \<and> j <  k}) +  (card {j | j :: nat. f j = 1 \<and> j =  k})\<close>
     using  \<open> {j | j :: nat. f j = 1 \<and> j <  k} \<inter>  {j | j :: nat. f j = 1 \<and> j =  k} = {}\<close>
-     \<open>finite {j | j :: nat. f j = 1 \<and> j <  k}\<close> 
- \<open>finite {j | j :: nat. f j = 1 \<and> j = k}\<close>
+      \<open>finite {j | j :: nat. f j = 1 \<and> j <  k}\<close> 
+      \<open>finite {j | j :: nat. f j = 1 \<and> j = k}\<close>
     by (simp add: card_Un_disjoint)
   then  have \<open> (card {j | j :: nat. f j = 1 \<and> j <  k}) +  (card {j | j :: nat. f j = 1 \<and> j =  k}) = card {j | j :: nat. f j = 1 \<and> j < Suc k}\<close>
     using \<open>{j |j. f j = 1 \<and> j < k} \<union> {j |j. f j = 1 \<and> j = k} = {j |j. f j = 1 \<and> j < Suc k}\<close> by auto
@@ -96,7 +96,7 @@ proof-
   then have \<open>(\<Sum>j < Suc k. f j) = 
           ((card {j | j :: nat. f j = 1 \<and> j < Suc k})::int)
         - ((card {j | j :: nat. f j = -1 \<and> j < Suc k})::int) \<close>
-  using \<open>card {j |j. f j = - 1 \<and> j < k} = card {j |j. f j = - 1 \<and> j < Suc k}\<close> \<open>card {j |j. f j = 1 \<and> j < k} + 1 = card {j |j. f j = 1 \<and> j < Suc k}\<close> by linarith
+    using \<open>card {j |j. f j = - 1 \<and> j < k} = card {j |j. f j = - 1 \<and> j < Suc k}\<close> \<open>card {j |j. f j = 1 \<and> j < k} + 1 = card {j |j. f j = 1 \<and> j < Suc k}\<close> by linarith
   then show ?thesis  by blast
 qed
 
@@ -104,10 +104,10 @@ qed
 lemma JsignsSumToDiffCardLebesgueGRec1Zero:
   fixes f :: \<open>nat \<Rightarrow> int\<close> and k :: nat
   assumes \<open>f k = 0\<close>  
-  and  \<open>(\<Sum>j < k. f j) = 
+    and  \<open>(\<Sum>j < k. f j) = 
           ((card {j | j :: nat. f j = 1 \<and> j < k})::int)
         - ((card {j | j :: nat. f j = -1 \<and> j < k})::int)\<close>
-shows \<open>(\<Sum>j < Suc k. f j) = 
+  shows \<open>(\<Sum>j < Suc k. f j) = 
           ((card {j | j :: nat. f j = 1 \<and> j < Suc k})::int)
         - ((card {j | j :: nat. f j = -1 \<and> j < Suc k})::int)\<close>
 proof-
@@ -141,17 +141,17 @@ qed
 lemma JsignsSumToDiffCardLebesgueGRec1Minus:
   fixes f :: \<open>nat \<Rightarrow> int\<close> and k :: nat
   assumes \<open>f k = -1\<close> 
-  and  \<open>(\<Sum>j < k. f j) = 
+    and  \<open>(\<Sum>j < k. f j) = 
           ((card {j | j :: nat. f j = 1 \<and> j < k})::int)
         - ((card {j | j :: nat. f j = -1 \<and> j < k})::int)\<close>
-shows \<open>(\<Sum>j < Suc k. f j) = 
+  shows \<open>(\<Sum>j < Suc k. f j) = 
           ((card {j | j :: nat. f j = 1 \<and> j < Suc k})::int)
         - ((card {j | j :: nat. f j = -1 \<and> j < Suc k})::int)\<close>
 proof-
   have \<open> {j | j :: nat. f j = -1 \<and> j <  k} \<inter>  {j | j :: nat. f j = -1 \<and> j =  k} = {}\<close> 
     by blast
- have \<open> ( {j | j :: nat. (f j = -1 \<and> j <  k) \<or> (f j = -1 \<and> j = k)}) =  {j | j :: nat. f j = -1 \<and> j < Suc k}\<close>
-   using less_Suc_eq by blast
+  have \<open> ( {j | j :: nat. (f j = -1 \<and> j <  k) \<or> (f j = -1 \<and> j = k)}) =  {j | j :: nat. f j = -1 \<and> j < Suc k}\<close>
+    using less_Suc_eq by blast
   then have \<open> {j | j :: nat. (f j = -1 \<and> j <  k)} \<union> {j | j :: nat. (f j = -1 \<and> j = k)} =  {j | j :: nat. f j = -1 \<and> j < Suc k}\<close>
     by blast
   have \<open>finite {j | j :: nat. f j = -1 \<and> j <  k}\<close> 
@@ -160,8 +160,8 @@ proof-
     by auto
   have \<open>card ({j | j :: nat. (f j = -1 \<and> j <  k)} \<union> {j | j :: nat. (f j = -1 \<and> j = k)}) =  (card {j | j :: nat. f j = -1 \<and> j <  k}) +  (card {j | j :: nat. f j = -1 \<and> j =  k})\<close>
     using  \<open> {j | j :: nat. f j = -1 \<and> j <  k} \<inter>  {j | j :: nat. f j = -1 \<and> j =  k} = {}\<close>
-     \<open>finite {j | j :: nat. f j = -1 \<and> j <  k}\<close> 
- \<open>finite {j | j :: nat. f j = -1 \<and> j = k}\<close>
+      \<open>finite {j | j :: nat. f j = -1 \<and> j <  k}\<close> 
+      \<open>finite {j | j :: nat. f j = -1 \<and> j = k}\<close>
     by (simp add: card_Un_disjoint)
   then  have \<open> (card {j | j :: nat. f j = -1 \<and> j <  k}) +  (card {j | j :: nat. f j = -1 \<and> j =  k}) = card {j | j :: nat. f j = -1 \<and> j < Suc k}\<close>
     using \<open>{j |j. f j = -1 \<and> j < k} \<union> {j |j. f j = -1 \<and> j = k} = {j |j. f j = -1 \<and> j < Suc k}\<close> by auto
@@ -201,10 +201,10 @@ qed
 lemma JsignsSumToDiffCardLebesgueGRec1:
   fixes f :: \<open>nat \<Rightarrow> int\<close> and k :: nat
   assumes  \<open>f k = -1 \<or> f k = 0 \<or> f k = 1\<close>
-  and  \<open>(\<Sum>j < k. f j) = 
+    and  \<open>(\<Sum>j < k. f j) = 
           ((card {j | j :: nat. f j = 1 \<and> j < k})::int)
         - ((card {j | j :: nat. f j = -1 \<and> j < k})::int)\<close>
-shows \<open>(\<Sum>j < Suc k. f j) = 
+  shows \<open>(\<Sum>j < Suc k. f j) = 
           ((card {j | j :: nat. f j = 1 \<and> j < Suc k})::int)
         - ((card {j | j :: nat. f j = -1 \<and> j < Suc k})::int)\<close>
   using JsignsSumToDiffCardLebesgueGRec1Plus JsignsSumToDiffCardLebesgueGRec1Zero JsignsSumToDiffCardLebesgueGRec1Minus assms
@@ -231,21 +231,21 @@ qed
 lemma CantorBernsteinSchroeder:
   fixes A :: \<open>'a set\<close> and B :: \<open>'b set\<close> and f :: \<open>'a \<Rightarrow> 'b\<close> and g :: \<open>'b \<Rightarrow> 'a\<close>
   assumes  \<open>f ` A \<subseteq> B\<close> and \<open> g ` B \<subseteq> A\<close> and \<open>inj_on f A\<close> and \<open>inj_on g B\<close>
-      and \<open>finite A\<close> and \<open>finite B\<close>
+    and \<open>finite A\<close> and \<open>finite B\<close>
   shows \<open>card A = card B\<close>
   by (meson Schroeder_Bernstein assms(1) assms(2) assms(3) assms(4) assms(5) assms(6) bij_betw_iff_card)
 
 lemma CantorBernsteinSchroederfeqg:
   fixes A :: \<open>'a set\<close> and B :: \<open>'a set\<close> and f :: \<open>'a \<Rightarrow> 'a\<close>
   assumes \<open>f ` A \<subseteq> B\<close> and \<open>f ` B \<subseteq>  A\<close> and \<open>inj_on f A\<close> and \<open>inj_on f B\<close>
-      and \<open>finite A\<close> and \<open>finite B\<close>
+    and \<open>finite A\<close> and \<open>finite B\<close>
   shows \<open>card A = card B\<close>
   using CantorBernsteinSchroeder assms(1) assms(2) assms(3) assms(4) assms(5) assms(6) by blast
 
 lemma InjIneqCard:
   fixes A :: \<open>'a set\<close> and B :: \<open>'a set\<close> and f :: \<open>'a \<Rightarrow> 'a\<close>
   assumes \<open>f ` A \<subseteq> B\<close> \<open>inj_on f A\<close> 
-      and \<open>finite A\<close> and \<open>finite B\<close>
+    and \<open>finite A\<close> and \<open>finite B\<close>
   shows \<open>card A \<le> card B\<close>
   using assms(1) assms(2) assms(4) card_inj_on_le by blast
 
@@ -332,13 +332,13 @@ lemma CardSetSuc:
 subsubsection {* Number Theoretic Results *}
 
 definition JCompl::\<open>nat \<Rightarrow> (nat \<Rightarrow> nat)\<close> where
-\<open>JCompl \<equiv> \<lambda> n. (\<lambda> d. (2*n) div d)\<close>
+  \<open>JCompl \<equiv> \<lambda> n. (\<lambda> d. (2*n) div d)\<close>
 
 lemma preJsignsCardEq1AQ:
- fixes n k x y :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> 
-   and \<open>x \<in> A\<close> and \<open>y \<in> A\<close> and \<open>(JCompl n) x = (JCompl n) y\<close>
- shows \<open>x = y\<close>
+  fixes n k x y :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+    and \<open>x \<in> A\<close> and \<open>y \<in> A\<close> and \<open>(JCompl n) x = (JCompl n) y\<close>
+  shows \<open>x = y\<close>
 proof-
   have \<open>odd x\<close> using  \<open>x \<in> A\<close> \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> 
     by blast
@@ -370,15 +370,15 @@ proof-
 qed
 
 lemma preJsignsCardEq1A:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> 
- shows \<open>\<forall> x\<in>A. \<forall> y\<in>A. (JCompl n) x = (JCompl n) y \<longrightarrow> x = y\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+  shows \<open>\<forall> x\<in>A. \<forall> y\<in>A. (JCompl n) x = (JCompl n) y \<longrightarrow> x = y\<close>
   using assms preJsignsCardEq1AQ by blast
 
 lemma preJsignsCardEq1:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> 
- shows \<open>inj_on (JCompl n) A\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+  shows \<open>inj_on (JCompl n) A\<close>
 proof-
   have  \<open>\<forall> x\<in>A. \<forall> y\<in>A. (JCompl n) x = (JCompl n) y \<longrightarrow> x = y\<close> using assms preJsignsCardEq1A by blast
   then show ?thesis using inj_on_def 
@@ -386,10 +386,10 @@ proof-
 qed
 
 lemma preJsignsCardEq2AQ:
- fixes n k x y :: nat 
- assumes \<open>x \<in> B\<close> and \<open>y \<in> B\<close> and \<open>n \<ge> 1\<close> and  \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close>
-   and \<open>(JCompl n) x = (JCompl n) y\<close>
- shows \<open> x = y \<close>
+  fixes n k x y :: nat 
+  assumes \<open>x \<in> B\<close> and \<open>y \<in> B\<close> and \<open>n \<ge> 1\<close> and  \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close>
+    and \<open>(JCompl n) x = (JCompl n) y\<close>
+  shows \<open> x = y \<close>
 proof-
   have \<open>even x\<close> 
     using assms(1) assms(4) by auto
@@ -405,9 +405,9 @@ proof-
     using assms(2) assms(4) by blast
   have \<open>Jdvd y n\<close> 
     using assms(2) assms(4) by blast
-    have \<open>y \<le> k\<close>
-      using assms(2) assms(4) by blast
-      from \<open>Jdvd y n\<close> obtain s :: nat where \<open>y * s = 2*n\<close> 
+  have \<open>y \<le> k\<close>
+    using assms(2) assms(4) by blast
+  from \<open>Jdvd y n\<close> obtain s :: nat where \<open>y * s = 2*n\<close> 
     by (meson Jdvd_def)
   have \<open>t \<noteq> 0\<close>
     using \<open>x * t = 2 * n\<close> assms(3) not_one_le_zero by fastforce
@@ -423,21 +423,21 @@ proof-
 qed
 
 lemma preJsignsCardEq2A:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and  \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close>
- shows \<open>\<forall> x \<in> B. \<forall> y \<in> B. (JCompl n) x = (JCompl n) y \<longrightarrow> x = y \<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and  \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close>
+  shows \<open>\<forall> x \<in> B. \<forall> y \<in> B. (JCompl n) x = (JCompl n) y \<longrightarrow> x = y \<close>
   using assms(1) assms(2) preJsignsCardEq2AQ by auto
 
 lemma preJsignsCardEq2:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and  \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close>
- shows \<open>inj_on (JCompl n) B\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and  \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close>
+  shows \<open>inj_on (JCompl n) B\<close>
   by (smt Groups.mult_ac(2) JCompl_def Jdvd_def assms(1) assms(2) dvd_div_mult_self dvd_triv_left inj_on_def less_one linorder_not_le mem_Collect_eq mult_compare_simps(13))
 
 lemma preJsignsCardEq3AS:
- fixes n k x:: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close>  and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
-and \<open>k \<ge> 2*n\<close> and \<open>x \<in> A\<close>
+  fixes n k x:: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close>  and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+    and \<open>k \<ge> 2*n\<close> and \<open>x \<in> A\<close>
   shows \<open>(JCompl n) x \<in> B\<close>
 proof-
   obtain y where \<open>y = (JCompl n) x\<close> by blast
@@ -458,24 +458,24 @@ proof-
 qed
 
 lemma preJsignsCardEq3A:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close>  and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
-and \<open>k \<ge> 2*n\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close>  and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+    and \<open>k \<ge> 2*n\<close>
   shows \<open>\<forall>x \<in> A.(JCompl n) x \<in> B\<close>
   using assms preJsignsCardEq3AS by blast
 
 lemma preJsignsCardEq3:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close>  and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
-and \<open>k \<ge> 2*n\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close>  and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+    and \<open>k \<ge> 2*n\<close>
   shows \<open>(JCompl n) ` A \<subseteq> B\<close>
   using preJsignsCardEq3A assms by blast
 
 lemma preJsignsCardEq4AS:
- fixes n k x :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
-   and \<open>x \<in> B\<close> and \<open>k \<ge> 2*n\<close>
- shows \<open>(JCompl n) x \<in>  A\<close>
+  fixes n k x :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+    and \<open>x \<in> B\<close> and \<open>k \<ge> 2*n\<close>
+  shows \<open>(JCompl n) x \<in>  A\<close>
 proof-
   obtain y where \<open>y = (JCompl n) x\<close> by blast
   have \<open>x*y = 2*n\<close> 
@@ -496,17 +496,17 @@ proof-
 qed
 
 lemma preJsignsCardEq4A:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
-   and \<open>k \<ge> 2*n\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+    and \<open>k \<ge> 2*n\<close>
   shows \<open>\<forall> x \<in> B. (JCompl n) x \<in>  A\<close>
   using preJsignsCardEq4AS assms by blast
 
 lemma preJsignsCardEq4:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
-   and \<open>k \<ge> 2*n\<close>
- shows \<open>(JCompl n) ` B \<subseteq> A\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+    and \<open>k \<ge> 2*n\<close>
+  shows \<open>(JCompl n) ` B \<subseteq> A\<close>
   using assms preJsignsCardEq4A by blast
 
 lemma JsignsCardEq:
@@ -535,10 +535,10 @@ proof-
 qed
 
 lemma OddPartfromAtoBinjQS:
- fixes n k x y:: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
-and \<open>x \<in> B\<close> and \<open>y \<in> B\<close> and \<open>OddPart x = OddPart y\<close>
-shows \<open>x = y\<close>
+  fixes n k x y:: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+    and \<open>x \<in> B\<close> and \<open>y \<in> B\<close> and \<open>OddPart x = OddPart y\<close>
+  shows \<open>x = y\<close>
 proof-
   have \<open>even x\<close> 
     using assms(3) assms(4) by blast
@@ -558,7 +558,7 @@ proof-
   have \<open>odd (OddPart x)\<close> using \<open>x = (2^(Exp2 x))*(OddPart x) \<and> odd (OddPart x)\<close> by blast
   from \<open>y \<ge> 1\<close> have \<open>y = (2^(Exp2 y))*(OddPart y) \<and> odd (OddPart y)\<close> 
     using Exp2OddPartChar by blast
- then have \<open>y = (2^(Exp2 y))*(OddPart y)\<close> by blast
+  then have \<open>y = (2^(Exp2 y))*(OddPart y)\<close> by blast
   have \<open>odd (OddPart y)\<close> using \<open>y = (2^(Exp2 y))*(OddPart y) \<and> odd (OddPart y)\<close> by blast
   have \<open>odd (t*(OddPart x))\<close> 
     by (simp add: \<open>odd (OddPart x)\<close> \<open>odd t\<close>)
@@ -569,40 +569,40 @@ proof-
   have \<open>(2^(Exp2 y))*(s*(OddPart y)) = 2*n\<close> 
     by (metis \<open>y * s = 2 * n\<close> \<open>y = 2 ^ Exp2 y * OddPart y\<close> mult.assoc semiring_normalization_rules(16))    
   from \<open>(2^(Exp2 x))*(t*(OddPart x)) = 2*n\<close>  \<open>odd (t*(OddPart x))\<close> 
-    have \<open>OddPart (2*n) = t*(OddPart x)\<close>
-      using  Exp2OddPartChar Exp2ValueAt1 OddPartValueAt1 UniqnessOddEven_EvenPart UniqnessOddEven_OddPart 
-      by (metis One_nat_def Suc_leI assms(1) one_le_mult_iff pos2)
-    from \<open>(2^(Exp2 y))*(s*(OddPart y)) = 2*n\<close>  \<open>odd (s*(OddPart y))\<close>
-    have  \<open>OddPart (2*n) = s*(OddPart y)\<close>
-      using  Exp2OddPartChar Exp2ValueAt1 OddPartValueAt1 UniqnessOddEven_EvenPart UniqnessOddEven_OddPart 
-      by (metis \<open>2 ^ Exp2 x * (t * OddPart x) = 2 * n\<close> \<open>OddPart (2 * n) = t * OddPart x\<close> \<open>odd (t * OddPart x)\<close>)
-    from  \<open>OddPart (2*n) = t*(OddPart x)\<close> \<open>OddPart (2*n) = s*(OddPart y)\<close> 
-    have \<open>t*(OddPart x) = s*(OddPart y)\<close> by simp
-    then have \<open>t = s\<close> using  \<open>OddPart x = OddPart y\<close> 
-      by (metis UniqnessOddEven \<open>1 \<le> x\<close> \<open>2 ^ Exp2 x * (t * OddPart x) = 2 * n\<close> \<open>2 ^ Exp2 y * (s * OddPart y) = 2 * n\<close> \<open>odd (t * OddPart x)\<close> \<open>x * t = 2 * n\<close> \<open>x = 2 ^ Exp2 x * OddPart x \<and> odd (OddPart x)\<close> \<open>y * s = 2 * n\<close> \<open>y = 2 ^ Exp2 y * OddPart y\<close> nat_mult_eq_cancel_disj not_one_le_zero)
-    then have \<open>x = y\<close> 
-      by (metis UniqnessOddEven \<open>2 ^ Exp2 x * (t * OddPart x) = 2 * n\<close> \<open>2 ^ Exp2 y * (s * OddPart y) = 2 * n\<close> \<open>odd (t * OddPart x)\<close> \<open>x = 2 ^ Exp2 x * OddPart x \<and> odd (OddPart x)\<close> \<open>y = 2 ^ Exp2 y * OddPart y\<close> assms(6))
-    then show ?thesis by blast
-  qed
+  have \<open>OddPart (2*n) = t*(OddPart x)\<close>
+    using  Exp2OddPartChar Exp2ValueAt1 OddPartValueAt1 UniqnessOddEven_EvenPart UniqnessOddEven_OddPart 
+    by (metis One_nat_def Suc_leI assms(1) one_le_mult_iff pos2)
+  from \<open>(2^(Exp2 y))*(s*(OddPart y)) = 2*n\<close>  \<open>odd (s*(OddPart y))\<close>
+  have  \<open>OddPart (2*n) = s*(OddPart y)\<close>
+    using  Exp2OddPartChar Exp2ValueAt1 OddPartValueAt1 UniqnessOddEven_EvenPart UniqnessOddEven_OddPart 
+    by (metis \<open>2 ^ Exp2 x * (t * OddPart x) = 2 * n\<close> \<open>OddPart (2 * n) = t * OddPart x\<close> \<open>odd (t * OddPart x)\<close>)
+  from  \<open>OddPart (2*n) = t*(OddPart x)\<close> \<open>OddPart (2*n) = s*(OddPart y)\<close> 
+  have \<open>t*(OddPart x) = s*(OddPart y)\<close> by simp
+  then have \<open>t = s\<close> using  \<open>OddPart x = OddPart y\<close> 
+    by (metis UniqnessOddEven \<open>1 \<le> x\<close> \<open>2 ^ Exp2 x * (t * OddPart x) = 2 * n\<close> \<open>2 ^ Exp2 y * (s * OddPart y) = 2 * n\<close> \<open>odd (t * OddPart x)\<close> \<open>x * t = 2 * n\<close> \<open>x = 2 ^ Exp2 x * OddPart x \<and> odd (OddPart x)\<close> \<open>y * s = 2 * n\<close> \<open>y = 2 ^ Exp2 y * OddPart y\<close> nat_mult_eq_cancel_disj not_one_le_zero)
+  then have \<open>x = y\<close> 
+    by (metis UniqnessOddEven \<open>2 ^ Exp2 x * (t * OddPart x) = 2 * n\<close> \<open>2 ^ Exp2 y * (s * OddPart y) = 2 * n\<close> \<open>odd (t * OddPart x)\<close> \<open>x = 2 ^ Exp2 x * OddPart x \<and> odd (OddPart x)\<close> \<open>y = 2 ^ Exp2 y * OddPart y\<close> assms(6))
+  then show ?thesis by blast
+qed
 
 lemma OddPartfromAtoBinjQ:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
- shows \<open>\<forall> x \<in> B. \<forall> y \<in> B. OddPart x = OddPart y \<longrightarrow> x = y\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+  shows \<open>\<forall> x \<in> B. \<forall> y \<in> B. OddPart x = OddPart y \<longrightarrow> x = y\<close>
   using assms OddPartfromAtoBinjQS by blast
 
 lemma OddPartfromAtoBinj:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
- shows \<open>inj_on OddPart B\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+  shows \<open>inj_on OddPart B\<close>
   using assms OddPartfromAtoBinjQ  inj_on_def 
   by (metis (mono_tags, lifting) inj_onI)
 
 lemma OddPartfromAtoB1:
- fixes n k x :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
-and \<open>x \<in> B\<close> 
-shows \<open>OddPart x \<in> A\<close>
+  fixes n k x :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+    and \<open>x \<in> B\<close> 
+  shows \<open>OddPart x \<in> A\<close>
 proof-
   have \<open>x \<ge> 1\<close> 
     by (metis (no_types, lifting) Jdvd_def assms(1) assms(3) assms(4) less_one mem_Collect_eq mult_eq_0_iff neq0_conv not_le pos2)
@@ -618,15 +618,15 @@ proof-
   have \<open>OddPart x \<le> k\<close> 
     by (metis (no_types, lifting) OddPartL1 \<open>1 \<le> x\<close> assms(3) assms(4) dual_order.trans dvd_imp_le less_le_trans less_numeral_extra(1) mem_Collect_eq)
   from  \<open>odd (OddPart x)\<close>  \<open>Jdvd (OddPart x) n\<close>   \<open>OddPart x \<le> k\<close> 
-   have \<open>OddPart x \<in> A\<close> using  \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close>
-     by blast
-   then show ?thesis by blast
- qed
+  have \<open>OddPart x \<in> A\<close> using  \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close>
+    by blast
+  then show ?thesis by blast
+qed
 
 lemma OddPartfromAtoB:
- fixes n k :: nat 
- assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
- shows \<open>OddPart ` B \<subseteq> A\<close>
+  fixes n k :: nat 
+  assumes \<open>n \<ge> 1\<close> and \<open>A = {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> k}\<close> and \<open>B = {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k}\<close> 
+  shows \<open>OddPart ` B \<subseteq> A\<close>
   using OddPartfromAtoB1  assms(1) assms(2) assms(3) image_subsetI by blast
 
 lemma JsignsCardIneq:
@@ -764,7 +764,7 @@ lemma JsignsSumToDiffCardMinus:
   assumes \<open>n \<ge> 1\<close>
   shows \<open>(card {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> k})
        = (card {j | j :: nat. (Jsigns n) j = -1 \<and> j < k}) \<close>
-  proof-
+proof-
   from \<open>n \<ge> 1\<close> have  \<open> {j | j :: nat. even (Suc j) \<and> Jdvd (Suc j) n \<and> j < k}
        =  {j | j :: nat. (Jsigns n) j = -1 \<and> j < k} \<close> using preSJsignsSumToDiffCardMinus by blast
   then have \<open> {j | j :: nat. even (Suc j) \<and> Jdvd (Suc j) n \<and> Suc j \<le> k}
@@ -815,7 +815,7 @@ proof-
   have \<open>SchroederPHeight (a # w) = (SchroederCode a) + (SchroederPHeight w)\<close> 
     using SchroederCode_def SchroederPHeight_def  PHeightLetterwise.simps(1)  PHeightLetterwise.simps(2)
     by (smt SCHR.exhaust SchroederPHeightLetter.simps(1) SchroederPHeightLetter.simps(2) SchroederPHeightLetter.simps(3))
-    have \<open>(a # w) ! 0 = a\<close>
+  have \<open>(a # w) ! 0 = a\<close>
     by simp
   have \<open>length (a # w) = Suc (length w)\<close> 
     by simp
@@ -824,7 +824,7 @@ proof-
   have \<open>(\<Sum>j < length w. SchroederCode( w ! j ) ) = (\<Sum>j < length w. SchroederCode( (a # w) ! (Suc j) ) )\<close>
     by simp
   then have  \<open>(\<Sum>j < length w. SchroederCode( w ! j ) )+(SchroederCode a) = (\<Sum>j < length w. SchroederCode( (a # w) ! (Suc j) ) )+ SchroederCode( (a # w) ! 0)\<close>
-   using \<open>(a # w) ! 0 = a\<close> by presburger
+    using \<open>(a # w) ! 0 = a\<close> by presburger
   then have \<open>SchroederPHeight (a # w) = (\<Sum>j < length w. SchroederCode( (a # w) ! (Suc j) ) )+ SchroederCode( (a # w) ! 0)\<close>
     using \<open>SchroederPHeight (a # w) = SchroederCode a + SchroederPHeight w\<close> assms by linarith
   then show ?thesis 
@@ -837,7 +837,7 @@ lemma SchroederPHeightSum:
 proof(induction w)
   case Nil
   then show ?case 
-        by (simp add: SchroederPHeight_def)
+    by (simp add: SchroederPHeight_def)
 next
   case (Cons a w)
   then show ?case 
@@ -899,10 +899,10 @@ proof-
     using JsignsSumToDiffCard assms(1) by auto
   have \<open>(card {d | d :: nat. odd d \<and> Jdvd d n \<and> d \<le> length w})
         = (card {d | d :: nat. even d \<and> Jdvd d n \<and> d \<le> length w})\<close> 
-  using JsignsCardEq \<open>2 * n \<le> length w\<close> assms(1) by auto
+    using JsignsCardEq \<open>2 * n \<le> length w\<close> assms(1) by auto
   show ?thesis 
     using \<open>card {d |d. odd d \<and> Jdvd d n \<and> d \<le> length w} = card {d |d. even d \<and> Jdvd d n \<and> d \<le> length w}\<close> \<open>sum (Jsigns n) {..<length w} = int (card {d |d. odd d \<and> Jdvd d n \<and> d \<le> length w}) - int (card {d |d. even d \<and> Jdvd d n \<and> d \<le> length w})\<close> by linarith
-  qed
+qed
 
 lemma SchroederArithmL3A :
   fixes n :: nat and w :: \<open>SCHR list\<close> 
@@ -952,16 +952,16 @@ proof-
     using \<open>WordToFun w = g\<close> by blast
   have \<open>length ww = Suc K\<close> 
     by (simp add: \<open>length w = K\<close> \<open>ww = w @ [q]\<close>)
-   have  \<open>\<forall> j. j \<le> K \<longrightarrow> (WordToFun ww)  j = f  j\<close> 
-     by (metis WordToFun_def \<open>SchroederCode q = f K\<close> \<open>\<forall>j<length w. WordToFun ww j = g j\<close> \<open>g \<equiv> \<lambda>n. if n < K then f n else 0\<close> \<open>length w = K\<close> \<open>length ww = Suc K\<close> \<open>ww = w @ [q]\<close> le_imp_less_Suc le_less nth_append_length)
-   have  \<open>\<forall> j. j \<ge> Suc K \<longrightarrow> (WordToFun ww)  j = f  j\<close> 
-     by (simp add: WordToFun_def \<open>length ww = Suc K\<close> assms(3))
-   have  \<open>\<forall> j. (WordToFun ww)  j = f  j\<close> 
-     using \<open>\<forall>j\<ge>Suc K. WordToFun ww j = f j\<close> \<open>\<forall>j\<le>K. WordToFun ww j = f j\<close> not_less_eq_eq by blast
-   then    have  \<open>(WordToFun ww)  = f \<close> by blast
-   show ?thesis 
-     using \<open>WordToFun ww = f\<close> \<open>length ww = Suc K\<close> by auto
- qed
+  have  \<open>\<forall> j. j \<le> K \<longrightarrow> (WordToFun ww)  j = f  j\<close> 
+    by (metis WordToFun_def \<open>SchroederCode q = f K\<close> \<open>\<forall>j<length w. WordToFun ww j = g j\<close> \<open>g \<equiv> \<lambda>n. if n < K then f n else 0\<close> \<open>length w = K\<close> \<open>length ww = Suc K\<close> \<open>ww = w @ [q]\<close> le_imp_less_Suc le_less nth_append_length)
+  have  \<open>\<forall> j. j \<ge> Suc K \<longrightarrow> (WordToFun ww)  j = f  j\<close> 
+    by (simp add: WordToFun_def \<open>length ww = Suc K\<close> assms(3))
+  have  \<open>\<forall> j. (WordToFun ww)  j = f  j\<close> 
+    using \<open>\<forall>j\<ge>Suc K. WordToFun ww j = f j\<close> \<open>\<forall>j\<le>K. WordToFun ww j = f j\<close> not_less_eq_eq by blast
+  then    have  \<open>(WordToFun ww)  = f \<close> by blast
+  show ?thesis 
+    using \<open>WordToFun ww = f\<close> \<open>length ww = Suc K\<close> by auto
+qed
 
 lemma FromFunToThreeWordE1Qbase:
   fixes  f :: \<open>nat\<Rightarrow>int\<close>
@@ -1016,7 +1016,7 @@ proposition SchroederArithmA :
 section {* Dyck Paths *}
 
 definition STRANGEL :: \<open>SCHR list \<Rightarrow> int\<close> where 
-\<open>STRANGEL \<equiv> (PHeightLetterwise (\<lambda> c::SCHR. (if c = STRANGE then (1::int) else (0::int)))) \<close>
+  \<open>STRANGEL \<equiv> (PHeightLetterwise (\<lambda> c::SCHR. (if c = STRANGE then (1::int) else (0::int)))) \<close>
 
 lemma STRANGELCHAR:
   fixes w :: \<open>SCHR list\<close> and a :: SCHR
@@ -1052,8 +1052,8 @@ lemma STRANGELCHAR2:
 lemma DyckToSchroederSchroederToDyckRec:
   fixes w :: \<open>SCHR list\<close>
   assumes \<open>STRANGEL w = 0 \<longrightarrow> DyckToSchroeder (SchroederToDyck w) = w\<close>
-  and \<open>STRANGEL (a # w) = 0\<close>
-shows \<open>DyckToSchroeder (SchroederToDyck (a # w)) = a # w\<close>
+    and \<open>STRANGEL (a # w) = 0\<close>
+  shows \<open>DyckToSchroeder (SchroederToDyck (a # w)) = a # w\<close>
   using assms STRANGELCHAR1 STRANGELCHAR2 SchroederToDyckCode_def
   by (metis (full_types) DCHR.distinct(1) DyckToSchroeder.simps(2) DyckToSchroederCode_def SCHR.distinct(1)   SCHR.exhaust   SchroederToDyck.simps(2) append_Cons append_Nil)
 
@@ -1072,7 +1072,7 @@ qed
 
 lemma PHeightZeroStrange:
   fixes w :: \<open>DCHR list\<close>
-shows \<open>SchroederPHeight (DyckToSchroeder w) = DyckPHeight w\<close>
+  shows \<open>SchroederPHeight (DyckToSchroeder w) = DyckPHeight w\<close>
 proof(induction w)
   case Nil
   then show ?case 
@@ -1093,14 +1093,14 @@ lemma prefixL1:
   assumes \<open>prefix u (a # w)\<close> and \<open>u \<noteq> []\<close>
   shows \<open>\<exists> uu. u = a # uu\<close>
 proof -
-obtain bb :: "'b list \<Rightarrow> 'b" and bbs :: "'b list \<Rightarrow> 'b list" where
-  f1: "\<forall>bs. ([] \<noteq> bs \<or> (\<forall>b bsa. b # bsa \<noteq> bs)) \<and> (bb bs # bbs bs = bs \<or> [] = bs)"
-  by (metis (no_types) neq_Nil_conv)
+  obtain bb :: "'b list \<Rightarrow> 'b" and bbs :: "'b list \<Rightarrow> 'b list" where
+    f1: "\<forall>bs. ([] \<noteq> bs \<or> (\<forall>b bsa. b # bsa \<noteq> bs)) \<and> (bb bs # bbs bs = bs \<or> [] = bs)"
+    by (metis (no_types) neq_Nil_conv)
   { assume "a # bbs u \<noteq> u"
     then have "\<exists>bs. bs @ u = bs"
       using f1 by (metis append_Nil assms(1) length_greater_0_conv nth_Cons_0 prefix_def)
-then have ?thesis
-using assms(2) by force }
+    then have ?thesis
+      using assms(2) by force }
   then show ?thesis
     by (metis (full_types))
 qed
@@ -1135,7 +1135,7 @@ qed
 lemma DyckIsSchroederPrefixOntoRec:
   fixes w u :: \<open>DCHR list\<close> 
   assumes \<open>\<forall> u. (prefix u w \<longrightarrow> prefix (DyckToSchroeder u) (DyckToSchroeder w))\<close>
-  and \<open>prefix u (a # w)\<close>
+    and \<open>prefix u (a # w)\<close>
   shows  \<open> prefix (DyckToSchroeder u) (DyckToSchroeder (a # w))\<close>
 proof(cases \<open>u = []\<close>)
   case True
@@ -1157,13 +1157,13 @@ next
     by (simp add: \<open>prefix (DyckToSchroeder uu) (DyckToSchroeder w)\<close>)
   show ?thesis 
     using \<open>DyckToSchroeder (a # w) = x # DyckToSchroeder w\<close> \<open>DyckToSchroeder u = x # DyckToSchroeder uu\<close> \<open>prefix (DyckToSchroeder uu) (DyckToSchroeder w)\<close> prefixL3 by force
-  qed
+qed
 
 lemma DyckIsSchroederPrefixOnto:
   fixes w :: \<open>DCHR list\<close> 
   shows \<open>\<forall> u. (prefix u w \<longrightarrow> prefix (DyckToSchroeder u) (DyckToSchroeder w))\<close>
 proof (induction w)
-case Nil
+  case Nil
   then show ?case 
     by (simp add: prefix_def)
 next
@@ -1225,7 +1225,7 @@ lemma SchroederToDyckConcat:
   fixes u v :: \<open>SCHR list\<close>
   shows \<open>SchroederToDyck (u @ v) = (SchroederToDyck u) @ (SchroederToDyck v)\<close>
 proof(induction u)
-case Nil
+  case Nil
   then show ?case 
     by simp
 next
@@ -1239,8 +1239,8 @@ lemma SchroederPHeightAdd:
   shows \<open>\<forall> v. SchroederPHeight (u @ v) = (SchroederPHeight u)+(SchroederPHeight v)\<close>
 proof(induction u)
   case Nil
-have \<open> (SchroederPHeight Nil) = 0\<close> 
-  by (metis DyckPHeight_def DyckToSchroeder.simps(1) PHeightLetterwise.simps(1) PHeightZeroStrange) 
+  have \<open> (SchroederPHeight Nil) = 0\<close> 
+    by (metis DyckPHeight_def DyckToSchroeder.simps(1) PHeightLetterwise.simps(1) PHeightZeroStrange) 
   then show ?case 
     by simp
 next
@@ -1433,8 +1433,8 @@ next
     using assms(2) prefixY by blast
   have \<open>prefix (u @ [STRANGE] @ q) (u @ [STRANGE] @ v)\<close> 
     using \<open>p = u @ q\<close> assms(2) prefixZ by blast
-then have \<open>SchroederPHeight (u @ [STRANGE] @ q) \<ge> 0\<close> 
-  using assms(1) by blast
+  then have \<open>SchroederPHeight (u @ [STRANGE] @ q) \<ge> 0\<close> 
+    using assms(1) by blast
   then have  \<open>SchroederPHeight (u @  q) \<ge> 0\<close> 
     using SchroederPHeightAdd SchroederPHeightSTRANGE by smt
   then show ?thesis 
@@ -1453,12 +1453,12 @@ proof-
     by blast
   from \<open>SchroederPath (u @ [STRANGE] @ v)\<close>
   have  \<open>\<forall> p :: SCHR list. prefix p (u @ [STRANGE] @ v) \<longrightarrow> SchroederPHeight p \<ge> 0\<close>
- using AbstractPath_def SchroederPath_def SchroederPHeight_def
-  by (metis (full_types) )
+    using AbstractPath_def SchroederPath_def SchroederPHeight_def
+    by (metis (full_types) )
   then have   \<open>\<forall> p :: SCHR list. prefix p (u @ v) \<longrightarrow> SchroederPHeight p \<ge> 0\<close>
     using SchroederPathIsNotStrangePHeightREC by blast
   show ?thesis using  \<open>SchroederPHeight (u @ v) = 0\<close>  \<open>\<forall> p :: SCHR list. prefix p (u @ v) \<longrightarrow> SchroederPHeight p \<ge> 0\<close>
-  AbstractPath_def SchroederPath_def SchroederPHeight_def
+      AbstractPath_def SchroederPath_def SchroederPHeight_def
     by (metis (full_types) )
 qed
 
@@ -1475,22 +1475,22 @@ proof-
   have \<open>STRANGEL vv = n\<close> 
     using STRANGELAdd STRANGELCHAR \<open>v = p @ [STRANGE] @ q\<close> \<open>vv = p @ q\<close> assms(1) by auto
   from \<open>(SchroederToDyck v) = (SchroederToDyck w)\<close> 
-    have \<open>(SchroederToDyck vv) = (SchroederToDyck w)\<close> 
-      by (simp add: SchroederToDyckCode_def SchroederToDyckConcat \<open>v = p @ [STRANGE] @ q\<close> \<open>vv = p @ q\<close>)
+  have \<open>(SchroederToDyck vv) = (SchroederToDyck w)\<close> 
+    by (simp add: SchroederToDyckCode_def SchroederToDyckConcat \<open>v = p @ [STRANGE] @ q\<close> \<open>vv = p @ q\<close>)
   from \<open>(SchroederPath w \<longrightarrow> SchroederPath v)\<close>
-    have \<open>(SchroederPath w \<longrightarrow> SchroederPath vv)\<close> 
-      using SchroederPathIsNotStrange \<open>v = p @ [STRANGE] @ q\<close> \<open>vv = p @ q\<close> by blast
-    show ?thesis 
-      using \<open>STRANGEL vv = int n\<close> \<open>SchroederPath w \<longrightarrow> SchroederPath vv\<close> \<open>SchroederToDyck vv = SchroederToDyck w\<close> by blast
-  qed
+  have \<open>(SchroederPath w \<longrightarrow> SchroederPath vv)\<close> 
+    using SchroederPathIsNotStrange \<open>v = p @ [STRANGE] @ q\<close> \<open>vv = p @ q\<close> by blast
+  show ?thesis 
+    using \<open>STRANGEL vv = int n\<close> \<open>SchroederPath w \<longrightarrow> SchroederPath vv\<close> \<open>SchroederToDyck vv = SchroederToDyck w\<close> by blast
+qed
 
 lemma SchroederStrangeRedPara_n:
   fixes w :: \<open>SCHR list\<close> and n :: nat
   shows   \<open>(\<exists> v :: SCHR list. STRANGEL v =  n \<and> (SchroederToDyck v) = (SchroederToDyck w) \<and> (SchroederPath w \<longrightarrow> SchroederPath v)) \<longrightarrow> (\<exists> v :: SCHR list. STRANGEL v = 0  \<and> (SchroederToDyck v) = (SchroederToDyck w) \<and> (SchroederPath w \<longrightarrow> SchroederPath v))\<close>
-  proof(induction n)
-case 0
-then show ?case 
-  by simp
+proof(induction n)
+  case 0
+  then show ?case 
+    by simp
 next
   case (Suc n)
   then show ?case 
@@ -1501,8 +1501,8 @@ lemma SchroederStrangeRed:
   fixes w :: \<open>SCHR list\<close>
   shows \<open>\<exists> v :: SCHR list. STRANGEL v = 0 \<and> (SchroederToDyck v) = (SchroederToDyck w) \<and> (SchroederPath w \<longrightarrow> SchroederPath v)\<close>
 proof-
-obtain n::nat where  \<open>STRANGEL w =  n\<close> 
-  using STRANGELCHARGE0 zero_le_imp_eq_int by blast
+  obtain n::nat where  \<open>STRANGEL w =  n\<close> 
+    using STRANGELCHARGE0 zero_le_imp_eq_int by blast
   have  \<open>(SchroederToDyck w) = (SchroederToDyck w)\<close> by simp
   have \<open> (SchroederPath w \<longrightarrow> SchroederPath w)\<close> by blast
   then show ?thesis using SchroederStrangeRedPara_n 
@@ -1535,7 +1535,7 @@ section {* Dyck path uniqueness *}
 lemma WordToFunlength :
   fixes  v w :: \<open>SCHR list\<close> and j :: nat
   assumes \<open>WordToFun v = WordToFun w\<close> and \<open>length v \<le> length w\<close>
-and \<open>j < length v\<close>
+    and \<open>j < length v\<close>
   shows \<open>v ! j = w ! j\<close>
 proof-
   from  \<open>WordToFun v = WordToFun w\<close>
@@ -1579,15 +1579,15 @@ qed
 lemma SchroederToDyckStrange :
   fixes  w :: \<open>SCHR list\<close>
   shows \<open>(\<forall> j. j < length w \<longrightarrow> w ! j = STRANGE)\<longrightarrow>(SchroederToDyck w = [])\<close>
-  proof(induction w)
-    case Nil
-    then show ?case 
-      by simp
-  next
-    case (Cons a w)
-    then show ?case 
-      by (metis One_nat_def SCHR.distinct(3) SCHR.distinct(5) SchroederToDyck.simps(2) SchroederToDyckCode_def Suc_less_eq append_is_Nil_conv diff_Suc_Suc diff_zero length_Cons nth_Cons_0 nth_Cons_pos zero_less_Suc)
-  qed
+proof(induction w)
+  case Nil
+  then show ?case 
+    by simp
+next
+  case (Cons a w)
+  then show ?case 
+    by (metis One_nat_def SCHR.distinct(3) SCHR.distinct(5) SchroederToDyck.simps(2) SchroederToDyckCode_def Suc_less_eq append_is_Nil_conv diff_Suc_Suc diff_zero length_Cons nth_Cons_0 nth_Cons_pos zero_less_Suc)
+qed
 
 lemma WordToFunSchroederToDyckOrder :
   fixes  v w :: \<open>SCHR list\<close>
@@ -1625,7 +1625,7 @@ qed
 
 lemma prezDyckExistsS :
   fixes n :: nat
-assumes \<open>n \<ge> 1\<close>
+  assumes \<open>n \<ge> 1\<close>
   shows \<open>\<exists>! w :: DCHR list.  n \<in> DyckClass w \<and> DyckPath w\<close>
   using assms DyckArithmA  DyckUniq 
   by blast
@@ -1644,18 +1644,18 @@ next
 qed
 
 lemma zDyckExists :
- \<open>\<forall> n. \<exists>! w :: DCHR list. (n = 0 \<longrightarrow> w = [])\<and>(n \<ge> 1 \<longrightarrow> n \<in> DyckClass w \<and> DyckPath w)\<close>
+  \<open>\<forall> n. \<exists>! w :: DCHR list. (n = 0 \<longrightarrow> w = [])\<and>(n \<ge> 1 \<longrightarrow> n \<in> DyckClass w \<and> DyckPath w)\<close>
   using zDyckExistsS by blast
 
 lemma qDyckExists :
- \<open>\<exists> f :: nat \<Rightarrow> DCHR list.  (f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n))\<close>
+  \<open>\<exists> f :: nat \<Rightarrow> DCHR list.  (f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n))\<close>
   using zDyckExists by metis
 
 lemma ADyckExistsUniqExt :
   fixes f g :: \<open>nat \<Rightarrow> DCHR list\<close> and n :: nat
   assumes \<open>f 0 = []\<close> and \<open> n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n)\<close>
-and \<open>g 0 = []\<close> and \<open> n \<ge> 1 \<longrightarrow> n \<in> DyckClass (g n) \<and> DyckPath (g n)\<close>
-shows \<open>f n = g n\<close>
+    and \<open>g 0 = []\<close> and \<open> n \<ge> 1 \<longrightarrow> n \<in> DyckClass (g n) \<and> DyckPath (g n)\<close>
+  shows \<open>f n = g n\<close>
 proof(cases \<open>n = 0\<close>)
   case True
   then show ?thesis 
@@ -1671,13 +1671,13 @@ next
 qed
 
 lemma ADyckExistsUniq :
- \<open>\<forall> f g :: nat \<Rightarrow> DCHR list.  (f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n)) \<and> (g 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (g n) \<and> DyckPath (g n)) \<longrightarrow> f = g\<close>
+  \<open>\<forall> f g :: nat \<Rightarrow> DCHR list.  (f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n)) \<and> (g 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (g n) \<and> DyckPath (g n)) \<longrightarrow> f = g\<close>
   using ADyckExistsUniqExt ext by auto
 
 section {* Main Result *}
 
 theorem DyckExistsUniq :
- \<open>\<exists>! f :: nat \<Rightarrow> DCHR list.  (f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n))\<close>
+  \<open>\<exists>! f :: nat \<Rightarrow> DCHR list.  (f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n))\<close>
   using qDyckExists ADyckExistsUniqExt ADyckExistsUniq 
   by auto 
 

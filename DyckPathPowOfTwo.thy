@@ -14,7 +14,7 @@ begin
 
 
 lemma DyckTypeDivLengthWA: 
-\<open>n \<ge> 1 \<Longrightarrow> length (DyckType n) = 2 \<Longrightarrow>  d dvd n \<Longrightarrow> odd d \<Longrightarrow> d = 1\<close>
+  \<open>n \<ge> 1 \<Longrightarrow> length (DyckType n) = 2 \<Longrightarrow>  d dvd n \<Longrightarrow> odd d \<Longrightarrow> d = 1\<close>
 proof(rule classical)
   assume \<open>n \<ge> 1\<close>
   assume \<open>length (DyckType n) = 2\<close>
@@ -42,14 +42,14 @@ qed
 
 
 lemma DyckTypeDivLengthWB: 
-\<open>n \<ge> 1 \<Longrightarrow> (\<forall> d. d dvd n \<and> odd d \<longrightarrow> d = 1) \<Longrightarrow> length (DyckType n) = 2\<close>
+  \<open>n \<ge> 1 \<Longrightarrow> (\<forall> d. d dvd n \<and> odd d \<longrightarrow> d = 1) \<Longrightarrow> length (DyckType n) = 2\<close>
 proof(rule classical)
   assume \<open>n \<ge> 1\<close>
   assume \<open>\<forall> d. d dvd n \<and> odd d \<longrightarrow> d = 1\<close>
   assume \<open>\<not> (length (DyckType n) = 2)\<close>
   then have \<open>card {d |d::nat. d dvd n \<and> odd d} \<noteq> 1\<close>
     using DyckTypeDivLength \<open>1 \<le> n\<close> by auto
-    have \<open>1 \<in> {d |d::nat. d dvd n \<and> odd d}\<close>
+  have \<open>1 \<in> {d |d::nat. d dvd n \<and> odd d}\<close>
     by simp
   have \<open>{1} \<subseteq> {d |d::nat. d dvd n \<and> odd d}\<close> by simp
   then have \<open>1 \<le> card {d |d::nat. d dvd n \<and> odd d}\<close> 
@@ -66,13 +66,13 @@ proof(rule classical)
 qed
 
 lemma DyckTypeDivLengthW: 
-\<open>length (DyckType n) = 2 \<longleftrightarrow> (\<forall> d. d dvd n \<and> odd d \<longrightarrow> d = 1)\<close>
+  \<open>length (DyckType n) = 2 \<longleftrightarrow> (\<forall> d. d dvd n \<and> odd d \<longrightarrow> d = 1)\<close>
   using DyckTypeDivLengthWA DyckTypeDivLengthWB 
   by (metis (no_types, lifting) DyckType0 Nitpick.size_list_simp(2) One_nat_def  add.commute add_left_imp_eq dvd_0_right dvd_add_triv_right_iff less_one linorder_not_le  odd_one odd_two_times_div_two_succ plus_1_eq_Suc zero_neq_numeral)
 
 
 lemma DyckTypeLength2A:
-\<open>DyckPath w \<Longrightarrow> length w = 2 \<Longrightarrow> w = [up, down]\<close>
+  \<open>DyckPath w \<Longrightarrow> length w = 2 \<Longrightarrow> w = [up, down]\<close>
 proof-
   assume \<open>DyckPath w\<close>
   assume \<open>length w = 2\<close>
@@ -93,28 +93,28 @@ proof-
 qed
 
 lemma DyckTypeLength2B:
-\<open>DyckPath w  \<Longrightarrow> w = [up, down] \<Longrightarrow> length w = 2\<close>
+  \<open>DyckPath w  \<Longrightarrow> w = [up, down] \<Longrightarrow> length w = 2\<close>
   by simp
 
 lemma DyckTypeLength2:
-\<open>DyckPath w \<Longrightarrow> (length w = 2 \<longleftrightarrow> w = [up, down])\<close>
+  \<open>DyckPath w \<Longrightarrow> (length w = 2 \<longleftrightarrow> w = [up, down])\<close>
   using DyckTypeLength2A DyckTypeLength2B by blast
 
 lemma preArithmFunPow2: 
-\<open>n \<ge> 1 \<Longrightarrow> (length (DyckType n) = 2 \<longleftrightarrow> (\<exists> k. n = 2^k))\<close>
+  \<open>n \<ge> 1 \<Longrightarrow> (length (DyckType n) = 2 \<longleftrightarrow> (\<exists> k. n = 2^k))\<close>
   by (meson DyckTypeDivLengthW OddDivPow2)
 
 
 lemma preArithmFunPow2C: 
-\<open>n \<ge> 1 \<Longrightarrow> ( DyckType n = [up, down] \<longleftrightarrow> (\<exists> k. n = 2^k))\<close>
+  \<open>n \<ge> 1 \<Longrightarrow> ( DyckType n = [up, down] \<longleftrightarrow> (\<exists> k. n = 2^k))\<close>
   using DyckTypeLength2 preArithmFunPow2 
   by (simp add: DyckType2)
 
 
 proposition ArithmFunPow2 : 
-\<open>ArithmFun (\<lambda> w. w = [up, down]) \<doteq> (\<lambda> n. (\<exists> k. n = 2^k ))\<close>
+  \<open>ArithmFun (\<lambda> w. w = [up, down]) \<doteq> (\<lambda> n. (\<exists> k. n = 2^k ))\<close>
   using preArithmFunPow2  preArithmFunPow2C
   by (simp add: DyckTypeToArithmFunB)
-  
+
 
 end

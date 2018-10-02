@@ -6,7 +6,7 @@ Miscellany about powers of 2. Our main result will be the following theorem:
 
 \<exists>! f :: nat \<Rightarrow> nat. \<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) )
 
-(This code  was verified in Isabelle2018-RC4/HOL)
+(This code  was verified in Isabelle2018)
 
 *)
 
@@ -29,7 +29,7 @@ lemma TrapezoidalNumbersNec2_5recA1729:
   fixes t d r :: nat
   assumes \<open>\<forall>d. odd t \<and> d * t = 2 ^ r \<longrightarrow> t = 1\<close>
     and \<open>odd t\<close> and \<open> d * t = 2 ^ Suc r \<close>
-shows \<open>t = 1\<close>
+  shows \<open>t = 1\<close>
 proof-
   have \<open>even d\<close> 
     by (metis \<open>d * t = 2 ^ Suc r\<close> \<open>odd t\<close> even_mult_iff even_numeral even_power zero_less_Suc)
@@ -39,9 +39,9 @@ proof-
     using \<open>2 * e = d\<close> \<open>d * t = 2 ^ Suc r\<close> by auto
   have \<open> t = 1 \<close> 
     using \<open>e * t = 2 ^ r\<close> assms(1) assms(2) by blast
-    show ?thesis 
-      by (simp add: \<open>t = 1\<close>)
-  qed
+  show ?thesis 
+    by (simp add: \<open>t = 1\<close>)
+qed
 
 lemma TrapezoidalNumbersNec2_5recA:
   "\<forall> d::nat. (odd t \<and> d*(t::nat) = 2^(r::nat) \<longrightarrow> t = 1)"
@@ -53,7 +53,7 @@ next
   case (Suc r)
   then show ?case 
     using TrapezoidalNumbersNec2_5recA1729 by blast
-  qed
+qed
 
 lemma TrapezoidalNumbersNec2_5rec: 
   fixes d r :: nat
@@ -69,46 +69,46 @@ next
     by (metis dvdE) 
   then have \<open>t \<ge> 2\<close> 
     by (metis False One_nat_def Suc_leI le_antisym mult_1_right nat_one_le_power not_less_eq_eq numeral_2_eq_2 one_le_mult_iff pos2)
-   have \<open>t dvd  2 ^ Suc r\<close> 
-     by (metis \<open>d * t = 2 ^ Suc r\<close> dvd_triv_right)
-   from  \<open>d*t = 2 ^ Suc r\<close> have "even t \<or> even d" 
-     by (metis False One_nat_def TrapezoidalNumbersNec2_5recA mult.right_neutral)
-   then show ?thesis
-   proof (cases "even t")
-     case True
-     then show ?thesis 
-     proof -
-       obtain nn :: "nat \<Rightarrow> nat \<Rightarrow> nat" where
-         "t = Suc (Suc 0) * nn t (Suc (Suc 0))"
-         by (metis True dvd_def numeral_2_eq_2)
-then have "Suc (Suc 0) * 2 ^ r = d * (Suc (Suc 0) * nn t (Suc (Suc 0)))"
-by (simp add: \<open>d * t = 2 ^ Suc r\<close>)
-  then have "\<exists>n. 2 ^ r = d * n"
-by (metis Suc_neq_Zero mult_left_cancel semiring_normalization_rules(19))
+  have \<open>t dvd  2 ^ Suc r\<close> 
+    by (metis \<open>d * t = 2 ^ Suc r\<close> dvd_triv_right)
+  from  \<open>d*t = 2 ^ Suc r\<close> have "even t \<or> even d" 
+    by (metis False One_nat_def TrapezoidalNumbersNec2_5recA mult.right_neutral)
   then show ?thesis
-    using \<open>d dvd 2 ^ r \<Longrightarrow> \<exists>k. d = 2 ^ k\<close> dvd_def by blast
-qed
-   next
-     case False
-     then have \<open>odd t\<close> by simp
-     then show ?thesis 
-       by (metis TrapezoidalNumbersNec2_5recA \<open>d * t = 2 ^ Suc r\<close> mult_1_right)
-     qed
+  proof (cases "even t")
+    case True
+    then show ?thesis 
+    proof -
+      obtain nn :: "nat \<Rightarrow> nat \<Rightarrow> nat" where
+        "t = Suc (Suc 0) * nn t (Suc (Suc 0))"
+        by (metis True dvd_def numeral_2_eq_2)
+      then have "Suc (Suc 0) * 2 ^ r = d * (Suc (Suc 0) * nn t (Suc (Suc 0)))"
+        by (simp add: \<open>d * t = 2 ^ Suc r\<close>)
+      then have "\<exists>n. 2 ^ r = d * n"
+        by (metis Suc_neq_Zero mult_left_cancel semiring_normalization_rules(19))
+      then show ?thesis
+        using \<open>d dvd 2 ^ r \<Longrightarrow> \<exists>k. d = 2 ^ k\<close> dvd_def by blast
+    qed
+  next
+    case False
+    then have \<open>odd t\<close> by simp
+    then show ?thesis 
+      by (metis TrapezoidalNumbersNec2_5recA \<open>d * t = 2 ^ Suc r\<close> mult_1_right)
+  qed
 qed
 
 lemma TrapezoidalNumbersNec2_5: 
   fixes d r :: nat
   shows "d dvd 2^r \<Longrightarrow> \<exists> k. d = 2^k"
 proof (induction r)
-case 0
-then show ?case 
-  using TrapezoidalNumbersNec2_5base by blast
+  case 0
+  then show ?case 
+    using TrapezoidalNumbersNec2_5base by blast
 next
   case (Suc r)
   then show ?case 
     using TrapezoidalNumbersNec2_5rec by blast
 qed
-  
+
 lemma TrapezoidalNumbersNec2_4: 
   fixes d r :: nat
   assumes "d dvd 2^r"  and "d \<noteq> 2^r"
@@ -170,14 +170,14 @@ next
       using TrapezoidalNumbersSuf_1C_base by blast
   next
     case False
-  then have \<open>even (Suc N)\<close> 
-    by auto
-  obtain m where \<open>2*m = Suc N\<close> 
-    by (metis \<open>even (Suc N)\<close> dvdE)
-  from \<open>2*m = Suc N\<close> have \<open>m \<le> N\<close> 
-    by linarith
-  then have \<open> \<exists> r t.  m = 2^r*t \<and> odd t \<close> 
-    using Suc.IH \<open>2 * m = Suc N\<close> by auto
+    then have \<open>even (Suc N)\<close> 
+      by auto
+    obtain m where \<open>2*m = Suc N\<close> 
+      by (metis \<open>even (Suc N)\<close> dvdE)
+    from \<open>2*m = Suc N\<close> have \<open>m \<le> N\<close> 
+      by linarith
+    then have \<open> \<exists> r t.  m = 2^r*t \<and> odd t \<close> 
+      using Suc.IH \<open>2 * m = Suc N\<close> by auto
     then show ?thesis 
       by (metis \<open>2 * m = Suc N\<close> power_commutes semiring_normalization_rules(18) semiring_normalization_rules(28))
   qed
@@ -212,30 +212,30 @@ qed
 (* ---  *)
 
 lemma preExistenceUniquenessEvenPart:
-\<open>\<forall> n::nat. \<exists> u v :: nat. ( n \<ge> 1 \<longrightarrow> n = 2^u*v \<and> odd v )\<close>
+  \<open>\<forall> n::nat. \<exists> u v :: nat. ( n \<ge> 1 \<longrightarrow> n = 2^u*v \<and> odd v )\<close>
   by (simp add: ParityDescomposition) 
 
 lemma preExistenceEvenPart:
-\<open>\<exists> f g :: nat \<Rightarrow> nat. \<forall> n::nat. ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
+  \<open>\<exists> f g :: nat \<Rightarrow> nat. \<forall> n::nat. ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
   using preExistenceUniquenessEvenPart by metis
 
 lemma ExistenceEvenPart:
-\<open>\<exists> f :: nat \<Rightarrow> nat. \<exists> g :: nat \<Rightarrow> nat. \<forall> n::nat. (f 0 = 0) \<and> (g 0 = 1) \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
+  \<open>\<exists> f :: nat \<Rightarrow> nat. \<exists> g :: nat \<Rightarrow> nat. \<forall> n::nat. (f 0 = 0) \<and> (g 0 = 1) \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
 proof-
   obtain f g :: \<open>nat \<Rightarrow> nat\<close> where 
-\<open> \<forall> n::nat. ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
+    \<open> \<forall> n::nat. ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
     using preExistenceEvenPart by blast
 
   obtain ff :: \<open>nat \<Rightarrow> nat\<close> where 
-\<open>ff \<equiv> \<lambda> n. (if n = 0 then 0 else f n)\<close>
+    \<open>ff \<equiv> \<lambda> n. (if n = 0 then 0 else f n)\<close>
     by simp
 
   obtain gg :: \<open>nat \<Rightarrow> nat\<close> where 
-\<open>gg \<equiv> \<lambda> n. (if n = 0 then 1 else g n)\<close>
+    \<open>gg \<equiv> \<lambda> n. (if n = 0 then 1 else g n)\<close>
     by simp
 
   from \<open> \<forall> n::nat. ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )\<close>
-\<open>ff \<equiv> \<lambda> n. (if n = 0 then 0 else f n)\<close> \<open>gg \<equiv> \<lambda> n. (if n = 0 then 1 else g n)\<close>
+    \<open>ff \<equiv> \<lambda> n. (if n = 0 then 0 else f n)\<close> \<open>gg \<equiv> \<lambda> n. (if n = 0 then 1 else g n)\<close>
   show ?thesis 
     by (smt \<open>\<And>thesis. (\<And>ff. ff \<equiv> \<lambda>n. if n = 0 then 0 else f n \<Longrightarrow> thesis) \<Longrightarrow> thesis\<close> \<open>\<And>thesis. (\<And>gg. gg \<equiv> \<lambda>n. if n = 0 then 1 else g n \<Longrightarrow> thesis) \<Longrightarrow> thesis\<close> not_one_le_zero)
 qed
@@ -250,42 +250,42 @@ lemma preUniqEvenPartS0:
 
 
 lemma preUniqnessOddEven_OddPartOneSide :
- fixes uu v vv :: nat
- assumes  \<open>odd v\<close> and \<open>odd vv\<close> and \<open>v = 2^uu*vv\<close>
- shows \<open>v = vv\<close>
+  fixes uu v vv :: nat
+  assumes  \<open>odd v\<close> and \<open>odd vv\<close> and \<open>v = 2^uu*vv\<close>
+  shows \<open>v = vv\<close>
   using assms(1) assms(3) by auto
 
 lemma preUniqnessOddEven_OddPart :
- fixes u uu v vv :: nat
- assumes \<open>u \<le> uu\<close> and \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
- shows \<open>v = vv\<close>
+  fixes u uu v vv :: nat
+  assumes \<open>u \<le> uu\<close> and \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
+  shows \<open>v = vv\<close>
 proof-
   from  \<open>u \<le> uu\<close> obtain k :: nat where \<open>u + k = uu\<close> 
     using le_Suc_ex by blast
   from \<open>2^u*v = 2^uu*vv\<close> \<open>u + k = uu\<close> 
-    have \<open>v = 2^k*vv\<close> 
-      by (smt Groups.mult_ac(1) nonzero_mult_div_cancel_left power_add power_eq_0_iff rel_simps(76))
-    then show ?thesis using \<open>odd v\<close> \<open>odd vv\<close> 
-      using preUniqnessOddEven_OddPartOneSide by blast
+  have \<open>v = 2^k*vv\<close> 
+    by (smt Groups.mult_ac(1) nonzero_mult_div_cancel_left power_add power_eq_0_iff rel_simps(76))
+  then show ?thesis using \<open>odd v\<close> \<open>odd vv\<close> 
+    using preUniqnessOddEven_OddPartOneSide by blast
 qed
 
 lemma UniqnessOddEven_OddPart :
- fixes u uu v vv :: nat
- assumes \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
- shows \<open>v = vv\<close>
+  fixes u uu v vv :: nat
+  assumes \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
+  shows \<open>v = vv\<close>
   by (metis assms(1) assms(2) assms(3) nat_le_linear preUniqnessOddEven_OddPart)
 
 
 lemma UniqnessOddEven_EvenPart :
- fixes u uu v vv :: nat
- assumes \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
- shows \<open>u = uu\<close>
+  fixes u uu v vv :: nat
+  assumes \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
+  shows \<open>u = uu\<close>
   by (metis One_nat_def UniqnessOddEven_OddPart assms(1) assms(2) assms(3) even_zero lessI mult_cancel_right numeral_2_eq_2 power_inject_exp)
 
 lemma UniqnessOddEven :
- fixes u uu v vv :: nat
- assumes \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
- shows \<open>u = uu \<and> v = vv\<close>
+  fixes u uu v vv :: nat
+  assumes \<open>odd v\<close> and \<open>odd vv\<close> and \<open>2^u*v = 2^uu*vv\<close>
+  shows \<open>u = uu \<and> v = vv\<close>
   using UniqnessOddEven_EvenPart UniqnessOddEven_OddPart assms(1) assms(2) assms(3) by blast
 
 lemma preUniqEvenPartS1:
@@ -323,11 +323,11 @@ lemma preUniqEvenPartSQEGD:
   by (metis assms preUniqEvenPartSQE)
 
 lemma preUniqEvenPartSQEGX:
-   \<open>\<exists> f :: nat \<Rightarrow> nat. \<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) ) \<close>
+  \<open>\<exists> f :: nat \<Rightarrow> nat. \<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) ) \<close>
   by (smt ExistenceEvenPart preUniqEvenPartSQE)
 
 lemma UniqEvenPartXrferew4:
- \<open>\<exists>f. \<exists>!g. f 0 = 0 \<and>
+  \<open>\<exists>f. \<exists>!g. f 0 = 0 \<and>
              g 0 = Suc 0 \<and>
              (\<forall>n\<ge>Suc 0. n = 2 ^ f n * g n \<and> odd (g n))\<close>
   using preUniqEvenPartSQEGX by auto
@@ -335,28 +335,28 @@ lemma UniqEvenPartXrferew4:
 lemma preUniqEvenPartXr43ur93n: 
   fixes f y g ga :: \<open>nat \<Rightarrow> nat\<close> and n :: nat
   assumes
-\<open> \<forall>y y'.
+    \<open> \<forall>y y'.
           y 0 = Suc 0 \<and>
           (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y n \<and> odd (y n)) \<and>
           y' 0 = Suc 0 \<and>
           (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y' n \<and> odd (y' n)) \<longrightarrow>
           y = y'\<close> 
-and
-      \<open> \<forall>ya y'.
+    and
+    \<open> \<forall>ya y'.
           ya 0 = Suc 0 \<and>
           (\<forall>n\<ge>Suc 0. n = 2 ^ y n * ya n \<and> odd (ya n)) \<and>
           y' 0 = Suc 0 \<and>
           (\<forall>n\<ge>Suc 0. n = 2 ^ y n * y' n \<and> odd (y' n)) \<longrightarrow>
           ya = y'\<close>and
-      \<open>f 0 = 0\<close> and
-      \<open>y 0 = 0\<close> and
-      \<open>g 0 = Suc 0\<close> and
-      \<open> \<forall>n\<ge>Suc 0. n = 2 ^ f n * g n \<and> odd (g n)\<close> and
-      \<open> ga 0 = Suc 0\<close> and
-      \<open> \<forall>n\<ge>Suc 0. n = 2 ^ y n * ga n \<and> odd (ga n)\<close> 
-    shows \<open> f n = y n\<close>
+    \<open>f 0 = 0\<close> and
+    \<open>y 0 = 0\<close> and
+    \<open>g 0 = Suc 0\<close> and
+    \<open> \<forall>n\<ge>Suc 0. n = 2 ^ f n * g n \<and> odd (g n)\<close> and
+    \<open> ga 0 = Suc 0\<close> and
+    \<open> \<forall>n\<ge>Suc 0. n = 2 ^ y n * ga n \<and> odd (ga n)\<close> 
+  shows \<open> f n = y n\<close>
 proof(cases \<open>n = 0\<close>)
-case True
+  case True
   then show ?thesis 
     by (simp add: assms(3) assms(4))
 next
@@ -370,26 +370,26 @@ qed
 lemma preUniqEvenPartXr43ur93: 
   fixes f y g ga :: \<open>nat \<Rightarrow> nat\<close>
   assumes
-\<open> \<forall>y y'.
+    \<open> \<forall>y y'.
           y 0 = Suc 0 \<and>
           (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y n \<and> odd (y n)) \<and>
           y' 0 = Suc 0 \<and>
           (\<forall>n\<ge>Suc 0. n = 2 ^ f n * y' n \<and> odd (y' n)) \<longrightarrow>
           y = y'\<close> 
-and
-      \<open> \<forall>ya y'.
+    and
+    \<open> \<forall>ya y'.
           ya 0 = Suc 0 \<and>
           (\<forall>n\<ge>Suc 0. n = 2 ^ y n * ya n \<and> odd (ya n)) \<and>
           y' 0 = Suc 0 \<and>
           (\<forall>n\<ge>Suc 0. n = 2 ^ y n * y' n \<and> odd (y' n)) \<longrightarrow>
           ya = y'\<close>and
-      \<open>f 0 = 0\<close> and
-      \<open>y 0 = 0\<close> and
-      \<open>g 0 = Suc 0\<close> and
-      \<open> \<forall>n\<ge>Suc 0. n = 2 ^ f n * g n \<and> odd (g n)\<close> and
-      \<open> ga 0 = Suc 0\<close> and
-      \<open> \<forall>n\<ge>Suc 0. n = 2 ^ y n * ga n \<and> odd (ga n)\<close> 
-    shows \<open> f = y\<close>
+    \<open>f 0 = 0\<close> and
+    \<open>y 0 = 0\<close> and
+    \<open>g 0 = Suc 0\<close> and
+    \<open> \<forall>n\<ge>Suc 0. n = 2 ^ f n * g n \<and> odd (g n)\<close> and
+    \<open> ga 0 = Suc 0\<close> and
+    \<open> \<forall>n\<ge>Suc 0. n = 2 ^ y n * ga n \<and> odd (ga n)\<close> 
+  shows \<open> f = y\<close>
 proof (rule classical)
   assume \<open>\<not>(f = y)\<close>
   then obtain n where \<open>f n \<noteq> y n \<close> 
@@ -423,7 +423,7 @@ lemma UniqEvenPartXr43ur93: \<open>\<And>f y g ga.
   using preUniqEvenPartXr43ur93 by auto
 
 theorem UniqEvenPart:
-   \<open>\<exists>! f :: nat \<Rightarrow> nat. \<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) ) \<close>
+  \<open>\<exists>! f :: nat \<Rightarrow> nat. \<exists>! g :: nat \<Rightarrow> nat. (\<forall> n. (f 0 = 0 \<and> g 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(f n)*(g n) \<and> odd (g n) )) ) \<close>
   apply (auto)
   using UniqEvenPartXrferew4 apply blast
   using UniqEvenPartXr43ur93 apply auto
@@ -432,10 +432,10 @@ theorem UniqEvenPart:
 (* --- *)
 
 definition OddPart :: \<open>nat \<Rightarrow> nat\<close> where
-\<open>OddPart \<equiv> \<lambda> n. (if n = 0 then 1 else  Max {d |d :: nat.  d dvd n \<and> odd d} )\<close>
+  \<open>OddPart \<equiv> \<lambda> n. (if n = 0 then 1 else  Max {d |d :: nat.  d dvd n \<and> odd d} )\<close>
 
 definition Exp2 :: \<open>nat \<Rightarrow> nat\<close> where
-\<open>Exp2 \<equiv> \<lambda> n. (if n = 0 then 0 else Max {k |k :: nat.  (2^k) dvd n})\<close>
+  \<open>Exp2 \<equiv> \<lambda> n. (if n = 0 then 0 else Max {k |k :: nat.  (2^k) dvd n})\<close>
 
 lemma preExp2OddPartChar1:
   fixes n :: nat
@@ -460,11 +460,11 @@ proof-
 qed
 
 lemma Exp2L1QQ:
-\<open>(n :: nat) \<ge> 1 \<Longrightarrow> {e |e :: nat.  2^e dvd n} \<noteq> {}\<close>
+  \<open>(n :: nat) \<ge> 1 \<Longrightarrow> {e |e :: nat.  2^e dvd n} \<noteq> {}\<close>
   by (metis One_nat_def ParityDescomposition dvd_triv_left empty_Collect_eq)
 
 lemma Exp2L1QQQ:
-\<open>(n :: nat) \<ge> 1 \<Longrightarrow> finite {e |e :: nat.  2^e dvd n}\<close>
+  \<open>(n :: nat) \<ge> 1 \<Longrightarrow> finite {e |e :: nat.  2^e dvd n}\<close>
 proof(rule classical)
   assume \<open>n \<ge> 1\<close>
   assume \<open>\<not> (finite {e |e :: nat.  2^e dvd n})\<close>
@@ -488,7 +488,7 @@ lemma Exp2L1:
   assumes \<open>n \<ge> 1\<close>
   shows \<open> 2^(Exp2 n) dvd n \<close>
 proof-
-   from \<open>n \<ge> 1\<close> have \<open>\<not> (n = 0)\<close> by simp
+  from \<open>n \<ge> 1\<close> have \<open>\<not> (n = 0)\<close> by simp
   then obtain S :: \<open>nat set\<close> where \<open>S = {e |e :: nat.  2^e dvd n}\<close> 
     by blast
   from  \<open>S = {e |e :: nat.  2^e dvd n}\<close> \<open>n \<ge> 1\<close> have \<open>S \<noteq> {}\<close> 
@@ -508,7 +508,7 @@ lemma Exp2L2:
   assumes \<open>n \<ge> 1\<close> \<open> 2^e dvd n\<close>
   shows \<open> e \<le> Exp2 n \<close>
 proof-
-   from \<open>n \<ge> 1\<close> have \<open>\<not> (n = 0)\<close> by simp
+  from \<open>n \<ge> 1\<close> have \<open>\<not> (n = 0)\<close> by simp
   then obtain S :: \<open>nat set\<close> where \<open>S = {e |e :: nat.  2^e dvd n}\<close> 
     by blast
   from  \<open>S = {e |e :: nat.  2^e dvd n}\<close> \<open>n \<ge> 1\<close> have \<open>S \<noteq> {}\<close> 
@@ -572,10 +572,10 @@ proof-
     using \<open>n \<noteq> 0\<close> by presburger
   from \<open>S \<noteq> {}\<close> \<open>finite S\<close> \<open>d = Max S\<close> have \<open> d dvd n \<and> odd d \<close>
     using Max_in \<open>S = {d |d. d dvd n \<and> odd d}\<close> by auto
-    then have \<open>d dvd n\<close> by blast
-    then show ?thesis using \<open>d = Max S\<close> 
-      using \<open>d = OddPart n\<close> by auto
-  qed
+  then have \<open>d dvd n\<close> by blast
+  then show ?thesis using \<open>d = Max S\<close> 
+    using \<open>d = OddPart n\<close> by auto
+qed
 
 lemma OddPartL1X1:
   fixes n k :: nat
@@ -595,11 +595,11 @@ proof-
   from \<open>S \<noteq> {}\<close> \<open>finite S\<close> \<open>d = Max S\<close> have \<open> d dvd n \<and> odd d \<close>
     using Max_in \<open>S = {d |d. d dvd n \<and> odd d}\<close> by auto
   then have \<open>odd d\<close> by blast 
-    have \<open>k \<le> d\<close> 
-      using Max_ge \<open>S = {d |d. d dvd n \<and> odd d}\<close> \<open>d = Max S\<close> \<open>finite S\<close> assms(2) assms(3) by blast
-    then show ?thesis 
-      by (simp add: \<open>d = OddPart n\<close>)
-  qed
+  have \<open>k \<le> d\<close> 
+    using Max_ge \<open>S = {d |d. d dvd n \<and> odd d}\<close> \<open>d = Max S\<close> \<open>finite S\<close> assms(2) assms(3) by blast
+  then show ?thesis 
+    by (simp add: \<open>d = OddPart n\<close>)
+qed
 
 lemma OddPartL2S:
   fixes n d k :: nat
@@ -609,8 +609,8 @@ proof(rule classical)
   assume \<open>\<not>(k = 1)\<close>
   then have \<open>k = 0 \<or> k \<ge> 2\<close> 
     by linarith
-have \<open>k \<noteq> 0\<close> 
-  using assms(4) by presburger
+  have \<open>k \<noteq> 0\<close> 
+    using assms(4) by presburger
   then have \<open>k \<ge> 2\<close> 
     using \<open>k = 0 \<or> 2 \<le> k\<close> by blast
   obtain w :: nat where \<open>w = k * (OddPart n)\<close> 
@@ -694,7 +694,7 @@ lemma preExp2OddPartChar:
   using assms preExp2OddPartChar1 preExp2OddPartChar2 by blast
 
 corollary Exp2OddPartChar:
-   \<open> (\<forall> n. (Exp2 0 = 0 \<and> OddPart 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(Exp2 n)*(OddPart n) \<and> odd (OddPart n) )) ) \<close>
+  \<open> (\<forall> n. (Exp2 0 = 0 \<and> OddPart 0 = 1 \<and> ( n \<ge> 1 \<longrightarrow> n = 2^(Exp2 n)*(OddPart n) \<and> odd (OddPart n) )) ) \<close>
   using  preExp2OddPartChar 
   by (simp add: Exp2_def OddPart_def)
 
@@ -722,7 +722,7 @@ proof-
 qed
 
 lemma OddDivPow2: 
-\<open>(n::nat) \<ge> 1 \<Longrightarrow> (\<forall> d. d dvd n \<and> odd d \<longrightarrow> d = 1) \<longleftrightarrow> (\<exists> k. n = 2^k)\<close>
+  \<open>(n::nat) \<ge> 1 \<Longrightarrow> (\<forall> d. d dvd n \<and> odd d \<longrightarrow> d = 1) \<longleftrightarrow> (\<exists> k. n = 2^k)\<close>
   using DFSFSfre34 TrapezoidalNumbersNec2_5recA dvd_div_mult_self by blast
 
 end

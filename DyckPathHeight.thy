@@ -11,7 +11,9 @@ definition DyckHeight :: \<open>DCHR list \<Rightarrow> int\<close> where
 We provide the following characterization for the height of a Dyck path.
 
 theorem DyckHeightCharacterization:
- \<open> DyckPath w \<Longrightarrow> w \<noteq> [] \<Longrightarrow> DyckHeight w = Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close>
+ \<open> DyckPath w \<Longrightarrow> w \<noteq> [] \<Longrightarrow>
+ DyckHeight w = Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int)
+ | v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close>
 
 
 Reference:
@@ -35,42 +37,42 @@ imports Complex_Main  DyckTypeLengthDiv
 
 begin
 definition DyckSetDCHR :: \<open> DCHR \<Rightarrow> DCHR list \<Rightarrow> nat set \<close> where
-\<open>DyckSetDCHR \<equiv> \<lambda> c :: DCHR. \<lambda> w :: DCHR list. {j | j::nat. j < length w \<and> w ! j = c}\<close>
+  \<open>DyckSetDCHR \<equiv> \<lambda> c :: DCHR. \<lambda> w :: DCHR list. {j | j::nat. j < length w \<and> w ! j = c}\<close>
 
 definition DyckListDCHR :: \<open> DCHR \<Rightarrow> DCHR list \<Rightarrow> nat list \<close> where
-\<open>DyckListDCHR \<equiv> \<lambda> c :: DCHR.  \<lambda> w :: DCHR list. sorted_list_of_set (DyckSetDCHR c w)\<close>
+  \<open>DyckListDCHR \<equiv> \<lambda> c :: DCHR.  \<lambda> w :: DCHR list. sorted_list_of_set (DyckSetDCHR c w)\<close>
 
 definition DyckHeight :: \<open>DCHR list \<Rightarrow> int\<close> where
-\<open>DyckHeight \<equiv> \<lambda> w. Max {DyckPHeight v | v. prefix v w}\<close>
+  \<open>DyckHeight \<equiv> \<lambda> w. Max {DyckPHeight v | v. prefix v w}\<close>
 
 section {* Auxiliary Results *}
 
 lemma FinSetToListCard3:
-\<open> L = sorted_list_of_set (set L) \<Longrightarrow> length L = card (set L)\<close>
+  \<open> L = sorted_list_of_set (set L) \<Longrightarrow> length L = card (set L)\<close>
   by (metis distinct_card distinct_sorted_list_of_set)
 
 lemma FinSetToListCard2:
-\<open>finite S \<Longrightarrow> set (sorted_list_of_set S) =  S \<Longrightarrow>  length (sorted_list_of_set S) = card S\<close>
+  \<open>finite S \<Longrightarrow> set (sorted_list_of_set S) =  S \<Longrightarrow>  length (sorted_list_of_set S) = card S\<close>
   by (simp add: FinSetToListCard3)
 
 lemma FinSetToListCard1:
-\<open>finite S \<Longrightarrow> set (sorted_list_of_set S) =  S\<close>
+  \<open>finite S \<Longrightarrow> set (sorted_list_of_set S) =  S\<close>
   by simp
 
 lemma FinSetToListCard:
-\<open>finite S \<Longrightarrow> length (sorted_list_of_set S) = card S\<close>
+  \<open>finite S \<Longrightarrow> length (sorted_list_of_set S) = card S\<close>
   by (simp add: FinSetToListCard2)
 
 lemma DyckSetDCHRFIN:
-\<open>finite (DyckSetDCHR c w)\<close>
+  \<open>finite (DyckSetDCHR c w)\<close>
   by (metis (no_types, lifting) CollectD DyckSetDCHR_def  finite_lessThan finite_nat_set_iff_bounded_le lessThan_iff )
 
 lemma DyckSetDCHRDyckSetDCHRDyckSetDCHREqNonZero:
-\<open>{0} \<inter> {Suc j | j. j \<in> (S :: nat set)} = {}\<close>
+  \<open>{0} \<inter> {Suc j | j. j \<in> (S :: nat set)} = {}\<close>
   by blast
 
 lemma DyckSetDCHRDyckSetDCHRDyckSetDCHREqSet:
-\<open>c = d \<Longrightarrow> (DyckSetDCHR c (d # w)) = {0} \<union> {Suc j | j. j \<in> (DyckSetDCHR c w)}\<close>
+  \<open>c = d \<Longrightarrow> (DyckSetDCHR c (d # w)) = {0} \<union> {Suc j | j. j \<in> (DyckSetDCHR c w)}\<close>
 proof-
   assume \<open>c = d\<close>
   have \<open>(DyckSetDCHR c (d # w)) = {j | j. j < length (d # w) \<and> (d # w) ! j = c}\<close>
@@ -96,7 +98,7 @@ qed
 
 
 lemma DyckSetDCHRDyckSetDCHRDyckSetDCHRNoneqSet:
-\<open>c \<noteq> d \<Longrightarrow> (DyckSetDCHR c (d # w)) =  {Suc j | j. j \<in> (DyckSetDCHR c w)}\<close>
+  \<open>c \<noteq> d \<Longrightarrow> (DyckSetDCHR c (d # w)) =  {Suc j | j. j \<in> (DyckSetDCHR c w)}\<close>
 proof-
   assume \<open>c \<noteq> d\<close>
   have \<open>(DyckSetDCHR c (d # w)) = {j | j. j < length (d # w) \<and> (d # w) ! j = c}\<close>
@@ -122,7 +124,7 @@ proof-
 qed
 
 lemma DyckSetDCHRDyckSetDCHRDyckSetDCHREq:
-\<open>c = d \<Longrightarrow> card (DyckSetDCHR c (d # w)) = 1 + card (DyckSetDCHR c w)\<close>
+  \<open>c = d \<Longrightarrow> card (DyckSetDCHR c (d # w)) = 1 + card (DyckSetDCHR c w)\<close>
 proof-
   assume \<open>c = d\<close>
   then have  \<open>(DyckSetDCHR c (d # w)) = {0} \<union> {Suc j | j. j \<in> (DyckSetDCHR c w)}\<close>
@@ -142,12 +144,12 @@ proof-
     using \<open>bij_betw Suc {j |j. j \<in> DyckSetDCHR c w} {Suc j |j. j \<in> DyckSetDCHR c w}\<close> bij_betw_same_card by blast
   then have \<open>card  (DyckSetDCHR c w) = card  {Suc j | j. j \<in> (DyckSetDCHR c w)}\<close>
     by auto
-    show ?thesis 
-      by (simp add: \<open>card (DyckSetDCHR c (d # w)) = 1 + card {Suc j |j. j \<in> DyckSetDCHR c w}\<close> \<open>card (DyckSetDCHR c w) = card {Suc j |j. j \<in> DyckSetDCHR c w}\<close>)
-  qed
+  show ?thesis 
+    by (simp add: \<open>card (DyckSetDCHR c (d # w)) = 1 + card {Suc j |j. j \<in> DyckSetDCHR c w}\<close> \<open>card (DyckSetDCHR c w) = card {Suc j |j. j \<in> DyckSetDCHR c w}\<close>)
+qed
 
 lemma DyckSetDCHRDyckSetDCHRDyckSetDCHRNeq:
-\<open>c \<noteq> d \<Longrightarrow> card (DyckSetDCHR c (d # w)) =  card (DyckSetDCHR c w)\<close>
+  \<open>c \<noteq> d \<Longrightarrow> card (DyckSetDCHR c (d # w)) =  card (DyckSetDCHR c w)\<close>
 proof-
   assume \<open>c \<noteq> d\<close>
   then have  \<open>(DyckSetDCHR c (d # w)) = {Suc j | j. j \<in> (DyckSetDCHR c w)}\<close>
@@ -161,9 +163,9 @@ proof-
     using \<open>bij_betw Suc {j |j. j \<in> DyckSetDCHR c w} {Suc j |j. j \<in> DyckSetDCHR c w}\<close> bij_betw_same_card by blast
   then have \<open>card  (DyckSetDCHR c w) = card  {Suc j | j. j \<in> (DyckSetDCHR c w)}\<close>
     by auto
-    show ?thesis 
-      by (simp add: \<open>DyckSetDCHR c (d # w) = {Suc j |j. j \<in> DyckSetDCHR c w}\<close> \<open>card (DyckSetDCHR c w) = card {Suc j |j. j \<in> DyckSetDCHR c w}\<close>)
-  qed
+  show ?thesis 
+    by (simp add: \<open>DyckSetDCHR c (d # w) = {Suc j |j. j \<in> DyckSetDCHR c w}\<close> \<open>card (DyckSetDCHR c w) = card {Suc j |j. j \<in> DyckSetDCHR c w}\<close>)
+qed
 
 lemma DyckListDCHRLengthAbstrEqDyckPHeight0SetFormRecUp:
   assumes \<open>DyckPHeight w = ((card (DyckSetDCHR up w))::int) - ((card (DyckSetDCHR down w))::int) \<close>
@@ -184,7 +186,7 @@ lemma DyckListDCHRLengthAbstrEqDyckPHeight0SetFormRec:
   by (metis (full_types) DCHR.exhaust assms)
 
 lemma DyckListDCHRLengthAbstrEqDyckPHeight0SetForm:
- \<open>DyckPHeight w = ((card (DyckSetDCHR up w))::int) - ((card (DyckSetDCHR down w))::int) \<close>
+  \<open>DyckPHeight w = ((card (DyckSetDCHR up w))::int) - ((card (DyckSetDCHR down w))::int) \<close>
 proof(induction w)
   case Nil
   have \<open>DyckPHeight [] = 0\<close> 
@@ -207,15 +209,15 @@ qed
 
 
 lemma preDyckHeightCharacterization:
- \<open>DyckHeight w = Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w}\<close>
+  \<open>DyckHeight w = Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w}\<close>
   using DyckHeight_def  DyckListDCHRLengthAbstrEqDyckPHeight0SetForm by presburger
 
 lemma lastcharlist:
- \<open>v \<noteq> [] \<Longrightarrow> last (v :: DCHR list) = down \<Longrightarrow> \<exists> u. v = u @ [down]\<close>
+  \<open>v \<noteq> [] \<Longrightarrow> last (v :: DCHR list) = down \<Longrightarrow> \<exists> u. v = u @ [down]\<close>
   by (metis last_snoc rev_exhaust)
 
 lemma DyckSetDCHRup:
- \<open> ((card (DyckSetDCHR up (u @ [down])))::int) = ((card (DyckSetDCHR up u))::int) \<close>
+  \<open> ((card (DyckSetDCHR up (u @ [down])))::int) = ((card (DyckSetDCHR up u))::int) \<close>
 proof-
   have \<open>(DyckSetDCHR up (u @ [down])) = {j | j::nat. j < length (u @ [down]) \<and> (u @ [down]) ! j = up}\<close>
     using DyckSetDCHR_def 
@@ -230,7 +232,7 @@ qed
 
 
 lemma DyckSetDCHRdown:
- \<open> ((card (DyckSetDCHR down (u @ [down])))::int) = ((card (DyckSetDCHR down u))::int) + (1::int)\<close>
+  \<open> ((card (DyckSetDCHR down (u @ [down])))::int) = ((card (DyckSetDCHR down u))::int) + (1::int)\<close>
 proof-
   have  \<open>{j | j::nat. (j = length u \<and> (u @ [down]) ! j = down)} = {length u}\<close>
     by auto  
@@ -263,12 +265,12 @@ qed
 
 
 lemma DyckFirstLetterPrefix:
-\<open>w \<noteq> [] \<Longrightarrow> prefix [w!0] w\<close>
+  \<open>w \<noteq> [] \<Longrightarrow> prefix [w!0] w\<close>
   by (simp add: Suc_leI prefix_def)
 
 
 lemma DyckFirstLetter:
- \<open> w \<noteq> [] \<Longrightarrow> DyckPath w \<Longrightarrow> w ! 0 = up\<close>
+  \<open> w \<noteq> [] \<Longrightarrow> DyckPath w \<Longrightarrow> w ! 0 = up\<close>
 proof-
   assume \<open>DyckPath w\<close>
   assume \<open>w \<noteq> []\<close>
@@ -282,17 +284,17 @@ proof-
 qed
 
 lemma DyckUpPrefix:
-\<open>DyckPath w \<Longrightarrow> w \<noteq> [] \<Longrightarrow> prefix [up] w\<close>
+  \<open>DyckPath w \<Longrightarrow> w \<noteq> [] \<Longrightarrow> prefix [up] w\<close>
   using DyckFirstLetterPrefix DyckFirstLetter
   by fastforce
 
 lemma prefixConcat:
-\<open>w = u @ v \<Longrightarrow> prefix u w\<close> 
+  \<open>w = u @ v \<Longrightarrow> prefix u w\<close> 
   using prefix_def 
   using DyckFirstLetterPrefix prefixL2 prefixZ1 by fastforce
 
 lemma prefixTrans:
-\<open>prefix u v \<Longrightarrow> prefix v w \<Longrightarrow> prefix u w\<close> 
+  \<open>prefix u v \<Longrightarrow> prefix v w \<Longrightarrow> prefix u w\<close> 
   using prefix_def 
   using prefixLX prefixYY by blast
 
@@ -321,23 +323,23 @@ proof-
     by (simp add: prefixConcat)
   from  \<open>prefix u v\<close>  \<open>prefix v w\<close> have \<open>prefix u w\<close>
     using prefixTrans by blast
-    show ?thesis
+  show ?thesis
     using \<open>int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) \<le> int (card (DyckSetDCHR up u)) - int (card (DyckSetDCHR down u))\<close> \<open>length u = length v - 1\<close> \<open>prefix u w\<close> \<open>u \<noteq> []\<close> by blast
-  qed
+qed
 
 lemma MaxDyckHeightCharacterizationPropwithoutxylastInd:
   fixes n :: nat and w :: \<open>DCHR list\<close>
   assumes  \<open>DyckPath w\<close>
   shows \<open>\<forall> v. \<exists> u. length v \<le> n \<and> prefix v w \<and> last v = down \<and> v \<noteq> [] \<longrightarrow> ( ((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) \<le> ((card (DyckSetDCHR up u))::int) - ((card (DyckSetDCHR down u))::int) \<and> prefix u w \<and> last u = up \<and>  u \<noteq> [] )\<close>
 proof(induction n)
-case 0
+  case 0
   then show ?case 
     using lastcharlist by blast
 next
   case (Suc n)
   then show ?case using MaxDyckHeightCharacterizationPropwithoutxylastRedLength
     by (smt DCHR.exhaust add_diff_cancel_left' assms le_SucE not_less_eq_eq plus_1_eq_Suc)
-  qed
+qed
 
 lemma MaxDyckHeightCharacterizationPropwithoutxylast:
   assumes  \<open>DyckPath w\<close> and \<open>prefix v w\<close> and \<open>last v = down\<close> and \<open>v \<noteq> []\<close>
@@ -395,7 +397,7 @@ lemma FiniteNumberOfBoundedLengthRecUnion:
   using FiniteNumberOfBoundedLengthRecUnionL FiniteNumberOfBoundedLengthRecUnionR by auto
 
 lemma preCFiniteNumberOfBoundedLengthRecinj:
-\<open>inj (\<lambda> w ::'a list. c # w)\<close>
+  \<open>inj (\<lambda> w ::'a list. c # w)\<close>
   by simp
 
 
@@ -474,20 +476,20 @@ proof-
     by (simp add: prefix_def)
   then have \<open>{v | v :: DCHR list. prefix v w} \<subseteq>  {v | v :: DCHR list. length v \<le> length w}\<close>
     by auto
-then show ?thesis using \<open> finite {v | v :: DCHR list. length v \<le> length w} \<close> 
-  by (simp add: finite_subset)
+  then show ?thesis using \<open> finite {v | v :: DCHR list. length v \<le> length w} \<close> 
+    by (simp add: finite_subset)
 qed
 
 lemma DyckSetDCHRcardempty:
- \<open>((card (DyckSetDCHR up []))::int) - ((card (DyckSetDCHR down []))::int) = 0\<close>
+  \<open>((card (DyckSetDCHR up []))::int) - ((card (DyckSetDCHR down []))::int) = 0\<close>
   by (simp add: DyckSetDCHR_def)
 
 lemma preDyckHeightCharacterizationDyckNonZeroLthanOrEq1:
- \<open>DyckPath w \<Longrightarrow> w \<noteq> [] \<Longrightarrow> Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w} \<noteq> 0\<close>
+  \<open>DyckPath w \<Longrightarrow> w \<noteq> [] \<Longrightarrow> Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w} \<noteq> 0\<close>
 proof-
   assume \<open>DyckPath w\<close>
   assume \<open>w \<noteq> []\<close>
- have \<open>{((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up} \<subseteq> {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w}\<close>
+  have \<open>{((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up} \<subseteq> {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w}\<close>
     by blast
   have \<open>prefix [up] w\<close> using  \<open>DyckPath w\<close> \<open>w \<noteq> []\<close> DyckFirstLetter  
     by (simp add: prefix_def Suc_leI)
@@ -525,7 +527,7 @@ lemma preDyckHeightCharacterizationDyckNonZero:
 proof-
   assume \<open>DyckPath w\<close>
   assume \<open>w \<noteq> []\<close>
- have \<open>{((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up} \<subseteq> {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w}\<close>
+  have \<open>{((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up} \<subseteq> {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w}\<close>
     by blast
   have \<open>prefix [up] w\<close> using  \<open>DyckPath w\<close> \<open>w \<noteq> []\<close> DyckFirstLetter  
     by (simp add: prefix_def Suc_leI)
@@ -578,7 +580,7 @@ qed
 section {* Main Result *}
 
 theorem DyckHeightCharacterization:
- \<open> DyckPath w \<Longrightarrow> w \<noteq> [] \<Longrightarrow> DyckHeight w = Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close>
+  \<open> DyckPath w \<Longrightarrow> w \<noteq> [] \<Longrightarrow> DyckHeight w = Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close>
 proof-
   assume \<open>w \<noteq> []\<close>
   assume \<open>DyckPath w\<close>
@@ -611,34 +613,34 @@ proof-
     then show ?thesis
       using \<open>finite {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> v \<noteq> []}\<close> rev_finite_subset by blast
   qed
-  
-    have \<open>Max{((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up \<and> v \<noteq> []} \<le> Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> v \<noteq> []}\<close>
-proof -
-  obtain dds :: "int \<Rightarrow> DCHR list" where
-    f1: "\<forall>i. ((\<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []) \<or> (\<forall>ds. [] = ds \<or> up \<noteq> last ds \<or> \<not> prefix ds w \<or> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<noteq> i)) \<and> ([] \<noteq> dds i \<and> up = last (dds i) \<and> prefix (dds i) w \<and> int (card (DyckSetDCHR up (dds i))) - int (card (DyckSetDCHR down (dds i))) = i \<or> (\<forall>ds. i \<noteq> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<or> \<not> prefix ds w \<or> last ds \<noteq> up \<or> ds = []))"
-by moura
-  { assume "\<forall>ds. sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []) \<noteq> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<or> \<not> prefix ds w \<or> ds = []"
-    { assume "\<forall>ds. int (card (DyckSetDCHR up (dds (sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []))))) - int (card (DyckSetDCHR down (dds (sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []))))) \<noteq> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<or> \<not> prefix ds w \<or> ds = []"
-      then have "prefix (dds (sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []))) w \<longrightarrow> [] = dds (sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []))"
-        by (metis (lifting))
-      then have "\<forall>ds. sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []) \<noteq> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<or> \<not> prefix ds w \<or> last ds \<noteq> up \<or> ds = []"
-        using f1 by blast }
+
+  have \<open>Max{((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up \<and> v \<noteq> []} \<le> Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> v \<noteq> []}\<close>
+  proof -
+    obtain dds :: "int \<Rightarrow> DCHR list" where
+      f1: "\<forall>i. ((\<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []) \<or> (\<forall>ds. [] = ds \<or> up \<noteq> last ds \<or> \<not> prefix ds w \<or> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<noteq> i)) \<and> ([] \<noteq> dds i \<and> up = last (dds i) \<and> prefix (dds i) w \<and> int (card (DyckSetDCHR up (dds i))) - int (card (DyckSetDCHR down (dds i))) = i \<or> (\<forall>ds. i \<noteq> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<or> \<not> prefix ds w \<or> last ds \<noteq> up \<or> ds = []))"
+      by moura
+    { assume "\<forall>ds. sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []) \<noteq> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<or> \<not> prefix ds w \<or> ds = []"
+      { assume "\<forall>ds. int (card (DyckSetDCHR up (dds (sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []))))) - int (card (DyckSetDCHR down (dds (sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []))))) \<noteq> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<or> \<not> prefix ds w \<or> ds = []"
+        then have "prefix (dds (sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []))) w \<longrightarrow> [] = dds (sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []))"
+          by (metis (lifting))
+        then have "\<forall>ds. sK9 (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> ds \<noteq> []) (\<lambda>i. \<exists>ds. i = int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<and> prefix ds w \<and> last ds = up \<and> ds \<noteq> []) \<noteq> int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) \<or> \<not> prefix ds w \<or> last ds \<noteq> up \<or> ds = []"
+          using f1 by blast }
+      then have "{int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) |ds. prefix ds w \<and> last ds = up \<and> ds \<noteq> []} \<subseteq> {int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) | ds. prefix ds w \<and> ds \<noteq> []}"
+        by blast }
     then have "{int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) |ds. prefix ds w \<and> last ds = up \<and> ds \<noteq> []} \<subseteq> {int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) | ds. prefix ds w \<and> ds \<noteq> []}"
-      by blast }
-  then have "{int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) |ds. prefix ds w \<and> last ds = up \<and> ds \<noteq> []} \<subseteq> {int (card (DyckSetDCHR up ds)) - int (card (DyckSetDCHR down ds)) | ds. prefix ds w \<and> ds \<noteq> []}"
-by blast
-then show ?thesis
-  by (metis (lifting) Max_mono \<open>finite {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> v \<noteq> []}\<close> \<open>{int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> last v = up \<and> v \<noteq> []} \<noteq> {}\<close>)
-qed
+      by blast
+    then show ?thesis
+      by (metis (lifting) Max_mono \<open>finite {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> v \<noteq> []}\<close> \<open>{int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> last v = up \<and> v \<noteq> []} \<noteq> {}\<close>)
+  qed
 
   have \<open>DyckHeight w \<in> {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> v \<noteq> []}\<close>
     using Max_in \<open>DyckHeight w = Max {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> v \<noteq> []}\<close> \<open>finite {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> v \<noteq> []}\<close> \<open>{int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> v \<noteq> []} \<noteq> {}\<close> by auto
   then obtain y where \<open>y \<in> {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close>
     and \<open>DyckHeight w \<le> y\<close> using \<open>w \<noteq> []\<close> \<open>DyckPath w\<close> MaxDyckHeightCharacterization
-     \<open>DyckHeight w = Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> v \<noteq> []}\<close>
+      \<open>DyckHeight w = Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> v \<noteq> []}\<close>
     by blast    
-    have \<open>Max{((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up \<and> v \<noteq> []} \<ge> Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> v \<noteq> []}\<close>
-      using Max_ge_iff \<open>DyckHeight w = Max {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> v \<noteq> []}\<close> \<open>DyckHeight w \<le> y\<close> \<open>finite {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close> \<open>y \<in> {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close> by auto
+  have \<open>Max{((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up \<and> v \<noteq> []} \<ge> Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> v \<noteq> []}\<close>
+    using Max_ge_iff \<open>DyckHeight w = Max {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> v \<noteq> []}\<close> \<open>DyckHeight w \<le> y\<close> \<open>finite {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close> \<open>y \<in> {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close> by auto
   have \<open>Max{((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> last v = up \<and> v \<noteq> []} = Max {((card (DyckSetDCHR up v))::int) - ((card (DyckSetDCHR down v))::int) | v. prefix v w \<and> v \<noteq> []}\<close>
     using \<open>Max {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> last v = up \<and> v \<noteq> []} \<le> Max {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) | v. prefix v w \<and> v \<noteq> []}\<close> \<open>Max {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) |v. prefix v w \<and> v \<noteq> []} \<le> Max {int (card (DyckSetDCHR up v)) - int (card (DyckSetDCHR down v)) | v. prefix v w \<and> last v = up \<and> v \<noteq> []}\<close> by linarith
   then show ?thesis

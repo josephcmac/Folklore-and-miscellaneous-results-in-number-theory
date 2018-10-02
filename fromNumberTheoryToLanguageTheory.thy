@@ -19,14 +19,14 @@ section {* Equality *}
 
 text {* Equality ignoring the value of the functions at zero *}
 abbreviation eqSuc_abb :: \<open>(nat \<Rightarrow> 'a) \<Rightarrow> (nat \<Rightarrow> 'a) \<Rightarrow> bool\<close>
-(infixr "\<doteq>" 65)
-where
-\<open>f \<doteq> g \<equiv>  f \<circ> Suc = g \<circ> Suc\<close>
+  (infixr "\<doteq>" 65)
+  where
+    \<open>f \<doteq> g \<equiv>  f \<circ> Suc = g \<circ> Suc\<close>
 
 section {* DyckType *}
 
 definition DyckType :: \<open>nat \<Rightarrow> DCHR list\<close> where
-\<open>DyckType \<equiv> (SOME f :: nat \<Rightarrow> DCHR list. ((f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n)) ))\<close>
+  \<open>DyckType \<equiv> (SOME f :: nat \<Rightarrow> DCHR list. ((f 0 = [])\<and>(\<forall> n. n \<ge> 1 \<longrightarrow> n \<in> DyckClass (f n) \<and> DyckPath (f n)) ))\<close>
 
 proposition DyckType0: \<open>(DyckType 0 = [])\<close>
   by (smt qDyckExists DyckType_def someI_ex)
@@ -46,7 +46,7 @@ proof-
   obtain w where \<open>n \<in> DyckClass w\<close> 
     using DyckType1 \<open>1 \<le> n\<close> by blast
   from  \<open>n \<in> DyckClass w\<close> obtain v where \<open>WordToFun v = Jsigns n\<close> and \<open>SchroederToDyck v = w\<close>
-     by (smt CollectD DyckClass_def)
+    by (smt CollectD DyckClass_def)
   from \<open>n \<ge> 1\<close> have \<open>(Jsigns n) 0 = 1\<close> 
     by (metis Jdvd_def add.right_neutral dvd_0_right even_Suc preJsignsSumToDiffCardPlus times_nat.simps(1) times_nat.simps(2))
   from  \<open>WordToFun v = Jsigns n\<close>  \<open>(Jsigns n) 0 = 1\<close>  have \<open>v ! 0 = UP\<close> 
@@ -60,19 +60,19 @@ qed
 text {* ArithmFun transforms a language theoretic function into an arithmetical function *}
 
 definition ArithmFun :: \<open>(DCHR list \<Rightarrow> 'a) \<Rightarrow> (nat \<Rightarrow> 'a)\<close> where
-\<open>ArithmFun \<equiv> \<lambda> g. (g \<circ> DyckType)\<close>
+  \<open>ArithmFun \<equiv> \<lambda> g. (g \<circ> DyckType)\<close>
 
 section {* Pointwise Boolean operations *}
 
 
 subsection {* AND *}
 definition AND_op :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close> where
-\<open>AND_op \<equiv> \<lambda> f g. (\<lambda> x. (f x)\<and>(g x))\<close> 
+  \<open>AND_op \<equiv> \<lambda> f g. (\<lambda> x. (f x)\<and>(g x))\<close> 
 
 abbreviation AND_abb :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close>
-(infixr "AND" 65)
-where
-\<open>f AND g \<equiv> AND_op f g\<close>
+  (infixr "AND" 65)
+  where
+    \<open>f AND g \<equiv> AND_op f g\<close>
 
 lemma ANDQ : 
   shows  \<open>\<forall> x. (f AND g) x \<longleftrightarrow> f x \<and> g x\<close>
@@ -85,23 +85,23 @@ lemma AND_funt: \<open>(f \<circ> h) AND (g \<circ> h) = (f AND g) \<circ> h\<cl
   by (simp add: AND_funt_ext ext)
 
 proposition RepFunAND : 
- \<open>ArithmFun (F AND G) = (ArithmFun F) AND (ArithmFun G) \<close>
+  \<open>ArithmFun (F AND G) = (ArithmFun F) AND (ArithmFun G) \<close>
   by (simp add: AND_funt ArithmFun_def)
 
 proposition RepFunANDdot : 
- \<open>ArithmFun (F AND G) \<doteq> (ArithmFun F) AND (ArithmFun G) \<close>
+  \<open>ArithmFun (F AND G) \<doteq> (ArithmFun F) AND (ArithmFun G) \<close>
   using RepFunAND by auto
 
 
 subsection {* OR *}
 
 definition OR_op :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close> where
-\<open>OR_op \<equiv> \<lambda> f g. (\<lambda> x. (f x)\<or>(g x))\<close>
+  \<open>OR_op \<equiv> \<lambda> f g. (\<lambda> x. (f x)\<or>(g x))\<close>
 
 abbreviation OR_abb :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close>
-(infixr "OR" 65)
-where
-\<open>f OR g \<equiv> OR_op f g\<close>
+  (infixr "OR" 65)
+  where
+    \<open>f OR g \<equiv> OR_op f g\<close>
 
 
 lemma ORQ : 
@@ -115,21 +115,21 @@ lemma OR_funt: \<open>(f \<circ> h) OR (g \<circ> h) = (f OR g) \<circ> h\<close
   by (simp add: OR_funt_ext ext)
 
 proposition RepFunOR : 
- \<open>ArithmFun (F OR G) = (ArithmFun F) OR (ArithmFun G) \<close>
+  \<open>ArithmFun (F OR G) = (ArithmFun F) OR (ArithmFun G) \<close>
   by (simp add: ArithmFun_def OR_funt)
 
 proposition RepFunORdot : 
- \<open>ArithmFun (F OR G) \<doteq> (ArithmFun F) OR (ArithmFun G) \<close>
+  \<open>ArithmFun (F OR G) \<doteq> (ArithmFun F) OR (ArithmFun G) \<close>
   by (simp add: RepFunOR)
 
 subsection {* NOT *}
 
 definition NOT :: \<open>('a \<Rightarrow> bool) \<Rightarrow> ('a \<Rightarrow> bool)\<close> where
-\<open>NOT \<equiv> \<lambda> f. (\<lambda> x. \<not>(f x))\<close>
+  \<open>NOT \<equiv> \<lambda> f. (\<lambda> x. \<not>(f x))\<close>
 
 
 lemma NOTQ : 
-shows  \<open>\<forall> x. (NOT f) x \<longleftrightarrow> \<not> (f x)\<close>
+  shows  \<open>\<forall> x. (NOT f) x \<longleftrightarrow> \<not> (f x)\<close>
   by (simp add: NOT_def)
 
 lemma NOT_funt_ext: \<open>\<forall>x. ((NOT f) \<circ> h) x =  (NOT (f \<circ> h)) x\<close>
@@ -139,11 +139,11 @@ lemma NOT_funt: \<open>(NOT f) \<circ> h = NOT (f \<circ> h)\<close>
   using NOT_funt_ext ext by fastforce
 
 proposition RepFunNOT : 
- \<open>ArithmFun (NOT F) = NOT (ArithmFun F) \<close>
+  \<open>ArithmFun (NOT F) = NOT (ArithmFun F) \<close>
   by (simp add: ArithmFun_def NOT_funt)
 
 proposition RepFunNOTdot : 
- \<open>ArithmFun (NOT F) \<doteq> NOT (ArithmFun F) \<close>
+  \<open>ArithmFun (NOT F) \<doteq> NOT (ArithmFun F) \<close>
   using RepFunNOT by auto
 
 section {* Split *}
@@ -154,7 +154,7 @@ does not satisfy the properties *}
 proposition DyckTypeToArithmFun:
   fixes f :: \<open>nat \<Rightarrow> bool\<close> and g :: \<open>DCHR list \<Rightarrow> bool\<close>
   assumes  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> ((g (DyckType n) \<longrightarrow> f n))\<close> and  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> (f n \<longrightarrow> g (DyckType n))\<close>
-shows \<open>(ArithmFun g) \<doteq> f \<close>
+  shows \<open>(ArithmFun g) \<doteq> f \<close>
 proof-
   from \<open>\<forall> n. n \<ge> 1 \<longrightarrow> (g (DyckType n) \<longrightarrow> f n)\<close> 
   have \<open>\<forall> n. n \<ge> 1 \<longrightarrow>((ArithmFun g) n \<longrightarrow> f n)\<close> 
@@ -162,22 +162,22 @@ proof-
   from \<open>\<forall> n. n \<ge> 1 \<longrightarrow> (g (DyckType n) \<longrightarrow> f n)\<close> 
   have  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> (f n \<longrightarrow> (ArithmFun g) n )\<close> 
     by (metis ArithmFun_def assms(2) o_apply)
-    have \<open>\<forall> n. n \<ge> 1 \<longrightarrow>((ArithmFun g) n \<longleftrightarrow> f n)\<close>
-      using \<open>\<forall>n\<ge>1. ArithmFun g n \<longrightarrow> f n\<close> \<open>\<forall>n\<ge>1. f n \<longrightarrow> ArithmFun g n\<close> by blast
-    then show ?thesis using ext by auto
-  qed
+  have \<open>\<forall> n. n \<ge> 1 \<longrightarrow>((ArithmFun g) n \<longleftrightarrow> f n)\<close>
+    using \<open>\<forall>n\<ge>1. ArithmFun g n \<longrightarrow> f n\<close> \<open>\<forall>n\<ge>1. f n \<longrightarrow> ArithmFun g n\<close> by blast
+  then show ?thesis using ext by auto
+qed
 
 
 corollary DyckTypeToArithmFunB:
   fixes f :: \<open>nat \<Rightarrow> bool\<close> and g :: \<open>DCHR list \<Rightarrow> bool\<close>
   assumes  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> ((g (DyckType n) \<longleftrightarrow> f n))\<close>
-shows \<open>(ArithmFun g) \<doteq> f \<close>
+  shows \<open>(ArithmFun g) \<doteq> f \<close>
   by (simp add: DyckTypeToArithmFun assms)
 
 proposition DyckTypeToArithmFunC:
   fixes f :: \<open>nat \<Rightarrow> 'a\<close> and g :: \<open>DCHR list \<Rightarrow> 'a\<close>
   assumes  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> ((g (DyckType n) = f n))\<close>
-shows \<open>(ArithmFun g) \<doteq> f \<close>
+  shows \<open>(ArithmFun g) \<doteq> f \<close>
 proof-
   from  \<open>\<forall> n. n \<ge> 1 \<longrightarrow> ((g (DyckType n) = f n))\<close>
   have \<open>\<forall> n.((g (DyckType (Suc n)) = f (Suc n)))\<close>

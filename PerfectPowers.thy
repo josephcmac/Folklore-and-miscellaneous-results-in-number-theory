@@ -8,7 +8,7 @@ We will prove that any natural number n \<ge> 2 can be expressed as n = u^v,
 where u \<ge> 2, v \<ge> 1 and u is not perfect power. Furthermore, we will prove that such
 a representation is unique.This result belongs to the mathematical folklore.
 
-(This code  was verified in Isabelle2018-RC4/HOL)
+(This code  was verified in Isabelle2018)
 
 *)
 
@@ -21,9 +21,7 @@ begin
 
 text {* Definition of perfect powers *}
 definition PerfectPower :: "nat \<Rightarrow> bool" where
-"PerfectPower \<equiv> \<lambda> n. (\<exists> u v::nat. n = u^v \<and> u \<ge> 2 \<and> v \<ge> 2)"
-
-
+  "PerfectPower \<equiv> \<lambda> n. (\<exists> u v::nat. n = u^v \<and> u \<ge> 2 \<and> v \<ge> 2)"
 
 section {* Existence of the representation *}
 
@@ -41,8 +39,8 @@ lemma PPRepresentationRefKInd :
   shows \<open>(\<forall> k.  (k < K \<longrightarrow> ( \<exists> u v::nat. k+2 = u^v \<and> u \<ge> 2 \<and> v \<ge> 1 \<and> \<not>(PerfectPower u)) )) \<Longrightarrow> ( \<exists> u v::nat. K+2 = u^v \<and> u \<ge> 2 \<and> v \<ge> 1 \<and> \<not>(PerfectPower u)) \<close>
 proof (cases \<open>PerfectPower (K+2)\<close>)
   case True
-then obtain u v :: nat where \<open>K+2 = u^v\<close> and \<open>u \<ge> 2\<close> and \<open>v \<ge> 2\<close> 
-  by (meson PerfectPower_def)
+  then obtain u v :: nat where \<open>K+2 = u^v\<close> and \<open>u \<ge> 2\<close> and \<open>v \<ge> 2\<close> 
+    by (meson PerfectPower_def)
   from  \<open>K+2 = u^v\<close> and \<open>u \<ge> 2\<close> and \<open>v \<ge> 2\<close> have \<open>u < K+2\<close> 
     by (metis add_leD2 le_neq_implies_less numeral_le_one_iff one_add_one power_increasing_iff power_one_right semiring_norm(69))
   from \<open>u \<ge> 2\<close> obtain j :: nat where \<open>u = j + 2\<close> 
@@ -53,8 +51,8 @@ then obtain u v :: nat where \<open>K+2 = u^v\<close> and \<open>u \<ge> 2\<clos
   obtain s ::nat where \<open>s = q * v\<close> by auto
   from  \<open>K+2 = u^v\<close> and \<open>u = p^q\<close> have  \<open>K+2 = (p^q)^v\<close> 
     by blast
-   then have \<open>K+2 = p^s\<close> using  \<open>s = q * v\<close>
-  by (simp add: semiring_normalization_rules(31))
+  then have \<open>K+2 = p^s\<close> using  \<open>s = q * v\<close>
+    by (simp add: semiring_normalization_rules(31))
   have \<open>( \<exists> u v::nat. K+2 = u^v \<and> u \<ge> 2 \<and> v \<ge> 1 \<and> \<not>(PerfectPower u))\<close> 
     using \<open>1 \<le> q\<close> \<open>2 \<le> p\<close> \<open>2 \<le> v\<close> \<open>K + 2 = p ^ s\<close> \<open>\<not> PerfectPower p\<close> \<open>s = q * v\<close> by fastforce
   show ?thesis 
@@ -68,15 +66,15 @@ qed
 lemma PPRepresentationRefK :
   fixes K :: nat
   shows \<open>\<forall> k. (k < K \<longrightarrow> ( \<exists> u v::nat. k+2 = u^v \<and> u \<ge> 2 \<and> v \<ge> 1 \<and> \<not>(PerfectPower u)) )\<close>
-  proof (induction K)
-case 0
+proof (induction K)
+  case 0
   then show ?case 
     using PPRepresentationBase by force
 next
   case (Suc K)
   then show ?case 
     using PPRepresentationRefKInd by auto
-  qed
+qed
 
 lemma PPRepresentationRef :
   fixes k :: nat
@@ -151,7 +149,7 @@ lemma BezoutNat:
 lemma PPUniquenessRelPrimesRedEqOne :
   fixes n u v p q :: nat
   assumes \<open>n \<ge> 2\<close> and \<open>n = u^v\<close> and \<open>u \<ge> 2\<close> and \<open>v \<ge> 1\<close> and \<open>\<not>(PerfectPower u)\<close>
-and  \<open>n = p^q\<close> and \<open>p \<ge> 2\<close> and \<open>q \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close> and \<open>gcd q v = 1\<close> and \<open>q > v\<close>
+    and  \<open>n = p^q\<close> and \<open>p \<ge> 2\<close> and \<open>q \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close> and \<open>gcd q v = 1\<close> and \<open>q > v\<close>
   shows \<open> v = 1\<close>
 proof-
   from \<open>gcd q v = 1\<close> obtain a b :: nat where \<open>a*q = b*v + 1\<close>
@@ -181,21 +179,21 @@ qed
 lemma PPUniquenessRelPrimesRed :
   fixes n u v p q :: nat
   assumes \<open>n \<ge> 2\<close> and \<open>n = u^v\<close> and \<open>u \<ge> 2\<close> and \<open>v \<ge> 1\<close> and \<open>\<not>(PerfectPower u)\<close>
-and  \<open>n = p^q\<close> and \<open>p \<ge> 2\<close> and \<open>q \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close> and \<open>gcd q v = 1\<close> and \<open>q > v\<close>
+    and  \<open>n = p^q\<close> and \<open>p \<ge> 2\<close> and \<open>q \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close> and \<open>gcd q v = 1\<close> and \<open>q > v\<close>
   shows \<open>u = p \<and> v = q\<close>
   by (metis PPUniquenessRelPrimesRedEqOne assms(1) assms(10) assms(11) assms(2) assms(3) assms(4) assms(5) assms(6) assms(7) assms(8) assms(9) nonPerfectPowerChar power_one_right)
 
 lemma PPUniquenessRelPrimes :
   fixes n u v p q :: nat
   assumes \<open>n \<ge> 2\<close> and \<open>n = u^v\<close> and \<open>u \<ge> 2\<close> and \<open>v \<ge> 1\<close> and \<open>\<not>(PerfectPower u)\<close>
-and  \<open>n = p^q\<close> and \<open>p \<ge> 2\<close> and \<open>q \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close> and \<open>gcd q v = 1\<close>
+    and  \<open>n = p^q\<close> and \<open>p \<ge> 2\<close> and \<open>q \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close> and \<open>gcd q v = 1\<close>
   shows \<open>u = p \<and> v = q\<close>
   by (metis PPUniquenessRelPrimesRed assms(1) assms(10) assms(2) assms(3) assms(4) assms(5) assms(6) assms(7) assms(8) assms(9) gcd.commute gcd_nat.idem nat_neq_iff power_one_right)
 
 theorem PPUniqueness :
   fixes n u v p q :: nat
   assumes \<open>n \<ge> 2\<close> and \<open>n = u^v\<close> and \<open>u \<ge> 2\<close> and \<open>v \<ge> 1\<close> and \<open>\<not>(PerfectPower u)\<close>
-and  \<open>n = p^q\<close> and \<open>p \<ge> 2\<close> and \<open>q \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close>
+    and  \<open>n = p^q\<close> and \<open>p \<ge> 2\<close> and \<open>q \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close>
   shows \<open>u = p \<and> v = q\<close>
 proof-
   obtain d :: nat where \<open>gcd q v = d\<close> by auto
@@ -210,7 +208,6 @@ proof-
     then show ?thesis
       by (metis (no_types) \<open>qq * d = q\<close> assms(8) dvd_mult_cancel2 gcd.bottom_left_bottom le_less_trans nat_0_less_mult_iff nat_mult_eq_1_iff order.not_eq_order_implies_strict semiring_normalization_rules(7) zero_le)
   qed
-
   from \<open>n = p^q\<close> and \<open>n = u^v\<close> have \<open>p^q = u^v\<close>
     by blast
   from \<open>p^q = u^v\<close> and  \<open> qq * d = q \<close> and  \<open> vv * d = v \<close> have \<open>p^qq = u^vv\<close> 
@@ -226,7 +223,7 @@ proof-
   have  \<open>nn \<ge> 2\<close> 
     by (metis One_nat_def \<open>nn = p ^ qq\<close> \<open>qq * d = q\<close> add_leD2 antisym_conv assms(1) assms(6) assms(7) nat_one_le_power not_less_eq_eq numerals(2) one_add_one power_one semiring_normalization_rules(31))
   from  \<open>nn \<ge> 2\<close> and \<open>nn = u^vv\<close> and \<open>u \<ge> 2\<close> and \<open>vv \<ge> 1\<close> and \<open>\<not>(PerfectPower u)\<close>
-and  \<open>nn = p^qq\<close> and \<open>p \<ge> 2\<close> and \<open>qq \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close> and \<open>gcd qq vv = 1\<close>
+    and  \<open>nn = p^qq\<close> and \<open>p \<ge> 2\<close> and \<open>qq \<ge> 1\<close> and \<open>\<not>(PerfectPower p)\<close> and \<open>gcd qq vv = 1\<close>
   have  \<open>u = p \<and> vv = qq\<close> 
     by (meson PPUniquenessRelPrimes)
   show ?thesis

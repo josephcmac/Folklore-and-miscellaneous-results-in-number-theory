@@ -23,7 +23,7 @@ References:
   publisher={Taylor \& Francis}
 }
 
-(This code  was verified in Isabelle2018-RC4/HOL)
+(This code  was verified in Isabelle2018)
 
 *)
 
@@ -36,7 +36,8 @@ begin
 section {* Necessary Condition *}
 
 primrec TSum :: "nat \<Rightarrow> nat  \<Rightarrow> nat" where
- "TSum a 0 = 0" | "TSum a (Suc k) = (TSum a k) + (a + k)"
+  "TSum a 0 = 0" 
+| "TSum a (Suc k) = (TSum a k) + (a + k)"
 
 
 
@@ -69,7 +70,7 @@ proof (rule classical)
   then have False
     using \<open>k * (k + 2 * a - 1) + 2 * (a + k) \<noteq> (k + 1) * (k + 1 + 2 * a - 1)\<close> diff_mult_distrib2 by auto
   then show ?thesis by blast
-  qed
+qed
 
 lemma TrapezoidalNumbersNec1: "a \<ge> 1 \<Longrightarrow> 2*TSum a k =  k*(k+2*a-1)"
 proof (induction k)
@@ -93,7 +94,7 @@ proof-
   then obtain a k where "a \<ge> 1" and "k \<ge> 2" and "n = (TSum a k)" by auto
   from \<open>n = (TSum a k)\<close> have \<open>2*n = k*(k+2*a-1)\<close> 
     using TrapezoidalNumbersNec1 \<open>a \<ge> 1\<close> by blast
-   have "\<not> (\<exists> r. 2*n = 2^r)" 
+  have "\<not> (\<exists> r. 2*n = 2^r)" 
     using TrapezoidalNumbersNec2 \<open>1 \<le> a\<close> \<open>2 * n = k * (k + 2 * a - 1)\<close> \<open>2 \<le> k\<close> by auto
   then have "\<not> (\<exists> r. n = 2^r)"  by (rule TrapezoidalNumbersNec3)
   then show ?thesis by blast
@@ -124,7 +125,7 @@ proof-
   then have \<open>\<exists> r. n = 2^r\<close> by blast
   then show ?thesis by blast
 qed
- 
+
 
 lemma TrapezoidalNumbersSuf_1A: "n \<noteq> 0 \<Longrightarrow> (\<not> ( \<exists> d. d \<ge> 2 \<and> d dvd (n::nat) \<and> odd d ) \<longrightarrow> (\<exists> r. n = 2^r))"
   by (metis One_nat_def Suc_leI TrapezoidalNumbersSuf_1B dvd_1_left dvd_pos_nat gr0I linorder_neqE_nat  nat_dvd_not_less numeral_2_eq_2)
@@ -145,8 +146,8 @@ proof -
     by (metis \<open>2 * n \<le> d\<^sup>2\<close> \<open>2 \<le> d\<close> \<open>d * e = n\<close> \<open>k = 2 * e\<close> less_le_trans mult.left_commute nat_mult_le_cancel_disj pos2 power2_eq_square)
   have \<open>even (d - k + 1)\<close> 
     using \<open>k = 2 * e\<close> \<open>k \<le> d\<close> \<open>odd d\<close> by auto
-  from this \<open>odd d\<close> obtain a::nat where \<open> 2*a  = d - k + 1\<close>  
-    by (metis evenE)
+  then   obtain a::nat where \<open> 2*a  = d - k + 1\<close>  
+    using  \<open>odd d\<close>  by (metis evenE)
   from \<open> 2*a  = d - k + 1\<close> \<open>k = 2 * e\<close>  \<open>d * e = n\<close> have \<open>k * (k + 2*a - 1) = 2*n\<close>
     by auto
   have \<open>a \<ge> 1\<close> 
@@ -171,12 +172,12 @@ proof -
     using \<open>d * e = n\<close> mult.left_commute by blast
   from \<open>d*(2*e) = 2*n\<close> \<open>d^2 \<le> 2*n\<close>  have \<open>2*e \<ge> d\<close> 
     by (metis \<open>2 \<le> d\<close> less_le_trans nat_mult_le_cancel_disj pos2 power2_eq_square)  
-    obtain k where \<open>k = d\<close>
-      by simp
-    have \<open>2*e  \<ge> k - 1 \<close> 
-      using \<open>d \<le> 2 * e\<close> \<open>k = d\<close> by linarith
-    have \<open>even (2*e - k - 1)\<close> 
-      by (simp add: \<open>k = d\<close> \<open>odd d\<close>)
+  obtain k where \<open>k = d\<close>
+    by simp
+  have \<open>2*e  \<ge> k - 1 \<close> 
+    using \<open>d \<le> 2 * e\<close> \<open>k = d\<close> by linarith
+  have \<open>even (2*e - k - 1)\<close> 
+    by (simp add: \<open>k = d\<close> \<open>odd d\<close>)
   obtain a where \<open>2*a = 2*e - k + 1\<close>  
     by (metis One_nat_def Suc_leI \<open>d \<le> 2 * e\<close> \<open>even (2 * e - k - 1)\<close> \<open>k = d\<close> \<open>odd d\<close> dvdE dvd_triv_left even_diff_nat le_neq_implies_less linorder_not_le zero_less_diff)
   have \<open>k \<ge> 2\<close> 
