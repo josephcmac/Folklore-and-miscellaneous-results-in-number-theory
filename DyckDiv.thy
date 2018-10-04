@@ -424,15 +424,15 @@ theorem ListEqCardPrefixDyckFun:
   using ListEqCardPrefixDyck  by metis
 
 definition DyckDiv :: \<open>nat\<Rightarrow>((DCHR list)\<Rightarrow>nat)\<close> where
-\<open>DyckDiv \<equiv> SOME F :: nat\<Rightarrow>((DCHR list)\<Rightarrow>nat). \<forall> n::nat. n \<ge> 1 \<longrightarrow> (F n) ` (DyckTypeP n) = (ODiv n) \<and> (\<forall> x y. length x < length y \<and> x \<in> (DyckTypeP n) \<and> y \<in> (DyckTypeP n) \<longrightarrow> (F n) x < (F n) y) \<close>
+  \<open>DyckDiv \<equiv> SOME F :: nat\<Rightarrow>((DCHR list)\<Rightarrow>nat). \<forall> n::nat. n \<ge> 1 \<longrightarrow> (F n) ` (DyckTypeP n) = (ODiv n) \<and> (\<forall> x y. length x < length y \<and> x \<in> (DyckTypeP n) \<and> y \<in> (DyckTypeP n) \<longrightarrow> (F n) x < (F n) y) \<close>
 
 lemma DyckDiv1:
-\<open>(n::nat) \<ge> 1 \<Longrightarrow> (DyckDiv n) ` (DyckTypeP n) = (ODiv n)\<close>
+  \<open>(n::nat) \<ge> 1 \<Longrightarrow> (DyckDiv n) ` (DyckTypeP n) = (ODiv n)\<close>
   using DyckDiv_def ListEqCardPrefixDyckFun
   by (smt DyckTypeP_def le_trans order_refl someI_ex)
 
 lemma DyckDiv2:
-\<open>(n::nat) \<ge> 1 \<Longrightarrow> \<forall> x y. length x < length y \<and> x \<in> (DyckTypeP n) \<and> y \<in> (DyckTypeP n) \<longrightarrow> (DyckDiv n) x < (DyckDiv n) y\<close>
+  \<open>(n::nat) \<ge> 1 \<Longrightarrow> \<forall> x y. length x < length y \<and> x \<in> (DyckTypeP n) \<and> y \<in> (DyckTypeP n) \<longrightarrow> (DyckDiv n) x < (DyckDiv n) y\<close>
   using DyckDiv_def ListEqCardPrefixDyckFun
   by (smt DyckTypeP_def dual_order.refl order.trans someI_ex)
 

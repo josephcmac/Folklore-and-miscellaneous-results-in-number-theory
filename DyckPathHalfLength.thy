@@ -17,14 +17,14 @@ theory DyckPathHalfLength
 imports Complex_Main ErdosNicolasOdd DyckPathHeight
 
 begin
- 
+
 lemma DyckListDCHRLengthAbstrEqDyckPHeight0Set:
- \<open>DyckPHeight w = 0 \<Longrightarrow> (card (DyckSetDCHR up w)) = (card (DyckSetDCHR down w)) \<close>
+  \<open>DyckPHeight w = 0 \<Longrightarrow> (card (DyckSetDCHR up w)) = (card (DyckSetDCHR down w)) \<close>
   using DyckListDCHRLengthAbstrEqDyckPHeight0SetForm 
   by simp
 
 lemma DyckListDCHRLengthAbstrEqDyckPHeight0:
- \<open>DyckPHeight w = 0 \<Longrightarrow> (length (DyckListDCHR up w)) = (length (DyckListDCHR down w)) \<close>
+  \<open>DyckPHeight w = 0 \<Longrightarrow> (length (DyckListDCHR up w)) = (length (DyckListDCHR down w)) \<close>
 proof-
   assume \<open>DyckPHeight w = 0\<close>
   then have \<open>(card (DyckSetDCHR up w)) = (card (DyckSetDCHR down w))\<close> using DyckListDCHRLengthAbstrEqDyckPHeight0Set
@@ -38,7 +38,7 @@ proof-
 qed
 
 lemma DyckListDCHRLengthAbstrEq:
- \<open>DyckPath w \<Longrightarrow> (length (DyckListDCHR up w)) = (length (DyckListDCHR down w)) \<close>
+  \<open>DyckPath w \<Longrightarrow> (length (DyckListDCHR up w)) = (length (DyckListDCHR down w)) \<close>
 proof-
   assume \<open>DyckPath w\<close>
   then have \<open>DyckPHeight w = 0\<close>
@@ -48,7 +48,7 @@ proof-
 qed
 
 lemma DyckListDCHRLengthAbstrUnion:
- \<open>  (DyckSetDCHR up w)\<union>(DyckSetDCHR down w) = {j | j :: nat. j < length w} \<close>
+  \<open>  (DyckSetDCHR up w)\<union>(DyckSetDCHR down w) = {j | j :: nat. j < length w} \<close>
 proof-
   have \<open> (DyckSetDCHR up w)\<union>(DyckSetDCHR down w) = {j | j :: nat. (j < length w \<and> w ! j = up) \<or>  (j < length w \<and> w ! j = down) }\<close>
     by (smt Collect_cong DyckSetDCHR_def Un_def mem_Collect_eq)
@@ -59,12 +59,12 @@ proof-
 qed
 
 lemma DyckListDCHRLengthAbstrInter:
- \<open>  (DyckSetDCHR up w)\<inter>(DyckSetDCHR down w) = {} \<close>
+  \<open>  (DyckSetDCHR up w)\<inter>(DyckSetDCHR down w) = {} \<close>
   by (metis (mono_tags, lifting) DCHR.distinct(1) DyckSetDCHR_def Int_emptyI mem_Collect_eq)
 
 
 lemma DyckListDCHRLengthAbstrCardSum:
- \<open>  card (DyckSetDCHR up w) + card (DyckSetDCHR down w) = length w \<close>
+  \<open>  card (DyckSetDCHR up w) + card (DyckSetDCHR down w) = length w \<close>
 proof-
   have \<open>card  {j | j::nat. j < length w} = length w\<close> 
     by auto
@@ -82,9 +82,9 @@ proof-
 qed
 
 lemma DyckListDCHRLengthAbstrSum:
- \<open> (length (DyckListDCHR up w))+(length (DyckListDCHR down w)) = length w \<close>
+  \<open> (length (DyckListDCHR up w))+(length (DyckListDCHR down w)) = length w \<close>
 proof-
- have \<open>card  {j | j::nat. j < length w} = length w\<close> 
+  have \<open>card  {j | j::nat. j < length w} = length w\<close> 
     by auto
   then have \<open>finite {j | j :: nat. j < length w}\<close> by simp
   have  \<open> (DyckSetDCHR up w)\<union>(DyckSetDCHR down w) = {j | j :: nat. j < length w} \<close>
@@ -109,7 +109,7 @@ proof-
 qed
 
 theorem DyckListDCHRLengthAbstr:
- \<open>DyckPath w \<Longrightarrow> 2*length (DyckListDCHR c w) = length w \<close>
+  \<open>DyckPath w \<Longrightarrow> 2*length (DyckListDCHR c w) = length w \<close>
   by (metis (full_types) DCHR.exhaust DyckListDCHRLengthAbstrEq DyckListDCHRLengthAbstrSum mult_2)
 
 
