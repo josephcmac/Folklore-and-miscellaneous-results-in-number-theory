@@ -17,6 +17,17 @@ imports Complex_Main fromNumberTheoryToLanguageTheory
 
 begin
 
+section  {* Definitions *}
+
+definition ODiv :: \<open>nat \<Rightarrow> nat set\<close> where
+  \<open>ODiv \<equiv> \<lambda> n. {d | d::nat. d dvd n \<and> odd d}\<close>
+
+definition sigmaOdd :: \<open>nat \<Rightarrow> nat\<close>
+  where \<open>sigmaOdd \<equiv> \<lambda> n. card (ODiv n)\<close>
+
+
+section {* Auxiliary Results *}
+
 lemma DyckTypeDivLengthJsignsARec: 
   assumes \<open> length ( SchroederToDyck w ) = (card {j | j :: nat. j < length w \<and> w ! j \<noteq> STRANGE})\<close>
   shows \<open> length ( SchroederToDyck (a # w) ) = (card {j | j :: nat. j < length (a # w) \<and> (a # w) ! j \<noteq> STRANGE})\<close>
@@ -365,12 +376,15 @@ lemma DyckTypeDivLength:
   using fromJdvdToDvd fromJsignsToJdvd DyckTypeDivLengthJsigns
   by auto
 
-definition sigmaOdd :: \<open>nat \<Rightarrow> nat\<close>
-  where \<open>sigmaOdd \<equiv> \<lambda> n. card {d | d :: nat. d dvd n \<and> odd d}\<close>
+
+lemma DyckTypeDivLengthsigmaOdd: 
+  \<open>n \<ge> 1 \<Longrightarrow> length (DyckType n) = 2*(sigmaOdd n)\<close>
+  using DyckTypeDivLength sigmaOdd_def 
+  by (simp add: sigmaOdd_def ODiv_def)
 
 proposition DyckTypeDivLengthArithmFun : 
   \<open>ArithmFun length \<doteq> ( \<lambda> n. 2*(sigmaOdd n) )\<close>
-  using DyckTypeDivLength sigmaOdd_def
-  by (simp add: sigmaOdd_def DyckTypeToArithmFunC)
+  using DyckTypeDivLength  
+  by (simp add: sigmaOdd_def ODiv_def DyckTypeToArithmFunC)
 
 end
