@@ -14,7 +14,7 @@ theorem DyckListDCHRLengthAbstr:
 
 theory DyckPathHalfLength
 
-imports Complex_Main ErdosNicolasOdd DyckPathHeight
+imports Complex_Main  DyckPathHeight
 
 begin
 
