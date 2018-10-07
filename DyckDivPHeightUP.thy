@@ -1,5 +1,5 @@
 (*
-Title: The frequency of a letter in a Dyck paths and the odd divisors 
+Title: The frequency of a letter in a Dyck paths and the odd divisors  (PART I)
 Author: Jose Manuel Rodriguez Caballero
 
 We prove the following result:
