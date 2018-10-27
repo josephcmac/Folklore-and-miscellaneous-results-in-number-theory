@@ -47,11 +47,11 @@ lemma TrapezoidalNumbersNec2_5recA:
   "\<forall> d::nat. (odd t \<and> d*(t::nat) = 2^(r::nat) \<longrightarrow> t = 1)"
 proof (induction r)
   case 0
-  then show ?case 
+  thus ?case 
     by simp
 next
   case (Suc r)
-  then show ?case 
+  thus ?case 
     using TrapezoidalNumbersNec2_5recA1729 by blast
 qed
 
@@ -60,38 +60,38 @@ lemma TrapezoidalNumbersNec2_5rec:
   shows "(d dvd 2 ^ r \<Longrightarrow> \<exists>k. d = 2 ^ k) \<Longrightarrow> ( d dvd 2 ^ Suc r \<Longrightarrow> \<exists>k. d = 2 ^ k)"
 proof (cases "d = 2^(Suc r)")
   case True
-  then show ?thesis by blast
+  thus ?thesis by blast
 next
   case False
   assume "d dvd 2 ^ r \<Longrightarrow> \<exists>k. d = 2 ^ k"
   assume "d dvd 2 ^ Suc r"
   from \<open>d dvd 2 ^ Suc r\<close> obtain t::nat where \<open>d*t = 2 ^ Suc r\<close> 
     by (metis dvdE) 
-  then have \<open>t \<ge> 2\<close> 
+  hence \<open>t \<ge> 2\<close> 
     by (metis False One_nat_def Suc_leI le_antisym mult_1_right nat_one_le_power not_less_eq_eq numeral_2_eq_2 one_le_mult_iff pos2)
   have \<open>t dvd  2 ^ Suc r\<close> 
     by (metis \<open>d * t = 2 ^ Suc r\<close> dvd_triv_right)
   from  \<open>d*t = 2 ^ Suc r\<close> have "even t \<or> even d" 
     by (metis False One_nat_def TrapezoidalNumbersNec2_5recA mult.right_neutral)
-  then show ?thesis
+  thus ?thesis
   proof (cases "even t")
     case True
-    then show ?thesis 
+    thus ?thesis 
     proof -
       obtain nn :: "nat \<Rightarrow> nat \<Rightarrow> nat" where
         "t = Suc (Suc 0) * nn t (Suc (Suc 0))"
         by (metis True dvd_def numeral_2_eq_2)
-      then have "Suc (Suc 0) * 2 ^ r = d * (Suc (Suc 0) * nn t (Suc (Suc 0)))"
+      hence "Suc (Suc 0) * 2 ^ r = d * (Suc (Suc 0) * nn t (Suc (Suc 0)))"
         by (simp add: \<open>d * t = 2 ^ Suc r\<close>)
-      then have "\<exists>n. 2 ^ r = d * n"
+      hence "\<exists>n. 2 ^ r = d * n"
         by (metis Suc_neq_Zero mult_left_cancel semiring_normalization_rules(19))
-      then show ?thesis
+      thus ?thesis
         using \<open>d dvd 2 ^ r \<Longrightarrow> \<exists>k. d = 2 ^ k\<close> dvd_def by blast
     qed
   next
     case False
-    then have \<open>odd t\<close> by simp
-    then show ?thesis 
+    hence \<open>odd t\<close> by simp
+    thus ?thesis 
       by (metis TrapezoidalNumbersNec2_5recA \<open>d * t = 2 ^ Suc r\<close> mult_1_right)
   qed
 qed
@@ -101,11 +101,11 @@ lemma TrapezoidalNumbersNec2_5:
   shows "d dvd 2^r \<Longrightarrow> \<exists> k. d = 2^k"
 proof (induction r)
   case 0
-  then show ?case 
+  thus ?case 
     using TrapezoidalNumbersNec2_5base by blast
 next
   case (Suc r)
-  then show ?case 
+  thus ?case 
     using TrapezoidalNumbersNec2_5rec by blast
 qed
 
@@ -135,7 +135,7 @@ qed
 lemma TrapezoidalNumbersNec2_2: "\<exists> d. d \<ge> 2 \<and> d dvd (n::nat) \<and> odd d \<Longrightarrow>  \<not> (\<exists> r. n = 2^r)"
 proof (rule classical)
   assume "\<not> (\<not> (\<exists> r. n = 2^r))"
-  then have "\<exists> r. n = 2^r" by simp
+  hence "\<exists> r. n = 2^r" by simp
   then obtain r :: nat where "n = 2^r" by blast
   assume "\<exists> d. d \<ge> 2 \<and> d dvd (n::nat) \<and> odd d"
   then obtain d::nat where "d \<ge> 2" and "d dvd n" and "odd d" by blast
@@ -159,29 +159,29 @@ qed
 lemma TrapezoidalNumbersSuf_1C_BOUNDEDNonQ: "\<forall>  n. (n \<le> (N::nat) \<longrightarrow> (n \<noteq> 0 \<longrightarrow>  ( \<exists> r t.  n = 2^r*t \<and> odd t ) ))"
 proof (induction N)
   case 0
-  then show ?case
+  thus ?case
     by blast
 next
   case (Suc N)
   have \<open>\<exists> r t.  Suc N = 2^r*t \<and> odd t\<close>
   proof (cases \<open>odd (Suc N)\<close>)
     case True
-    then show ?thesis 
+    thus ?thesis 
       using TrapezoidalNumbersSuf_1C_base by blast
   next
     case False
-    then have \<open>even (Suc N)\<close> 
+    hence \<open>even (Suc N)\<close> 
       by auto
     obtain m where \<open>2*m = Suc N\<close> 
       by (metis \<open>even (Suc N)\<close> dvdE)
     from \<open>2*m = Suc N\<close> have \<open>m \<le> N\<close> 
       by linarith
-    then have \<open> \<exists> r t.  m = 2^r*t \<and> odd t \<close> 
+    hence \<open> \<exists> r t.  m = 2^r*t \<and> odd t \<close> 
       using Suc.IH \<open>2 * m = Suc N\<close> by auto
-    then show ?thesis 
+    thus ?thesis 
       by (metis \<open>2 * m = Suc N\<close> power_commutes semiring_normalization_rules(18) semiring_normalization_rules(28))
   qed
-  then show ?case 
+  thus ?case 
     by (simp add: Suc.IH le_Suc_eq)
 qed
 
@@ -205,7 +205,7 @@ proof-
   from  \<open>v dvd n\<close> \<open>odd v\<close>  \<open>\<forall> d. d \<ge> 2 \<and> d dvd n \<longrightarrow> even d\<close> 
   have \<open>v = 1\<close> 
     by (metis One_nat_def Suc_leI add.commute add.right_neutral add_right_mono neq0_conv odd_two_times_div_two_succ one_add_one)
-  then show ?thesis 
+  thus ?thesis 
     by (simp add: \<open>n = 2 ^ u * v\<close>)
 qed
 
@@ -265,7 +265,7 @@ proof-
   from \<open>2^u*v = 2^uu*vv\<close> \<open>u + k = uu\<close> 
   have \<open>v = 2^k*vv\<close> 
     by (smt Groups.mult_ac(1) nonzero_mult_div_cancel_left power_add power_eq_0_iff rel_simps(76))
-  then show ?thesis using \<open>odd v\<close> \<open>odd vv\<close> 
+  thus ?thesis using \<open>odd v\<close> \<open>odd vv\<close> 
     using preUniqnessOddEven_OddPartOneSide by blast
 qed
 
@@ -357,13 +357,13 @@ lemma preUniqEvenPartXr43ur93n:
   shows \<open> f n = y n\<close>
 proof(cases \<open>n = 0\<close>)
   case True
-  then show ?thesis 
+  thus ?thesis 
     by (simp add: assms(3) assms(4))
 next
   case False
-  then have \<open>n \<ge> Suc 0\<close> 
+  hence \<open>n \<ge> Suc 0\<close> 
     using not_less_eq_eq by blast
-  then show ?thesis 
+  thus ?thesis 
     using One_nat_def assms(3) assms(4) assms(5) assms(6) assms(7) assms(8) preUniqEvenPartS by presburger
 qed
 
@@ -398,7 +398,7 @@ proof (rule classical)
     using One_nat_def assms(3) assms(4) assms(5) assms(6) assms(7) assms(8) preUniqEvenPartS by presburger
   from  \<open>f n \<noteq> y n \<close>  \<open>f n = y n\<close>  have False 
     by blast
-  then show ?thesis by blast
+  thus ?thesis by blast
 qed
 
 lemma UniqEvenPartXr43ur93: \<open>\<And>f y g ga.
@@ -454,7 +454,7 @@ proof-
     using \<open>n \<noteq> 0\<close> by presburger
   from \<open>S \<noteq> {}\<close> \<open>finite S\<close> \<open>d = Max S\<close> have \<open> d dvd n \<and> odd d \<close>
     using Max_in \<open>S = {d |d. d dvd n \<and> odd d}\<close> by auto
-  then have \<open>odd d\<close> by blast 
+  hence \<open>odd d\<close> by blast 
   from \<open>odd d\<close>  \<open>d = OddPart n\<close> show ?thesis 
     by blast
 qed
@@ -468,7 +468,7 @@ lemma Exp2L1QQQ:
 proof(rule classical)
   assume \<open>n \<ge> 1\<close>
   assume \<open>\<not> (finite {e |e :: nat.  2^e dvd n})\<close>
-  then have \<open>infinite {e |e :: nat.  2^e dvd n}\<close> 
+  hence \<open>infinite {e |e :: nat.  2^e dvd n}\<close> 
     by blast
   obtain e :: nat where \<open>e \<in> {e |e :: nat.  2^e dvd n}\<close> and \<open>e > n\<close>
     by (metis \<open>infinite {e |e. 2 ^ e dvd n}\<close> finite_nat_set_iff_bounded_le not_le)
@@ -478,7 +478,7 @@ proof(rule classical)
     using less_trans of_nat_less_two_power by auto
   from \<open>n \<ge> 1\<close> \<open>2^e dvd n\<close> \<open>2^e > n \<close>  have False 
     by auto
-  then show ?thesis 
+  thus ?thesis 
     by simp
 qed
 
@@ -499,7 +499,7 @@ proof-
     by blast
   have \<open>2^e dvd n\<close> 
     using Max_in \<open>S = {e |e. 2 ^ e dvd n}\<close> \<open>S \<noteq> {}\<close> \<open>e = Max S\<close> \<open>finite S\<close> by auto
-  then show ?thesis 
+  thus ?thesis 
     by (metis  Exp2_def \<open>S = {e |e. 2 ^ e dvd n}\<close> \<open>e = Max S\<close> \<open>n \<noteq> 0\<close>)
 qed
 
@@ -523,9 +523,9 @@ proof-
     using \<open>S = {e |e. 2 ^ e dvd n}\<close> assms(2) by blast 
   have \<open>e \<le> ee\<close> 
     by (simp add: \<open>e \<in> S\<close> \<open>ee = Max S\<close> \<open>finite S\<close>)
-  then have \<open>e \<le> Exp2 n\<close> using \<open>ee = Exp2 n\<close> 
+  hence \<open>e \<le> Exp2 n\<close> using \<open>ee = Exp2 n\<close> 
     by blast
-  then show ?thesis by blast
+  thus ?thesis by blast
 qed
 
 lemma preExp2OddPartChar2XA:
@@ -534,17 +534,17 @@ lemma preExp2OddPartChar2XA:
   shows \<open> odd k  \<close>
 proof (rule classical)
   assume \<open>\<not> (odd k)\<close>
-  then have \<open>even k\<close> by blast
+  hence \<open>even k\<close> by blast
   then obtain t :: nat where \<open>k = 2*t\<close> by blast
-  then have \<open>n = 2^((Exp2 n)+1)*t\<close> 
+  hence \<open>n = 2^((Exp2 n)+1)*t\<close> 
     using assms(2) by auto
-  then have \<open>2^((Exp2 n)+1) dvd n\<close> 
+  hence \<open>2^((Exp2 n)+1) dvd n\<close> 
     by (metis dvd_triv_left)
-  then have \<open>(Exp2 n)+1 \<le> Exp2 n\<close> 
+  hence \<open>(Exp2 n)+1 \<le> Exp2 n\<close> 
     using Exp2L2 assms(1) by blast
-  then have False 
+  hence False 
     by simp
-  then show ?thesis 
+  thus ?thesis 
     by simp
 qed
 
@@ -572,8 +572,8 @@ proof-
     using \<open>n \<noteq> 0\<close> by presburger
   from \<open>S \<noteq> {}\<close> \<open>finite S\<close> \<open>d = Max S\<close> have \<open> d dvd n \<and> odd d \<close>
     using Max_in \<open>S = {d |d. d dvd n \<and> odd d}\<close> by auto
-  then have \<open>d dvd n\<close> by blast
-  then show ?thesis using \<open>d = Max S\<close> 
+  hence \<open>d dvd n\<close> by blast
+  thus ?thesis using \<open>d = Max S\<close> 
     using \<open>d = OddPart n\<close> by auto
 qed
 
@@ -594,10 +594,10 @@ proof-
     using \<open>n \<noteq> 0\<close> by presburger
   from \<open>S \<noteq> {}\<close> \<open>finite S\<close> \<open>d = Max S\<close> have \<open> d dvd n \<and> odd d \<close>
     using Max_in \<open>S = {d |d. d dvd n \<and> odd d}\<close> by auto
-  then have \<open>odd d\<close> by blast 
+  hence \<open>odd d\<close> by blast 
   have \<open>k \<le> d\<close> 
     using Max_ge \<open>S = {d |d. d dvd n \<and> odd d}\<close> \<open>d = Max S\<close> \<open>finite S\<close> assms(2) assms(3) by blast
-  then show ?thesis 
+  thus ?thesis 
     by (simp add: \<open>d = OddPart n\<close>)
 qed
 
@@ -607,11 +607,11 @@ lemma OddPartL2S:
   shows \<open>k = 1\<close>
 proof(rule classical)
   assume \<open>\<not>(k = 1)\<close>
-  then have \<open>k = 0 \<or> k \<ge> 2\<close> 
+  hence \<open>k = 0 \<or> k \<ge> 2\<close> 
     by linarith
   have \<open>k \<noteq> 0\<close> 
     using assms(4) by presburger
-  then have \<open>k \<ge> 2\<close> 
+  hence \<open>k \<ge> 2\<close> 
     using \<open>k = 0 \<or> 2 \<le> k\<close> by blast
   obtain w :: nat where \<open>w = k * (OddPart n)\<close> 
     by blast
@@ -624,7 +624,7 @@ proof(rule classical)
   have \<open>w \<le> OddPart n\<close> 
     using OddPartL1X1 \<open>odd w\<close> \<open>w dvd n\<close> assms(1) by blast
   from  \<open>w > OddPart n\<close> \<open>w \<le> OddPart n\<close>  have False by simp
-  then show ?thesis by blast
+  thus ?thesis by blast
 qed
 
 
@@ -649,7 +649,7 @@ proof-
   from  \<open>n \<ge> 1\<close>  \<open>n = d * (OddPart n)\<close>
   have \<open>\<forall> k :: nat. k dvd d \<and> odd k \<longrightarrow> k = 1\<close> 
     using OddPartL2 by blast
-  then show ?thesis using DFSFSfre34 \<open>n \<ge> 1\<close> 
+  thus ?thesis using DFSFSfre34 \<open>n \<ge> 1\<close> 
     by (metis assms(2) dvd_imp_le mult_is_0 neq0_conv one_dvd)
 qed
 
@@ -665,7 +665,7 @@ proof-
     by (metis dvd_div_mult_self)
   then obtain e :: nat where \<open>d = 2^e\<close> 
     using OddPartL3 assms by blast
-  then show ?thesis 
+  thus ?thesis 
     using \<open>n = d * OddPart n\<close> by blast
 qed
 
@@ -681,9 +681,9 @@ proof-
   from  \<open>n = 2^(Exp2 n)*k\<close> \<open>n = 2^e*(OddPart n)\<close> \<open>odd k\<close> \<open>odd (OddPart n)\<close> 
   have \<open>(OddPart n) = k\<close> 
     by (metis UniqnessOddEven)
-  then have \<open>2^(Exp2 n) = 2^e\<close> 
+  hence \<open>2^(Exp2 n) = 2^e\<close> 
     by (metis UniqnessOddEven \<open>n = 2 ^ Exp2 n * k\<close> \<open>n = 2 ^ e * OddPart n\<close> \<open>odd (OddPart n)\<close>)
-  then show ?thesis 
+  thus ?thesis 
     by (smt \<open>n = 2 ^ e * OddPart n\<close>)
 qed
 
@@ -709,7 +709,7 @@ lemma Exp2ValueAt1: \<open>Exp2 (1::nat) = 0\<close>
 proof-
   have \<open>(1::nat) = 2^(Exp2 (1::nat))*OddPart (1::nat)\<close> 
     using preExp2OddPartChar by blast
-  then show ?thesis 
+  thus ?thesis 
     by simp
 qed
 
@@ -717,7 +717,7 @@ lemma OddPartValueAt1: \<open>OddPart (1::nat) = 1\<close>
 proof-
   have \<open>(1::nat) = 2^(Exp2 (1::nat))*OddPart (1::nat)\<close> 
     using preExp2OddPartChar by blast
-  then show ?thesis 
+  thus ?thesis 
     by simp
 qed
 

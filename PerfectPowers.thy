@@ -51,7 +51,7 @@ proof (cases \<open>PerfectPower (K+2)\<close>)
   obtain s ::nat where \<open>s = q * v\<close> by auto
   from  \<open>K+2 = u^v\<close> and \<open>u = p^q\<close> have  \<open>K+2 = (p^q)^v\<close> 
     by blast
-  then have \<open>K+2 = p^s\<close> using  \<open>s = q * v\<close>
+  hence \<open>K+2 = p^s\<close> using  \<open>s = q * v\<close>
     by (simp add: semiring_normalization_rules(31))
   have \<open>( \<exists> u v::nat. K+2 = u^v \<and> u \<ge> 2 \<and> v \<ge> 1 \<and> \<not>(PerfectPower u))\<close> 
     using \<open>1 \<le> q\<close> \<open>2 \<le> p\<close> \<open>2 \<le> v\<close> \<open>K + 2 = p ^ s\<close> \<open>\<not> PerfectPower p\<close> \<open>s = q * v\<close> by fastforce
@@ -59,7 +59,7 @@ proof (cases \<open>PerfectPower (K+2)\<close>)
     using \<open>\<exists>u v. K + 2 = u ^ v \<and> 2 \<le> u \<and> 1 \<le> v \<and> \<not> PerfectPower u\<close> by blast
 next
   case False
-  then show ?thesis 
+  thus ?thesis 
     by (metis le_add2 le_numeral_extra(4) power_one_right)
 qed
 
@@ -68,11 +68,11 @@ lemma PPRepresentationRefK :
   shows \<open>\<forall> k. (k < K \<longrightarrow> ( \<exists> u v::nat. k+2 = u^v \<and> u \<ge> 2 \<and> v \<ge> 1 \<and> \<not>(PerfectPower u)) )\<close>
 proof (induction K)
   case 0
-  then show ?case 
+  thus ?case 
     using PPRepresentationBase by force
 next
   case (Suc K)
-  then show ?case 
+  thus ?case 
     using PPRepresentationRefKInd by auto
 qed
 
@@ -112,7 +112,7 @@ proof-
     using \<open>b dvd a\<close> dvdE by blast
   from  \<open>a^p = b^p * c\<close> have  \<open>b^p*k^p = b^p * c\<close> 
     by (metis \<open>b * k = a\<close> power_mult_distrib)
-  then show ?thesis
+  thus ?thesis
     using assms(2) by auto
 qed
 
@@ -120,9 +120,9 @@ lemma nonPerfectPowerChar : \<open>(n::nat) \<ge> 2 \<Longrightarrow> \<not>(Per
 proof-
   assume \<open>n \<ge> 2\<close>
   assume \<open>\<not>(PerfectPower n)\<close>
-  then have \<open>\<not> (\<exists> u v::nat. n = u^v \<and> u \<ge> 2 \<and> v \<ge> 2)\<close> 
+  hence \<open>\<not> (\<exists> u v::nat. n = u^v \<and> u \<ge> 2 \<and> v \<ge> 2)\<close> 
     by (meson PerfectPower_def)
-  then have \<open>\<forall> u v::nat. n \<noteq> u^v \<or> u \<le> 1 \<or> v \<le> 1\<close> 
+  hence \<open>\<forall> u v::nat. n \<noteq> u^v \<or> u \<le> 1 \<or> v \<le> 1\<close> 
     by (simp add: not_less_eq_eq)
   assume \<open> n = u^v \<close>
   from  \<open> n = u^v \<close>  \<open>\<forall> u v::nat. n \<noteq> u^v \<or> u \<le> 1 \<or> v \<le> 1\<close>  have \<open> u \<le> 1 \<or> v \<le> 1\<close> 
@@ -135,7 +135,7 @@ proof-
     by (metis One_nat_def nat_power_eq_Suc_0_iff numeral_le_one_iff semiring_norm(69))
   from \<open>v \<noteq> 0 \<close>   \<open>v \<le> 1\<close>  have \<open>v = 1\<close> 
     using le_neq_implies_less by blast
-  then show ?thesis 
+  thus ?thesis 
     by blast
 qed
 
@@ -156,11 +156,11 @@ proof-
     using BezoutNat assms(11) by presburger
   from \<open>n = u^v\<close>  \<open>n = p^q\<close> have \<open>u^v = p^q\<close>
     by blast
-  then have \<open>u^(a*v) = p^(a*q)\<close> 
+  hence \<open>u^(a*v) = p^(a*q)\<close> 
     by (metis mult.commute semiring_normalization_rules(31))
-  then have \<open>u^(a*v) = p^(b*v + 1)\<close> 
+  hence \<open>u^(a*v) = p^(b*v + 1)\<close> 
     by (simp add: \<open>a * q = b * v + 1\<close>)
-  then have  \<open>(u^a)^v = (p^b)^v * p\<close> 
+  hence  \<open>(u^a)^v = (p^b)^v * p\<close> 
     by (simp add: semiring_normalization_rules(31))
   then obtain X Y :: nat where  \<open>X = u^a\<close> and  \<open>Y = p^b\<close> 
     by simp
@@ -205,7 +205,7 @@ proof-
   proof -
     have "d * gcd qq vv dvd d"
       by (metis (no_types) \<open>gcd q v = d\<close> \<open>qq * d = q\<close> \<open>vv * d = v\<close> dvd_refl gcd_mult_distrib_nat semiring_normalization_rules(7))
-    then show ?thesis
+    thus ?thesis
       by (metis (no_types) \<open>qq * d = q\<close> assms(8) dvd_mult_cancel2 gcd.bottom_left_bottom le_less_trans nat_0_less_mult_iff nat_mult_eq_1_iff order.not_eq_order_implies_strict semiring_normalization_rules(7) zero_le)
   qed
   from \<open>n = p^q\<close> and \<open>n = u^v\<close> have \<open>p^q = u^v\<close>

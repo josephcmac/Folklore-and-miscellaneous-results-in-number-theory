@@ -63,7 +63,7 @@ proof-
     by simp
   from \<open>odd d\<close> have \<open>gcd d 2 = 1\<close> 
     by (metis dvd_antisym dvd_mult_cancel2 dvd_mult_div_cancel dvd_refl even_mult_iff gcd_dvd2 gcd_nat.absorb_iff2 nat_0_less_mult_iff pos2)
-  then have  \<open>d dvd ((2::nat)^k)\<close> using \<open>d dvd 2*((2::nat)^k)\<close> 
+  hence  \<open>d dvd ((2::nat)^k)\<close> using \<open>d dvd 2*((2::nat)^k)\<close> 
     using coprime_dvd_mult_right_iff by blast
   then  show ?thesis 
     using assms(2) assms(3) by blast
@@ -74,11 +74,11 @@ lemma TribPow24234qweaBBBOddTRIVIALQ:
   shows \<open>\<forall> d::nat. d dvd ((2::nat)^k) \<and> odd d \<longrightarrow> d = 1\<close>
 proof (induction k)
   case 0
-  then show ?case 
+  thus ?case 
     by simp
 next
   case (Suc k)
-  then show ?case 
+  thus ?case 
     using TribPow24234qweaBBBOddTRIVIALQT by blast
 qed
 
@@ -99,7 +99,7 @@ proof-
     by simp
   from  \<open>d*e = 2*(2::nat)^k\<close> \<open>2*ee = e\<close> have \<open>d*ee = (2::nat)^k\<close> 
     by (metis Suc_mult_cancel1 numeral_2_eq_2 semiring_normalization_rules(19))
-  then show ?thesis 
+  thus ?thesis 
     by (metis dvd_triv_left)
 qed
 
@@ -115,13 +115,13 @@ lemma Pow2DivLQRec:
   shows \<open>\<exists> j :: nat. d = (2::nat)^j\<close> 
 proof(cases \<open>d = (2::nat)^(Suc k)\<close>)
   case True
-  then show ?thesis 
+  thus ?thesis 
     by blast
 next
   case False
-  then have \<open>d dvd ((2::nat)^k)\<close> using \<open>d dvd ((2::nat)^(Suc k))\<close> 
+  hence \<open>d dvd ((2::nat)^k)\<close> using \<open>d dvd ((2::nat)^(Suc k))\<close> 
     using TribPow24234qwea by blast
-  then show ?thesis 
+  thus ?thesis 
     by (simp add: assms(2))
 qed
 
@@ -130,11 +130,11 @@ lemma Pow2DivLQ:
   shows \<open>\<forall> d::nat. d dvd ((2::nat)^k) \<longrightarrow> (\<exists> j :: nat. d = (2::nat)^j)\<close>
 proof (induction k)
   case 0
-  then show ?case 
+  thus ?case 
     by (metis nat_dvd_1_iff_1 power_0)
 next
   case (Suc k)
-  then show ?case 
+  thus ?case 
     using Pow2DivLQRec by blast
 qed
 
@@ -169,7 +169,7 @@ proof-
     by (simp add: ConsecDiv_def)
   then   have \<open>\<forall> d:: nat. d dvd (2^(Suc k)) \<and> (d \<noteq> 2^(Suc k) ) \<longrightarrow> d \<le> u \<or> v \<le> d \<close>
     by blast
-  then have \<open>\<forall> d:: nat. d dvd (2^k) \<longrightarrow> d \<le> u \<or> v \<le> d \<close> 
+  hence \<open>\<forall> d:: nat. d dvd (2^k) \<longrightarrow> d \<le> u \<or> v \<le> d \<close> 
     by (simp add: \<open>\<forall>d. d dvd 2 ^ Suc k \<longrightarrow> d \<le> u \<or> v \<le> d\<close>)
   have \<open>u dvd (2^( k))\<close> 
     by (metis Pow2DivL \<open>u < v\<close> \<open>u dvd 2 ^ Suc k\<close> \<open>v dvd 2 ^ Suc k\<close> dvd_antisym dvd_power_le even_numeral  nat_dvd_not_less not_less_eq_eq zero_less_numeral zero_less_power)
@@ -187,11 +187,11 @@ lemma Pow2DivIndRecS:
   shows \<open>v = 2*u\<close>
 proof (cases \<open>v = 2^(Suc k)\<close>)
   case True
-  then show ?thesis 
+  thus ?thesis 
     using Pow2DivIndRecSTrivial assms(2) power_Suc by blast
 next
   case False
-  then show ?thesis 
+  thus ?thesis 
     using Pow2DivIndRecSTrivial2 assms(1) assms(2) by blast
 qed
 
@@ -200,11 +200,11 @@ lemma Pow2DivInd:
   shows \<open>( \<forall> u v. ConsecDiv (2^k) u v \<longrightarrow> v = 2*u)\<close>
 proof(induction k)
   case 0
-  then show ?case 
+  thus ?case 
     by (simp add: ConsecDiv_def)
 next
   case (Suc k)
-  then show ?case 
+  thus ?case 
     using Pow2DivIndRecS by blast
 qed
 
@@ -232,7 +232,7 @@ lemma Pow2DivConvOddTRGenY1:
   shows \<open> (x j) dvd n \<and> x j < v\<close>
 proof(induction j)
   case 0
-  then show ?case 
+  thus ?case 
     using assms(1) assms(2) by auto
 next
   case (Suc j)
@@ -256,11 +256,11 @@ lemma Pow2DivConvOddTRGenX1:
   shows \<open> x j > j\<close>
 proof(induction j)
   case 0
-  then show ?case 
+  thus ?case 
     by (simp add: assms(1))
 next
   case (Suc j)
-  then show ?case 
+  thus ?case 
     using Pow2DivConvOddTRGenY1 assms(1) assms(2) assms(3) assms(4) less_trans_Suc powOP.simps(2) by presburger
 qed
 
@@ -282,11 +282,11 @@ lemma Pow2DivConvOddTRGen:
   shows \<open>\<exists> u :: nat. ConsecDiv n u v\<close>
 proof (rule classical)
   assume \<open>\<not> ( \<exists> u :: nat. ConsecDiv n u v )\<close>
-  then have \<open>\<forall> u :: nat. \<not> (ConsecDiv n u v)\<close> 
+  hence \<open>\<forall> u :: nat. \<not> (ConsecDiv n u v)\<close> 
     by auto
-  then have \<open>\<forall> d :: nat. d dvd n \<and> d < v \<longrightarrow> (\<exists> e :: nat. e dvd n \<and> d < e \<and> e < v )\<close>
+  hence \<open>\<forall> d :: nat. d dvd n \<and> d < v \<longrightarrow> (\<exists> e :: nat. e dvd n \<and> d < e \<and> e < v )\<close>
     by (meson ConsecDiv_def assms(2) not_less)
-  then have \<open>\<forall> d :: nat. \<exists> e :: nat. ( d dvd n \<and> d < v \<longrightarrow> ( e dvd n \<and> d < e \<and> e < v ) )\<close>
+  hence \<open>\<forall> d :: nat. \<exists> e :: nat. ( d dvd n \<and> d < v \<longrightarrow> ( e dvd n \<and> d < e \<and> e < v ) )\<close>
     by blast
   from \<open>\<forall> d :: nat. \<exists> e :: nat. ( d dvd n \<and> d < v \<longrightarrow> ( e dvd n \<and> d < e \<and> e < v ) )\<close>
   obtain f :: \<open>nat \<Rightarrow> nat\<close> where \<open>\<forall> d :: nat.  ( d dvd n \<and> d < v \<longrightarrow> ( (f d) dvd n \<and> d < (f d) \<and> (f d) < v ) )\<close>
@@ -295,11 +295,11 @@ proof (rule classical)
     by simp
   have \<open>x n > n\<close> using Pow2DivConvOddTRGenX 
     using \<open>\<forall>d. d dvd n \<and> d < v \<longrightarrow> f d dvd n \<and> d < f d \<and> f d < v\<close> \<open>x \<equiv> powOP f\<close> assms(1) assms(2) by blast
-  then have \<open>(x n) dvd n\<close> 
+  hence \<open>(x n) dvd n\<close> 
     using Pow2DivConvOddTRGenY \<open>\<forall>d. d dvd n \<and> d < v \<longrightarrow> f d dvd n \<and> d < f d \<and> f d < v\<close> \<open>x \<equiv> powOP f\<close> assms(1) assms(2) by auto
   have False 
     by (metis  Suc_leI  \<open>\<forall>d. d dvd n \<and> d < v \<longrightarrow> (\<exists>e. e dvd n \<and> d < e \<and> e < v)\<close> \<open>n < x n\<close> \<open>x n dvd n\<close> assms(1) dvd_triv_left gr0I      less_or_eq_imp_le less_trans_Suc  mult_is_0 nat_dvd_not_less  not_le not_less_eq_eq numerals(2) old.nat.exhaust)
-  then show ?thesis 
+  thus ?thesis 
     by blast
 qed
 
@@ -361,7 +361,7 @@ proof-
     by (metis Pow2DivConvOddTRGen Suc_leI assms(1) dvd_pos_nat less_le_trans not_less_eq numerals(2) zero_less_one)
   from \<open>ConsecDiv n u e\<close> \<open>d < e\<close> \<open>d dvd n\<close> have \<open>d \<le> u\<close> 
     by (meson ConsecDiv_def leD)
-  then have \<open>e < 2*u\<close> using \<open>e < 2*d\<close> 
+  hence \<open>e < 2*u\<close> using \<open>e < 2*d\<close> 
     by linarith
   show ?thesis 
     using \<open>ConsecDiv n u e\<close> \<open>e < 2 * u\<close> by blast

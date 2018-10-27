@@ -62,29 +62,29 @@ proof (rule classical)
   obtain aa where "aa = real a" by simp
   assume "a \<ge> 1"
   assume "\<not> (k*(k+2*a-1) + 2*(a + k) = (Suc k)*((Suc k)+2*a-1))"
-  then have "(k*(k+2*a-1) + 2*(a + k) \<noteq> (k+1)*((k+1)+2*a-1))" by simp
-  then have "real  (k*(k+2*a-1) + 2*(a + k)) \<noteq> real ((k+1)*((k+1)+2*a-1))"
+  hence "(k*(k+2*a-1) + 2*(a + k) \<noteq> (k+1)*((k+1)+2*a-1))" by simp
+  hence "real  (k*(k+2*a-1) + 2*(a + k)) \<noteq> real ((k+1)*((k+1)+2*a-1))"
     using of_nat_eq_iff by blast
-  then have  "(kk*(kk+2*aa-1) + 2*(aa + kk)) \<noteq> ((kk+1)*((kk+1)+2*aa-1))"
+  hence  "(kk*(kk+2*aa-1) + 2*(aa + kk)) \<noteq> ((kk+1)*((kk+1)+2*aa-1))"
     using diff_mult_distrib2 by auto
-  then have False
+  hence False
     using \<open>k * (k + 2 * a - 1) + 2 * (a + k) \<noteq> (k + 1) * (k + 1 + 2 * a - 1)\<close> diff_mult_distrib2 by auto
-  then show ?thesis by blast
+  thus ?thesis by blast
 qed
 
 lemma TrapezoidalNumbersNec1: "a \<ge> 1 \<Longrightarrow> 2*TSum a k =  k*(k+2*a-1)"
 proof (induction k)
   case 0
-  then show ?case by auto
+  thus ?case by auto
 next
   case (Suc k)
-  then have "2*TSum a k + 2*(a + k) =  k*(k+2*a-1) + 2*(a + k)" by auto
-  then have "2*(TSum a k + (a + k)) =  k*(k+2*a-1) + 2*(a + k)" 
+  hence "2*TSum a k + 2*(a + k) =  k*(k+2*a-1) + 2*(a + k)" by auto
+  hence "2*(TSum a k + (a + k)) =  k*(k+2*a-1) + 2*(a + k)" 
     by simp
-  then have  "2*(TSum a (Suc k)) =  k*(k+2*a-1) + 2*(a + k)" by simp
-  then have "2*(TSum a (Suc k)) =  (Suc k)*((Suc k)+2*a-1)"
+  hence  "2*(TSum a (Suc k)) =  k*(k+2*a-1) + 2*(a + k)" by simp
+  hence "2*(TSum a (Suc k)) =  (Suc k)*((Suc k)+2*a-1)"
     using HDGFHF \<open>a \<ge> 1\<close> by auto
-  then show ?case
+  thus ?case
     by blast
 qed
 
@@ -96,8 +96,8 @@ proof-
     using TrapezoidalNumbersNec1 \<open>a \<ge> 1\<close> by blast
   have "\<not> (\<exists> r. 2*n = 2^r)" 
     using TrapezoidalNumbersNec2 \<open>1 \<le> a\<close> \<open>2 * n = k * (k + 2 * a - 1)\<close> \<open>2 \<le> k\<close> by auto
-  then have "\<not> (\<exists> r. n = 2^r)"  by (rule TrapezoidalNumbersNec3)
-  then show ?thesis by blast
+  hence "\<not> (\<exists> r. n = 2^r)"  by (rule TrapezoidalNumbersNec3)
+  thus ?thesis by blast
 qed
 
 section {* Sufficient Condition *}
@@ -122,8 +122,8 @@ proof-
     by blast
   from \<open> n = 2^r*t \<close> this have \<open>n = 2^r\<close> 
     using nat_mult_1_right by blast
-  then have \<open>\<exists> r. n = 2^r\<close> by blast
-  then show ?thesis by blast
+  hence \<open>\<exists> r. n = 2^r\<close> by blast
+  thus ?thesis by blast
 qed
 
 

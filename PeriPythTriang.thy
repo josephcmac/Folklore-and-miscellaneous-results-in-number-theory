@@ -75,7 +75,7 @@ proof -
   obtain r::nat where rdef: "r = ee" using real_of_nat_div by blast
   obtain s::nat where sdef: "s = 2*dd - ee"  by blast
   from rdef sdef sdle have sler: "s < r" by linarith
-  then have sler2: "s^2 < r^2" using pos2 power_strict_mono by blast
+  hence sler2: "s^2 < r^2" using pos2 power_strict_mono by blast
   from sler have rsqminusssq: "r^2 - s^2 \<noteq> 0" by (simp add: linorder_not_le power2_nat_le_eq_le)
   from rdef sdef  have rcongs: "2 dvd (r - s)" by (simp add: eeltwod order_less_imp_le)
   from rcongs sler  have twodivdifsq: "2 dvd (r^2 - s^2)" by simp
@@ -84,19 +84,19 @@ proof -
   from ydef have twoy: "2*y = r^2-s^2" by linarith
   from zdef  have "(r^2 + 2*s^2 - s^2)/2 = z" by simp
   from this sler2 ydef have "s^2 + y = z" by linarith
-  then have "(s^2 + y)^2 = z^2" by simp
-  then have "(s^2)^2 + 2*(s^2)*y + y^2 = z^2" by (simp add: power2_sum)
-  then have "(2*y + s^2)*s^2 + y^2 = z^2" by (simp add: add.commute power2_eq_square semiring_normalization_rules(1) semiring_normalization_rules(16))
+  hence "(s^2 + y)^2 = z^2" by simp
+  hence "(s^2)^2 + 2*(s^2)*y + y^2 = z^2" by (simp add: power2_sum)
+  hence "(2*y + s^2)*s^2 + y^2 = z^2" by (simp add: add.commute power2_eq_square semiring_normalization_rules(1) semiring_normalization_rules(16))
   from this twoy have "(r^2-s^2 + s^2)*s^2 + y^2 = z^2" by simp
-  then have "r^2*s^2 + y^2 = z^2" by (simp add: less_or_eq_imp_le sler2)
+  hence "r^2*s^2 + y^2 = z^2" by (simp add: less_or_eq_imp_le sler2)
   from this xdef have Pythxyz: "x^2 + y^2 = z^2" by (simp add: power_mult_distrib)
   from xdef ydef zdef have "x+y+z = r*s + (r^2-s^2)/2 + (r^2+s^2)/2"  by (simp add: zdef)
-  then have "x+y+z = r*s + ((r^2-s^2) + (r^2+s^2))/2" by simp
-  then have "x+y+z = r*s + (2*r^2)/2"  using sler2 by auto
-  then have "x+y+z = r*s + r^2" by linarith
-  then have "x+y+z = r*(s + r)" by (simp add: distrib_left power2_eq_square)
+  hence "x+y+z = r*s + ((r^2-s^2) + (r^2+s^2))/2" by simp
+  hence "x+y+z = r*s + (2*r^2)/2"  using sler2 by auto
+  hence "x+y+z = r*s + r^2" by linarith
+  hence "x+y+z = r*(s + r)" by (simp add: distrib_left power2_eq_square)
   from this rdef sdef have "x+y+z = ee*(2*dd-ee + ee)" by blast
-  then have sumxyz: "x+y+z = 2*dd*ee" using eeltwod by auto
+  hence sumxyz: "x+y+z = 2*dd*ee" using eeltwod by auto
   from ddvdn dddef have dddvdn: "dd dvd n" by (metis dvd_mult_right)
   from edvdn eedef have eeevdn: "ee dvd n" by (metis dvd_mult_right)
   from dddef eedef have gcdgcd: "gcd dd ee = 1"  by (metis dle gcd_eq_0_iff gcd_mult_distrib_nat gr_implies_not0 mult_eq_self_implies_10)
@@ -114,10 +114,10 @@ qed
 lemma factorizationinprimes2:  "(k::nat) \<noteq> 0  \<Longrightarrow> (\<Prod>x\<in>prime_factors k. x ^ (2*multiplicity x k)) = k^2"
 proof-
   assume "k \<noteq> 0"
-  then have "k^2 \<noteq> 0" by simp
-  then have  "(\<Prod>x\<in>prime_factors (k^2). x ^ multiplicity x (k^2)) = k^2" using prime_factorization_nat by auto
-  then have "(\<Prod>x\<in>prime_factors (k^2). x ^ ( 2*multiplicity x k )) = k^2" by (metis (no_types, lifting) ASSUMPTION_I \<open>k \<noteq> 0\<close> in_prime_factors_imp_prime prime_elem_multiplicity_power_distrib prime_imp_prime_elem' prod.cong)
-  then show ?thesis by (simp add: prime_factors_power)
+  hence "k^2 \<noteq> 0" by simp
+  hence  "(\<Prod>x\<in>prime_factors (k^2). x ^ multiplicity x (k^2)) = k^2" using prime_factorization_nat by auto
+  hence "(\<Prod>x\<in>prime_factors (k^2). x ^ ( 2*multiplicity x k )) = k^2" by (metis (no_types, lifting) ASSUMPTION_I \<open>k \<noteq> 0\<close> in_prime_factors_imp_prime prime_elem_multiplicity_power_distrib prime_imp_prime_elem' prod.cong)
+  thus ?thesis by (simp add: prime_factors_power)
 qed
 
 lemma MultSq:
@@ -127,8 +127,8 @@ lemma MultSq:
   shows "\<forall> p. p \<in> prime_factors n \<longrightarrow> even (multiplicity p n)"
 proof-
   from n0 have k0: "k \<noteq> 0"  by (simp add: Sq)
-  then have "(\<Prod>x\<in>prime_factors k. x ^ (2*multiplicity x k)) = n" using factorizationinprimes2 Sq by blast
-  then show ?thesis by (simp add: ASSUMPTION_I Sq in_prime_factors_imp_prime k0 prime_elem_multiplicity_power_distrib)
+  hence "(\<Prod>x\<in>prime_factors k. x ^ (2*multiplicity x k)) = n" using factorizationinprimes2 Sq by blast
+  thus ?thesis by (simp add: ASSUMPTION_I Sq in_prime_factors_imp_prime k0 prime_elem_multiplicity_power_distrib)
 qed
 
 
@@ -141,10 +141,10 @@ proof-
   have "\<forall> p. p \<in> prime_factors n \<longrightarrow> 2*((multiplicity p n) div 2) = multiplicity p n" using PrimePowSq dvd_mult_div_cancel by blast
   obtain k where Hk: "(\<Prod>x\<in>prime_factors n. x ^ ((multiplicity x n)div 2)) = k" by auto
   from Hk have "(\<Prod>x\<in>prime_factors n. x ^ ((multiplicity x n)div 2))^2 = k^2" by simp
-  then have "(\<Prod>x\<in>prime_factors n. ( x ^ ((multiplicity x n)div 2) )^2 ) = k^2" by (metis (full_types) prod_power_distrib)
-  then have "(\<Prod>x\<in>prime_factors n. x ^ (2*((multiplicity x n)div 2)) ) = k^2" by (simp add: \<open>(\<Prod>x\<in>prime_factors n. (x ^ (multiplicity x n div 2))\<^sup>2) = k\<^sup>2\<close> power_even_eq)
-  then have "(\<Prod>x\<in>prime_factors n. x ^ (multiplicity x n) ) = k^2" using \<open>\<forall>p. p \<in># prime_factorization n \<longrightarrow> 2 * (multiplicity p n div 2) = multiplicity p n\<close> by auto
-  then show ?thesis  using n0 prime_factorization_nat by auto
+  hence "(\<Prod>x\<in>prime_factors n. ( x ^ ((multiplicity x n)div 2) )^2 ) = k^2" by (metis (full_types) prod_power_distrib)
+  hence "(\<Prod>x\<in>prime_factors n. x ^ (2*((multiplicity x n)div 2)) ) = k^2" by (simp add: \<open>(\<Prod>x\<in>prime_factors n. (x ^ (multiplicity x n div 2))\<^sup>2) = k\<^sup>2\<close> power_even_eq)
+  hence "(\<Prod>x\<in>prime_factors n. x ^ (multiplicity x n) ) = k^2" using \<open>\<forall>p. p \<in># prime_factorization n \<longrightarrow> 2 * (multiplicity p n div 2) = multiplicity p n\<close> by auto
+  thus ?thesis  using n0 prime_factorization_nat by auto
 qed
 
 
@@ -175,7 +175,7 @@ proof-
   assume b0: "b \<noteq> 0"
   assume advdb:" a dvd b"
   assume "p \<in> prime_factors a"
-  then have pprime: "prime p" and pdvda: "p dvd a" by auto
+  hence pprime: "prime p" and pdvda: "p dvd a" by auto
   have pdvdb: "p dvd b" using \<open>a dvd b\<close> gcd_nat.trans pdvda by blast
   from pprime pdvdb show ?thesis using b0 in_prime_factors_iff by blast
 qed
@@ -186,12 +186,12 @@ proof -
   assume GCDab1: "gcd a b = 1"
   assume ksqeqab: "k^2 = a*b"
   have "\<forall> p. p \<in> prime_factors (k^2) \<longrightarrow> even (multiplicity p (k^2))" by (metis MultSq even_zero multiplicity_zero)
-  then have "\<forall> p. p \<in> prime_factors (k^2) \<longrightarrow> even (multiplicity p (a*b))"  by (simp add: ksqeqab)
-  then have "\<forall> p. p \<in> prime_factors (k^2) \<longrightarrow> even (multiplicity p a)" 
+  hence "\<forall> p. p \<in> prime_factors (k^2) \<longrightarrow> even (multiplicity p (a*b))"  by (simp add: ksqeqab)
+  hence "\<forall> p. p \<in> prime_factors (k^2) \<longrightarrow> even (multiplicity p a)" 
     using EvenMultRelPrimes GCDab1 in_prime_factors_imp_prime 
     by metis
-  then have "\<forall> p. p \<in> prime_factors a \<longrightarrow> even (multiplicity p a)" by (metis b0 dvdI ksqeqab no_zero_divisors primeincl)
-  then show ?thesis by (metis MultSqConverse zero_power2) 
+  hence "\<forall> p. p \<in> prime_factors a \<longrightarrow> even (multiplicity p a)" by (metis b0 dvdI ksqeqab no_zero_divisors primeincl)
+  thus ?thesis by (metis MultSqConverse zero_power2) 
 qed
 
 lemma sqProdnat: "k \<noteq> 0 \<Longrightarrow> gcd a b = 1 \<Longrightarrow> k^2 = (a::nat) * b \<Longrightarrow> (\<exists> r s. r^2 = a \<and> s^2 = b)"
@@ -201,15 +201,15 @@ lemma preatleastoneisoddPyth: " (a::nat)^2 + b^2 = c^2 \<Longrightarrow> \<not> 
 proof -
   assume Pyth:  "a^2 + b^2 = c^2"
   assume "\<not> ( odd a \<or> odd b)"
-  then have evena: "even a" and evenb: "even b" by auto
-  then have "even (a^2)" and "even (b^2)" by auto
-  then have "even (a^2 + b^2)" by simp
-  then have "even (c^2)" using Pyth by simp
-  then have evenc: "even c" by simp
+  hence evena: "even a" and evenb: "even b" by auto
+  hence "even (a^2)" and "even (b^2)" by auto
+  hence "even (a^2 + b^2)" by simp
+  hence "even (c^2)" using Pyth by simp
+  hence evenc: "even c" by simp
   from evena evenb evenc obtain aa bb cc :: nat where "a = 2*aa" and "b = 2*bb" and "c = 2*cc" by (meson evenE)
-  then have "Gcd { 2*aa,  2*bb,  2*cc} = Gcd {a, b, c}" by simp
-  then have "2*(Gcd { aa,  bb,  cc}) =  Gcd {a, b, c}" by (simp add: gcd_mult_distrib_nat)
-  then show ?thesis by auto
+  hence "Gcd { 2*aa,  2*bb,  2*cc} = Gcd {a, b, c}" by simp
+  hence "2*(Gcd { aa,  bb,  cc}) =  Gcd {a, b, c}" by (simp add: gcd_mult_distrib_nat)
+  thus ?thesis by auto
 qed
 
 lemma atleastoneisoddPyth: " (a::nat)^2 + b^2 = c^2 \<Longrightarrow> Gcd {a, b, c} = 1  \<Longrightarrow>  odd a \<or> odd b"
@@ -223,9 +223,9 @@ proof -
     using a1 by (simp add: mult.commute)
   have "gcd d 2 = 1"
     using a2 by (meson coprime_imp_gcd_eq_1 coprime_right_2_iff_odd)
-  then have "d dvd n * 1"
+  hence "d dvd n * 1"
     using f3 by (metis (no_types) dvd_triv_right  gcd_greatest_iff gcd_mult_distrib_nat)
-  then show ?thesis
+  thus ?thesis
     by simp
 qed
 
@@ -241,33 +241,33 @@ lemma PeriPythToShortDivRelPrimaodd:
 proof-
   from aodd have a0: "a \<noteq> 0" by (meson even_zero)
   from Pythabc a0 have "b^2 < c^2" by (metis add_diff_cancel_right' aodd odd_pos zero_less_diff zero_less_power) 
-  then have blc: "b < c" using power_less_imp_less_base by blast
+  hence blc: "b < c" using power_less_imp_less_base by blast
   then obtain v::nat where vdef: "b + v = c" using less_imp_add_positive by blast
   then obtain u::nat where udef: "u = c + b" by simp
   from Pythabc  have  "a^2+b^2 = (b+v)^2" using vdef by simp
-  then have "a^2 + b^2 = 2*b*v + v^2 + b^2"  by (simp add: power2_sum)
-  then have "a^2  = 2*b*v + v^2 " by simp
-  then have "a^2  = (2*b + v)*v " by (simp add: power2_eq_square semiring_normalization_rules(1))
-  then have auv: "a^2 = u*v" by (simp add: udef vdef)
+  hence "a^2 + b^2 = 2*b*v + v^2 + b^2"  by (simp add: power2_sum)
+  hence "a^2  = 2*b*v + v^2 " by simp
+  hence "a^2  = (2*b + v)*v " by (simp add: power2_eq_square semiring_normalization_rules(1))
+  hence auv: "a^2 = u*v" by (simp add: udef vdef)
   from auv aodd have uodd: "odd u" 
     by (metis even_mult_iff even_power)
   from auv aodd have vodd: "odd v" 
     using udef uodd vdef by auto
   from uodd vodd have gcduvodd: "odd (gcd u v)" using gcd_nat.bounded_iff by blast
   from udef vdef have "u + v = 2*c" by simp
-  then have "(gcd u v) dvd (2*c)" by (metis dvd_add gcd_dvd1 gcd_dvd2)
+  hence "(gcd u v) dvd (2*c)" by (metis dvd_add gcd_dvd1 gcd_dvd2)
   from this gcduvodd have gcduvdvdc: "(gcd u v) dvd c"  using blc gr_implies_not0 odddiv by blast
   from udef vdef have bdef: "u - v = 2*b" by simp
-  then have "(gcd u v) dvd (2*b)"  by (metis dvd_diff_nat gcd_nat.cobounded1 gcd_nat.cobounded2)
+  hence "(gcd u v) dvd (2*b)"  by (metis dvd_diff_nat gcd_nat.cobounded1 gcd_nat.cobounded2)
   from this gcduvodd have gcduvdvdb: "(gcd u v) dvd b" using b0 odddiv by blast
   from auv have  "(gcd u v)^2 dvd (a^2)"  by (simp add: mult_dvd_mono power2_eq_square)
-  then have gcduvdvda: "(gcd u v) dvd a" by simp
+  hence gcduvdvda: "(gcd u v) dvd a" by simp
   from gcduvdvda gcduvdvdb gcduvdvdc have "(gcd u v) dvd (Gcd {a, b, c})" by simp
   from Gcdabc1 this  have gcduv1: "gcd u v = 1" by simp
   from gcduv1 auv obtain r s::nat where rdef: "r^2 = u" and sdef: "s^2 = v"  
     by (meson a0 sqProdnat)
   from rdef sdef auv  have "a^2 = (r*s)^2"  by (simp add: power_mult_distrib)
-  then have ars: "a = r*s" by simp
+  hence ars: "a = r*s" by simp
   from rdef have rodd: "odd r"  using even_power pos2 uodd by blast
   from sdef have sodd: "odd s"  using even_power pos2 vodd by blast
   obtain e::nat where edef: "e = r" by simp
@@ -276,11 +276,11 @@ proof-
   from slr ddef edef have dle: "d < e"  by linarith
   from ddef edef have dltwoe: "e < 2*d" by (simp add: odd_pos sodd)
   from sumabc rdef sdef have "a + u = 2*n" using udef by auto
-  then have "a + r^2 = 2*n"  using rdef by blast
+  hence "a + r^2 = 2*n"  using rdef by blast
   from this ars  have "r*s + r^2 = 2*n" by simp
-  then have  "(s + r)*r = 2*n" by (metis power2_eq_square semiring_normalization_rules(1) semiring_normalization_rules(7))
-  then have "2*d*e = 2*n" using ddef edef by (simp add: semiring_normalization_rules(24))
-  then have den: "d*e = n" by simp
+  hence  "(s + r)*r = 2*n" by (metis power2_eq_square semiring_normalization_rules(1) semiring_normalization_rules(7))
+  hence "2*d*e = 2*n" using ddef edef by (simp add: semiring_normalization_rules(24))
+  hence den: "d*e = n" by simp
   from den have ddvdn: "d dvd n" using dvdI by blast
   from den have edvdn: "e dvd n" using dvd_triv_right by blast
   show ?thesis  using ddvdn dle dltwoe edvdn by blast
@@ -297,11 +297,11 @@ lemma PeriPythToShortDivRelPrim:
   shows "\<exists> d e. d dvd n \<and> e dvd n \<and> d < e \<and> e < 2*d"
 proof (cases "odd a")
   case True
-  then have aodd: "odd a" by simp
+  hence aodd: "odd a" by simp
   from n0 aodd b0 Pythabc sumabc Gcdabc1  show ?thesis  using PeriPythToShortDivRelPrimaodd  by blast
 next
   case False
-  then have bodd: "odd b" using Gcdabc1 Pythabc atleastoneisoddPyth by blast
+  hence bodd: "odd b" using Gcdabc1 Pythabc atleastoneisoddPyth by blast
   from Pythabc have Pythbac: "b^2 + a^2 = c^2" by simp
   from sumabc have sumbac: "b + a + c = 2*n" by simp
   from Gcdabc1 have Gcdbac1: "Gcd {b, a, c} = 1"  by (simp add: insert_commute)
@@ -331,8 +331,8 @@ proof-
   from a0 have Gcdabc0: "Gcd {a, b, c} \<noteq> 0" by auto
   from  Gcdabc0 Pythabc xdef ydef zdef have Pythxyz: "x^2 + y^2 = z^2" by (smt add_mult_distrib2 nat_mult_eq_cancel_disj power_eq_0_iff power_mult_distrib)
   from Gcdabc0 xdef ydef zdef have "Gcd {a, b, c} = Gcd {(Gcd {a, b, c})*x, (Gcd {a, b, c})*y, (Gcd {a, b, c})*z}" by simp
-  then have "Gcd {a, b, c} = (Gcd {a, b, c})*Gcd {x, y, z}" by (simp add: gcd_mult_distrib_nat)
-  then have Gcdxyz1: "Gcd {x, y, z} = 1" using Gcdabc0 by auto
+  hence "Gcd {a, b, c} = (Gcd {a, b, c})*Gcd {x, y, z}" by (simp add: gcd_mult_distrib_nat)
+  hence Gcdxyz1: "Gcd {x, y, z} = 1" using Gcdabc0 by auto
   from xdef ydef zdef  sumabc have gcdxyz2n:  "(Gcd {a, b, c})*(x + y + z) = 2*n"  by (metis distrib_left)
   from this Pythxyz obtain  nn:: nat where nndef: "x+y+z = 2*nn" using PerPythEven dvdE by blast
   from  gcdxyz2n  nndef  have Gcdnn: "(Gcd {a, b, c})*nn = n" by auto

@@ -50,11 +50,11 @@ lemma DiophantusIdentityNat :
   shows "(a^2 + b^2)*(c^2 + d^2) = k^2 + (a*d + b*c)^2"
 proof -
   from kdef have "a^2*c^2 = k^2 + 2*k*b*d + b^2*d^2" by (metis (mono_tags, lifting) power2_sum semiring_normalization_rules(18) semiring_normalization_rules(23) semiring_normalization_rules(30))
-  then have "a^2*(c^2 + d^2) = k^2 + 2*k*b*d + b^2*d^2 + a^2*d^2" by (simp add: distrib_left)
-  then have "a^2*(c^2 + d^2)+b^2*(c^2 + d^2) = k^2 + 2*k*b*d + b^2*d^2 + a^2*d^2 + b^2*c^2 + b^2*d^2" by (simp add: distrib_left)
-  then have "(a^2 + b^2)*(c^2 + d^2) = k^2 + 2*k*b*d + a^2*d^2 + b^2*c^2 + 2* b^2*d^2" by (simp add: semiring_normalization_rules(1))
-  then have  "(a^2 + b^2)*(c^2 + d^2) = k^2 + 2*b*d* (k + b*d) + a^2*d^2 + b^2*c^2" by (smt add_mult_distrib2 mult.commute power2_eq_square semiring_normalization_rules(16) semiring_normalization_rules(23) semiring_normalization_rules(25))
-  then have  "(a^2 + b^2)*(c^2 + d^2) = k^2 + 2*b*d*a*c + a^2*d^2 + b^2*c^2" using kdef by simp
+  hence "a^2*(c^2 + d^2) = k^2 + 2*k*b*d + b^2*d^2 + a^2*d^2" by (simp add: distrib_left)
+  hence "a^2*(c^2 + d^2)+b^2*(c^2 + d^2) = k^2 + 2*k*b*d + b^2*d^2 + a^2*d^2 + b^2*c^2 + b^2*d^2" by (simp add: distrib_left)
+  hence "(a^2 + b^2)*(c^2 + d^2) = k^2 + 2*k*b*d + a^2*d^2 + b^2*c^2 + 2* b^2*d^2" by (simp add: semiring_normalization_rules(1))
+  hence  "(a^2 + b^2)*(c^2 + d^2) = k^2 + 2*b*d* (k + b*d) + a^2*d^2 + b^2*c^2" by (smt add_mult_distrib2 mult.commute power2_eq_square semiring_normalization_rules(16) semiring_normalization_rules(23) semiring_normalization_rules(25))
+  hence  "(a^2 + b^2)*(c^2 + d^2) = k^2 + 2*b*d*a*c + a^2*d^2 + b^2*c^2" using kdef by simp
   thus ?thesis by (simp add: power2_sum power_mult_distrib)
 qed
 
@@ -74,7 +74,7 @@ proof -
     from a1la2 have a1la2sq: "a\<^sub>1^2 < a\<^sub>2^2" by (simp add: power_strict_mono)
     from sumofsq1 sumofsq2 have "a\<^sub>1^2 + b\<^sub>1^2 =a\<^sub>2^2 + b\<^sub>2^2" by simp
     then   have "b\<^sub>1^2 > b\<^sub>2^2" using  a1la2sq by linarith
-    then show ?thesis using power_less_imp_less_base by blast
+    thus ?thesis using power_less_imp_less_base by blast
   qed
 
   from podd sumofsq1 a1odd have b1eveb: "even b\<^sub>1" by simp
@@ -118,21 +118,21 @@ proof -
         by (simp add: power2_sum ydef)
     qed
     from xsq ysq  have  "(a\<^sub>2^2 + b\<^sub>2^2) + 4*y*b\<^sub>2 + 4*y^2 = (a\<^sub>1^2 + b\<^sub>1^2) + 4*x*a\<^sub>1 + 4*x^2"  by (simp add: semiring_normalization_rules(21))
-    then have "p + 4*y*b\<^sub>2 + 4*y^2 = p + 4*x*a\<^sub>1 + 4*x^2" using sumofsq1 sumofsq2 by simp
-    then have "y*b\<^sub>2 + y^2 = x*a\<^sub>1 + x^2" by simp
-    then have "y*(b\<^sub>2 + 2*y) = x*a\<^sub>1 + x^2 + y^2"  by (smt add.commute add_mult_distrib2 left_add_mult_distrib mult_2 power2_eq_square semiring_normalization_rules(1))      
-    then have "b\<^sub>1*y = a\<^sub>1*x + x^2 + y^2" using ydef by (simp add: semiring_normalization_rules(7))
-    then have "d*b\<^sub>1*Y = d*a\<^sub>1*X + d*x*X + d*y*Y" using Xdef Ydef by (metis mult.left_commute power2_eq_square semiring_normalization_rules(18))
-    then have "d*b\<^sub>1*Y = d*(a\<^sub>1*X + x*X + y*Y)" by (simp add: distrib_left)
-    then have "b\<^sub>1*Y = a\<^sub>1*X + x*X + y*Y" using d0 by simp
-    then show ?thesis by (simp add: add_mult_distrib)
+    hence "p + 4*y*b\<^sub>2 + 4*y^2 = p + 4*x*a\<^sub>1 + 4*x^2" using sumofsq1 sumofsq2 by simp
+    hence "y*b\<^sub>2 + y^2 = x*a\<^sub>1 + x^2" by simp
+    hence "y*(b\<^sub>2 + 2*y) = x*a\<^sub>1 + x^2 + y^2"  by (smt add.commute add_mult_distrib2 left_add_mult_distrib mult_2 power2_eq_square semiring_normalization_rules(1))      
+    hence "b\<^sub>1*y = a\<^sub>1*x + x^2 + y^2" using ydef by (simp add: semiring_normalization_rules(7))
+    hence "d*b\<^sub>1*Y = d*a\<^sub>1*X + d*x*X + d*y*Y" using Xdef Ydef by (metis mult.left_commute power2_eq_square semiring_normalization_rules(18))
+    hence "d*b\<^sub>1*Y = d*(a\<^sub>1*X + x*X + y*Y)" by (simp add: distrib_left)
+    hence "b\<^sub>1*Y = a\<^sub>1*X + x*X + y*Y" using d0 by simp
+    thus ?thesis by (simp add: add_mult_distrib)
   qed
   have  rdef: "\<exists> r::nat. r*Y = a\<^sub>1 + d*X"
   proof -
     from b1y have "Y dvd (a\<^sub>1 + x)*X"  by (metis dvd_add_times_triv_right_iff dvd_triv_right)
-    then have "Y dvd (a\<^sub>1 + x)" using gcdXY 
+    hence "Y dvd (a\<^sub>1 + x)" using gcdXY 
       by (metis (no_types, lifting) division_decomp dvd_triv_right  gcd_greatest_iff mult.right_neutral mult_dvd_mono)
-    then show ?thesis by (metis Xdef dvdE semiring_normalization_rules(7))
+    thus ?thesis by (metis Xdef dvdE semiring_normalization_rules(7))
   qed
 
   from rdef obtain r::nat where rdef: "r*Y = a\<^sub>1 + d*X" by auto
@@ -140,7 +140,7 @@ proof -
   have rd2: "r^2 + d^2 \<ge> 2" by (smt One_nat_def Suc_1 Suc_leI Y0 Ydef add_cancel_left_left add_gr_0 d0 le_add1 le_add2 le_add_same_cancel1 le_antisym le_less mult.commute mult_2_right mult_eq_0_iff power_eq_0_iff randb1 ydef)
   have XY2: "X^2 + Y^2 \<ge> 2" by (metis One_nat_def Suc_leI X0 Y0 add_mono neq0_conv numeral_Bit0 numeral_code(1) power_not_zero)
   from rdef randb1  have "(r^2 + d^2)*(X^2 + Y^2) = a\<^sub>1^2 + b\<^sub>1^2"  by (metis DiophantusIdentityNat add.commute) 
-  then have prod2sq: "(r^2 + d^2)*(X^2 + Y^2) = p" using sumofsq1 by blast
+  hence prod2sq: "(r^2 + d^2)*(X^2 + Y^2) = p" using sumofsq1 by blast
   from prod2sq rd2 XY2 show ?thesis by (metis add_diff_cancel_left' diff_is_0_eq' dvd_triv_left mult.right_neutral mult_eq_0_iff nat_mult_eq_cancel_disj numeral_Bit0 numeral_One prime_nat_iff prime_prime_factor_sqrt)
 qed
 
