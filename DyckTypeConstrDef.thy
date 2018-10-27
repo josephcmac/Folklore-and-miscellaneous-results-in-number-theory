@@ -21,27 +21,27 @@ References
 theory DyckTypeConstrDef
 
 imports 
-Complex_Main 
+  Complex_Main 
 
 begin
 
 fun SchroederCHR :: \<open>nat \<Rightarrow> nat \<Rightarrow> int\<close> where
-\<open>SchroederCHR n k = 
+  \<open>SchroederCHR n k = 
       (if k dvd (2*n) \<and> (odd k) then 1 
  else (if k dvd (2*n) \<and> odd ((2*n)div k) then -1 
 else 0 ))\<close>
 
 fun preSchroeder :: \<open>nat \<Rightarrow> nat \<Rightarrow> int list\<close> where
-\<open>preSchroeder n 0 = []\<close> |
-\<open>preSchroeder n (Suc k) = (preSchroeder n k) @ [SchroederCHR n (Suc k)]\<close> 
+  \<open>preSchroeder n 0 = []\<close> |
+  \<open>preSchroeder n (Suc k) = (preSchroeder n k) @ [SchroederCHR n (Suc k)]\<close> 
 
 fun Schroeder :: \<open>nat  \<Rightarrow> int list\<close> where
-\<open>Schroeder n = preSchroeder n (2*n)\<close> 
+  \<open>Schroeder n = preSchroeder n (2*n)\<close> 
 
 
 text {* Dyck n is the Dyck type of n *}
 fun Dyck :: \<open>nat  \<Rightarrow> int list\<close> where
-\<open>Dyck n = removeAll 0 (Schroeder n)\<close> 
+  \<open>Dyck n = removeAll 0 (Schroeder n)\<close> 
 
 
 end
