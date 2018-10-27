@@ -20,7 +20,8 @@ References
 
 theory DyckTypeConstrDef
 
-imports Complex_Main
+imports 
+Complex_Main 
 
 begin
 
@@ -37,14 +38,10 @@ fun preSchroeder :: \<open>nat \<Rightarrow> nat \<Rightarrow> int list\<close> 
 fun Schroeder :: \<open>nat  \<Rightarrow> int list\<close> where
 \<open>Schroeder n = preSchroeder n (2*n)\<close> 
 
-fun Ignore :: \<open>'a list \<Rightarrow> 'a \<Rightarrow> 'a list\<close> where
-\<open>Ignore [] x = []\<close>|
-\<open>Ignore (b # L) x = 
-  (if b = x then Ignore L x else b # (Ignore L x))\<close>
 
 text {* Dyck n is the Dyck type of n *}
 fun Dyck :: \<open>nat  \<Rightarrow> int list\<close> where
-\<open>Dyck n = Ignore (Schroeder n) (0::int)\<close> 
+\<open>Dyck n = removeAll 0 (Schroeder n)\<close> 
 
 
 end
