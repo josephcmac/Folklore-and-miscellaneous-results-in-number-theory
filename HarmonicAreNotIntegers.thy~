@@ -202,8 +202,8 @@ next
     \<open>v \<equiv> \<lambda> i. (if i = 0 then (u n) else 
 (if i = n then (u 0) else u i))\<close> 
     by auto
-  have \<open>(\<Sum>i=0..n. u i) = (u 0) + (\<Sum>i=1..n. u i)\<close>
-    by (simp add: sum.atLeast_Suc_atMost)    
+  have \<open>(\<Sum>i=0..n. u i) = (u 0) + (\<Sum>i=1..n. u i)\<close> 
+    by (simp add: sum_head_Suc)
   hence \<open>(\<Sum>i=0..n. u i) = (v n) + (\<Sum>i=1..n. u i)\<close>
     by (simp add: \<open>v \<equiv> \<lambda>i. if i = 0 then u n else if i = n then u 0 else u i\<close>)
   hence \<open>(\<Sum>i=0..n. u i) = (v n) + (\<Sum>i=1..Suc t. u i)\<close> 
@@ -216,8 +216,8 @@ next
     by (simp add: \<open>sum u {0..n} = v n + sum u {1..t} + u n\<close> \<open>v \<equiv> \<lambda>i. if i = 0 then u n else if i = n then u 0 else u i\<close>)
   hence \<open>(\<Sum>i=0..n. u i) = (v n) + (\<Sum>i=1..t. v i) + (v 0)\<close>
     using \<open>n = Suc t\<close> \<open>v \<equiv> \<lambda>i. if i = 0 then u n else if i = n then u 0 else u i\<close> by auto
-  then  have \<open>(\<Sum>i=0..n. u i) = (\<Sum>i=0..n. v i)\<close>
-    by (simp add: \<open>n = Suc t\<close> sum.atLeast_Suc_atMost) 
+  then  have \<open>(\<Sum>i=0..n. u i) = (\<Sum>i=0..n. v i)\<close> 
+    by (simp add: \<open>n = Suc t\<close> sum_head_Suc)
 
   obtain kappa :: \<open>nat \<Rightarrow> nat\<close> where 
     \<open>kappa \<equiv> \<lambda> i. (if i = 0 then (k n) else 

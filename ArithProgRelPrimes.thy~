@@ -2,7 +2,7 @@
 
 Problem (ARITHMETIC PROGRESSIONS): 9/13/2002: For which integers n>1 does the set of positive
  integers less than and relatively prime to n constitute an arithmetic progression?
-                                                                              
+
 Link: https://www.ocf.berkeley.edu/~wwu/riddles/putnam.shtml
 
 
@@ -1014,7 +1014,5 @@ theorem SolutionOfTheProblem:
 (\<exists> a b m. m \<noteq> 0 \<and> {x | x :: nat. x < n \<and> coprime x n} = {a+j*b| j::nat. j < m})\<close>
   using FSDFDC SolutionOfTheProblemRed 
   by auto
-
-  
 
 end
